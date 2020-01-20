@@ -1,15 +1,24 @@
 <template>
   <v-app>
-    <Login/>
+    <v-content>
+      <Signup/>
+    </v-content>
   </v-app>
 </template>
 
 <script>
-import Login from './components/Auth/Login'
+//  import Login from './components/Auth/Login'
+import Signup from './components/Auth/Signup'
+
 export default {
-  name: 'app',
+  name: 'App',
+
   components: {
-    Login
-  }
+    Signup
+  },
+
+  data: () => ({
+    //
+  })
 }
 </script>
