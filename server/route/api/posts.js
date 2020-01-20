@@ -28,7 +28,7 @@ async function loadPostsCollection() {
         useNewUrlParser: true
     });
 
-    return client.db('Matcha').collection('posts');
+    return client.db('Matcha').collection('Users');
     
 }
 
