@@ -76,10 +76,7 @@
   </v-col>
 </v-row>
 </v-parallax>
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/wiseman
 </template>
 <script>
 // @ is an alias to /src
