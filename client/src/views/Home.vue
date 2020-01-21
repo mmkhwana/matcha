@@ -12,9 +12,6 @@
   </v-col>
 </v-row>
 </v-parallax>
-<v-card>
-<h4 class="subheading">Want to find your perfect date today!</h4>
-</v-card>
 </template>
 <script>
 // @ is an alias to /src
