@@ -33,6 +33,7 @@
                                 name="user_email"
                                 label="Email"
                                 type="text"
+                                v-model="email"
                             >
                             </v-text-field>
                             <v-text-field
@@ -40,6 +41,7 @@
                                 name="user_pwd"
                                 label="Password"
                                 type="password"
+                                v-model="pass"
                             >
                             </v-text-field>
                             <v-text-field
@@ -47,6 +49,7 @@
                                 name="user_confpwd"
                                 label="Confirm Password"
                                 type="password"
+                                v-model="confirm"
                             >
                             </v-text-field>
                             <v-card-actions>
@@ -68,7 +71,12 @@ export default {
     return {
       posts: [],
       error: '',
-      text: ''
+      text: '',
+      username: '',
+      email: '',
+      surname: '',
+      pass: '',
+      confirm: ''
     }
   },
   async created () {
@@ -80,8 +88,8 @@ export default {
   },
   methods: {
     async insertUser () {
-      await SignupService.registerUser(this.text)
-      this.posts = await SignupService.getUsers()
+      await SignupService.registerUser(this.text, this.username, this.email, this.pass, this.confirm)
+    //  this.posts = await SignupService.getUsers()
     }
   }
 }
