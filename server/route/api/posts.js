@@ -3,18 +3,26 @@ const mongodb = require('mongodb');
 
 const router = express.Router();
 
+//User
+
 router.get('/', async(req, res) => {
     const posts = await loadPostsCollection();
     res.send(await posts.find({}).toArray());
 });
 
 router.post('/', async(req, res) => {
-    const posts = await loadPostsCollection();
-    await posts.insertOne({
-        text: req.body.text,
-        createdAt: new Date()
+    const posts = await loadUsersCollection();
+    if (req.body.confirm == req.body.pass)
+    {
+        var password = req.body.pass;
+        await posts.insertOne({
+            name: req.body.name,
+            email: req.body.email,
+            pass : password,
+            createdAt: new Date()
     });
     res.status(201).send();
+    }
 });
 
 router.delete('/:id', async(req, res) => {
@@ -31,5 +39,50 @@ async function loadPostsCollection() {
     return client.db('Matcha').collection('Users');
     
 }
+
+//interets
+
+router.post('/interests', async(req, res) => {
+    const posts = await loadInterestsCollection();
+    await posts.insertOne({
+        interest: req.body.interest,
+        text: req.body.text,
+        user_id: req.params.id,
+        createdAt: new Date()
+    });
+    res.status(201).send();
+});
+
+async function loadPostsCollection() {
+    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
+        useNewUrlParser: true
+    });
+
+    return client.db('Matcha').collection('interests');
+    
+}
+
+//Preferences
+
+router.post('/preferences', async(req, res) => {
+    const posts = await loadpreferencesCollection();
+    await posts.insertOne ({
+        age: req.body.age,
+        fame: req.body.number,
+        location: req.body.location,
+        user_id: req.params.id,
+        createdAt: new Date()
+    });
+    res.status(201).send();
+});
+
+async function loadPostsCollection() {
+    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
+        useNewUrlParser: true
+    });
+
+    return client.db('Matcha').collection('preferences');
+}
+
 
 module.exports = router;

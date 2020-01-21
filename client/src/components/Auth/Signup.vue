@@ -25,7 +25,7 @@
                                 name="username"
                                 label="Username"
                                 type="text"
-                                v-model="text"
+                                v-model="name"
                             >
                             </v-text-field>
                             <v-text-field
@@ -33,6 +33,7 @@
                                 name="user_email"
                                 label="Email"
                                 type="text"
+                                v-model="email"
                             >
                             </v-text-field>
                             <v-text-field
@@ -40,6 +41,8 @@
                                 name="user_pwd"
                                 label="Password"
                                 type="password"
+                                v-model="pass"
+
                             >
                             </v-text-field>
                             <v-text-field
@@ -47,6 +50,7 @@
                                 name="user_confpwd"
                                 label="Confirm Password"
                                 type="password"
+                                v-model="confirm"
                             >
                             </v-text-field>
                             <v-card-actions>
@@ -68,7 +72,10 @@ export default {
     return {
       posts: [],
       error: '',
-      text: ''
+      name: '',
+      email: '',
+      pass: '',
+      confirm: ''
     }
   },
   async created () {
