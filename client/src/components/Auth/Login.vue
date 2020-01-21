@@ -1,14 +1,9 @@
 <template>
-<<<<<<< HEAD
     <v-container fill-height>
-=======
-    <v-container>
->>>>>>> mdu
         <v-layout align-center justify-center>
             <v-flex xs12 sm8 md4 >
                 <v-form>
                     <v-card>
-<<<<<<< HEAD
                         <v-toolbar
                             color="primary"
                             dark
@@ -44,13 +39,11 @@
                         <v-card-actions>
                             <a href ="#">Forget Password?</a>
                         </v-card-actions>
-=======
                         <v-toolbar>
                             <v-toolbar-tittle>
                                 Login Form
                             </v-toolbar-tittle>
                         </v-toolbar>
->>>>>>> mdu
                     </v-card>
                 </v-form>
             </v-flex>
@@ -59,10 +52,7 @@
 </template>
 <script>
 export default {
-<<<<<<< HEAD
   name: 'Login'
-=======
 
->>>>>>> mdu
 }
 </script>

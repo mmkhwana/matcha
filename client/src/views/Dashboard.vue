@@ -1,5 +1,8 @@
 <template>
-  <v-card height="100%">
+  <v-card
+    height="100%"
+    width="100%"
+  >
     <v-app-bar
         color="deep-purple lighten-3"
         dark
@@ -8,22 +11,18 @@
           <v-toolbar-title>Dashboard</v-toolbar-title>
 
       <v-spacer></v-spacer>
-        <v-btn icon
-        float="right"
-        >
+        <v-btn icon>
             <v-icon>mdi-bell</v-icon>
         </v-btn>
-        <v-btn icon
-        float="right"
-        >
+        <v-btn icon>
             <v-icon>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
+    <v-row>
+    <v-col cols="2">
     <v-navigation-drawer
       v-model="drawer"
-      expand-on-hover
       permanent
-      max-height="100"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
@@ -51,18 +50,21 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-layout
-      id="scrolling-techniques-2"
-      class="overflow-y-auto"
-      max-height="100"
+    </v-col>
+    <v-col cols="10" sm="8">
+    <v-card-text
     >
-      <v-container style="height: 100%;"></v-container>
-    </v-layout>
+    <Matches/>
+    </v-card-text>
+    </v-col>
+    </v-row>
   </v-card>
 </template>
 
 <script>
 // @ is an alias to /src
+import Matches from '../views/Matches'
+
 export default {
   name: 'Dashboard',
   data () {
@@ -72,6 +74,9 @@ export default {
         { title: 'Matches', icon: 'mdi-account-group' },
         { title: 'Log Out', icon: 'mdi-logout' }]
     }
+  },
+  components: {
+    Matches
   }
 }
 </script>

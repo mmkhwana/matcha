@@ -1,6 +1,4 @@
 <template>
-  <v-row>
-    <v-col cols="12" sm="6" offset-sm="3">
       <v-card>
         <v-container fluid>
           <v-row>
@@ -8,7 +6,7 @@
               v-for="n in 9"
               :key="n"
               class="d-flex child-flex"
-              cols="4"
+              cols="5"
             >
               <v-card flat tile class="d-flex">
                 <v-img
@@ -28,10 +26,12 @@
                   </template>
                 </v-img>
               </v-card>
+            <v-list-item-content>
+              <v-list-item-title class="title">Khanyisa Mbukutshe</v-list-item-title>
+              <v-list-item-subtitle>Happy Man</v-list-item-subtitle>
+            </v-list-item-content>
             </v-col>
           </v-row>
         </v-container>
       </v-card>
-    </v-col>
-  </v-row>
 </template>
