@@ -1,0 +1,35 @@
+{
+  "name": "matcha",
+  "version": "1.0.0",
+  "description": "express and vue web",
+  "main": "index.js",
+  "scripts": {
+    "start": "server/index.js",
+    "Dev": "node server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmkhwana/matcha.git"
+  },
+  "author": "Peter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmkhwana/matcha/issues"
+  },
+  "homepage": "https://github.com/mmkhwana/matcha#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+<<<<<<< HEAD
+    "mongodb": "^3.5.1",
+    "vue": "^2.6.11"
+=======
+    "mongodb": "^3.5.2",
+    "semver": "^7.1.1"
+>>>>>>> refs/remotes/origin/wiseman
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
