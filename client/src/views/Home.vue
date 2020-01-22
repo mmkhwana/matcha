@@ -34,7 +34,7 @@
                             This user already exist, try a different set of data.
                             </v-alert> -->
                             <v-text-field
-                                icon="person"
+                                v-icon="person"
                                 name="username"
                                 label="Username"
                                 type="text"
