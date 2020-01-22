@@ -2,6 +2,7 @@
 <v-parallax
 src="../assets/home2.jpg"
 height="1000"
+
 >
 <v-row
   align="center"
