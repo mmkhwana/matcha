@@ -8,7 +8,7 @@
         dark
         width="100%"
     >
-          <v-toolbar-title>Dashboard</v-toolbar-title>
+          <v-toolbar-title>{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
         <v-btn icon>
@@ -45,7 +45,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title v-on:click="changeTitles(item.title)">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -54,7 +54,9 @@
     <v-col cols="10" sm="8">
     <v-card-text
     >
-    <Matches/>
+    <template>
+    <component :is="changeComponents"></component>
+    </template>
     </v-card-text>
     </v-col>
     </v-row>
@@ -64,7 +66,13 @@
 <script>
 // @ is an alias to /src
 import Matches from '../views/Matches'
+import Preference from '../views/Preference'
+import Profile from '../views/Profile'
+import Vue from 'vue'
 
+Vue.component('Preference', Preference)
+Vue.component('Matches', Matches)
+Vue.component('Profile', Profile)
 export default {
   name: 'Dashboard',
   data () {
@@ -72,11 +80,25 @@ export default {
       items: [{ title: 'Profile', icon: 'mdi-account' },
         { title: 'Preference', icon: 'mdi-settings-transfer' },
         { title: 'Matches', icon: 'mdi-account-group' },
-        { title: 'Log Out', icon: 'mdi-logout' }]
+        { title: 'Log Out', icon: 'mdi-logout' }],
+      titles: 'User Profile'
     }
   },
-  components: {
-    Matches
+  computed: {
+    changeComponents () {
+      if (this.titles === 'Preference') {
+        return 'Preference'
+      } else if (this.titles === 'Matches') {
+        return 'Matches'
+      } else {
+        return 'Profile'
+      }
+    }
+  },
+  methods: {
+    async changeTitles (titleName) {
+      this.titles = titleName
+    }
   }
 }
 </script>

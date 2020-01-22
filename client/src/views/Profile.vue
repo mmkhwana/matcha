@@ -29,14 +29,9 @@
                    <v-card-subtitle>Happy Man</v-card-subtitle>
                 </v-img>
                  <v-card-actions>
-        <v-rating
-          :value="2.5"
-          color="amber"
-          dense
-          half-increments
-          readonly
-          size="14"
-        ></v-rating>
+              <v-btn icon>
+                <v-icon>mdi-star-circle</v-icon>
+              </v-btn>
               <v-spacer></v-spacer>
               <v-btn icon>
                 <v-icon>mdi-chat</v-icon>
