@@ -21,8 +21,8 @@ class SignupService {
     )
   }
 
-  static registerUser (text, name, email, pass, confirm) {
-    return axios.post(url, { text, name, email, pass, confirm })
+  static registerUser (username, email, date, pass, confirm) {
+    return axios.post(url, { username, email, date, pass, confirm })
   }
 
   static deleteUser (id) {

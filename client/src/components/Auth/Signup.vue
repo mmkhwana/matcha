@@ -25,7 +25,7 @@
                                 name="username"
                                 label="Username"
                                 type="text"
-                                v-model="name"
+                                v-model="text"
                             >
                             </v-text-field>
                             <v-text-field
@@ -42,7 +42,6 @@
                                 label="Password"
                                 type="password"
                                 v-model="pass"
-
                             >
                             </v-text-field>
                             <v-text-field
@@ -72,8 +71,10 @@ export default {
     return {
       posts: [],
       error: '',
-      name: '',
+      text: '',
+      username: '',
       email: '',
+      surname: '',
       pass: '',
       confirm: ''
     }
@@ -87,8 +88,8 @@ export default {
   },
   methods: {
     async insertUser () {
-      await SignupService.registerUser(this.text)
-      this.posts = await SignupService.getUsers()
+      await SignupService.registerUser(this.text, this.username, this.email, this.pass, this.confirm)
+    //  this.posts = await SignupService.getUsers()
     }
   }
 }
