@@ -20,13 +20,15 @@
         align="center"
         class="mx-0"
       >
+      <v-card-title>Profile Rating</v-card-title>
         <v-rating
           :value="2.5"
-          color="amber"
           dense
           half-increments
           readonly
           size="14"
+          background-color="purple lighten-3"
+          color="purple"
         ></v-rating>
 
         <div class="grey--text ml-3">2.5 (413)</div>
