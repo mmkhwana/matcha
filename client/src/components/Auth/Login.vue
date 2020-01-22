@@ -1,18 +1,18 @@
 <template>
 <v-parallax
   src="../../assets/home.jpg"
-  height= "1100"
+  height= "1000"
 >
 <v-row
   align="center"
   justify="center"
 >
-<v-col class="text-center" cols="12">
+  <v-col class="text-center" cols="12">
     <h1 class="display-3 mb-4">Welcome to Matcha</h1>
     <h4 class="subheading font-weight-thin display-1">Meet Your Match!</h4>
   </v-col>
   <v-col class="text-center" cols="12">
-    <v-layout align-center justify-center>
+     <v-layout align-center justify-center>
             <v-flex xs12 sm8 md4 >
                 <v-form>
                     <v-card>
@@ -42,7 +42,7 @@
                         </v-card-text>
                         <v-divider light></v-divider>
                         <v-card-actions>
-                            <v-btn rounded color="deep-purple lighten-3" dark>Login
+                            <v-btn rounded color="deep-purple lighten-3" dark v-on:click="navigate">Login
                             </v-btn>
                         </v-card-actions>
                         <v-divider light></v-divider>
@@ -59,7 +59,13 @@
 
 </template>
 <script>
+import router from '../../router'
 export default {
-  name: 'Login'
+  name: 'Login',
+  methods: {
+    navigate () {
+      router.push({ name: 'Dashboard' })
+    }
+  }
 }
 </script>

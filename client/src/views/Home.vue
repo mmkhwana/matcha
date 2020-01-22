@@ -1,7 +1,7 @@
 <template>
 <v-parallax
   src="../assets/home.jpg"
-  height= "1100"
+  height= "1000"
 >
 <v-row
   align="center"
@@ -10,7 +10,7 @@
   <v-col class="text-center" cols="12">
     <h1 class="display-3 mb-4">Welcome to Matcha</h1>
     <h4 class="subheading font-weight-thin display-1">Want to find your perfect date today!</h4>
-    <v-btn v-on:click="Loginbtn" rounded color="deep-purple lighten-3" dark lg>Login</v-btn>
+    <v-btn v-on:click="Loginbtn" rounded color="deep-purple lighten-3" dark lg >Login</v-btn>
   </v-col>
   <v-col class="text-center" cols="12">
     <v-layout align-center justify-center>
@@ -34,7 +34,7 @@
                             This user already exist, try a different set of data.
                             </v-alert> -->
                             <v-text-field
-                                v-icon="person"
+                                icon="person"
                                 name="username"
                                 label="Username"
                                 type="text"
@@ -42,7 +42,6 @@
                             >
                             </v-text-field>
                             <v-text-field
-                                icon="email"
                                 name="user_email"
                                 label="Email"
                                 type="text"
@@ -66,7 +65,7 @@
                             >
                             </v-text-field>
                             <v-card-actions>
-                                <v-btn rounded color ="deep-purple lighten-3" dark v-on:click="insertUser">Sign Up</v-btn>
+                                <v-btn rounded color="deep-purple lighten-3" dark v-on:click="insertUser">Sign Up</v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-card-text>
@@ -79,7 +78,10 @@
 
 </template>
 <script>
+// @ is an alias to /src
+
 import router from '../router'
+
 export default {
   name: 'home',
   methods: {
