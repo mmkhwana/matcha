@@ -1,18 +1,17 @@
 <template>
 <v-parallax
-  src="../assets/home.jpg"
-  height= "1000"
+src="../assets/home2.jpg"
+height="1000"
 >
 <v-row
   align="center"
   justify="center"
 >
-  <v-col class="text-center" cols="12">
+  <v-col class="text-center" cols="6">
     <h1 class="display-3 mb-4">Welcome to Matcha</h1>
     <h4 class="subheading font-weight-thin display-1">Want to find your perfect date today!</h4>
-    <v-btn rounded dark lg>Login</v-btn>
   </v-col>
-  <v-col class="text-center" cols="12">
+  <v-col class="text-center" cols="6">
     <v-layout align-center justify-center>
         <v-flex xs12 sm8 md4 >
             <v-card class="elevation-12">
@@ -67,6 +66,8 @@
                             </v-text-field>
                             <v-card-actions>
                                 <v-btn rounded color ="indigo" dark v-on:click="insertUser">Sign Up</v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn rounded color ="indigo" dark v-on:click="insertUser">Login</v-btn>
                             </v-card-actions>
                         </v-form>
                     </v-card-text>
@@ -76,10 +77,6 @@
   </v-col>
 </v-row>
 </v-parallax>
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/remotes/origin/wiseman
 </template>
 <script>
 // @ is an alias to /src
