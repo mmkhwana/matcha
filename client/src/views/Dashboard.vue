@@ -82,7 +82,7 @@ export default {
         { title: 'Chat', icon: 'mdi-chat' },
         { title: 'Settings', icon: 'mdi-settings' },
         { title: 'Log Out', icon: 'mdi-logout' }],
-      titles: 'User Profile'
+      titles: 'Profile'
     }
   },
   computed: {
