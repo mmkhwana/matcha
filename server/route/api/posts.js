@@ -10,6 +10,11 @@ router.get('/', async(req, res) => {
     res.send(await posts.find({}).toArray());
 });
 
+router.get('/login', async(req, res) => {
+    const posts = await loadUsersCollection();
+    res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
+});
+
 router.post('/', async(req, res) => {
     const posts = await loadUsersCollection();
     if (req.body.confirm == req.body.pass)
@@ -32,9 +37,15 @@ router.delete('/:id', async(req, res) => {
 });
 
 async function loadUsersCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
-        keepAlive: 1, useUnifiedTopology: true, poolSize: 20, ssl: true
+   /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
+        useUnifiedTopology: true, useNewUrlParser: true
     });
+    return client.db('Matcha').collection('Users');*/
+
+    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
+        useNewUrlParser: true, useUnifiedTopology: true
+    });
+
     return client.db('Matcha').collection('Users');
     
 }

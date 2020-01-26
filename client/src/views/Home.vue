@@ -103,7 +103,13 @@
 // @ is an alias to /src
 import SignupService from '../SignupService'
 import router from '../router'
-
+import VueSession from 'vue-session'
+import Vue from 'vue'
+Vue.use(VueSession)
+var options = {
+  persist: true
+}
+Vue.use(VueSession, options)
 export default {
   name: 'home',
   data () {
@@ -120,6 +126,9 @@ export default {
   },
   async created () {
     try {
+      if (this.$session.exists()) {
+        router.push({ name: 'Dashboard' })
+      }
       this.posts = await SignupService.getUsers()
     } catch (error) {
       this.error = error.message

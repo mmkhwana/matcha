@@ -14,7 +14,7 @@
         <v-btn icon>
             <v-icon>mdi-bell</v-icon>
         </v-btn>
-        <v-btn icon>
+        <v-btn icon @click="logout">
             <v-icon>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
@@ -68,7 +68,10 @@
 import Matches from '../views/Matches'
 import Preference from '../views/Preference'
 import Profile from '../views/Profile'
+import router from '../router'
+import VueSession from 'vue-session'
 import Vue from 'vue'
+Vue.use(VueSession)
 Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
@@ -99,6 +102,14 @@ export default {
   methods: {
     async changeTitles (titleName) {
       this.titles = titleName
+    },
+    logout () {
+    //  this.$session.start()
+      if (this.$session.exists()) {
+        this.$session.clear()
+        this.$session.destroy()
+        router.push({ name: 'home' })
+      }
     }
   }
 }
