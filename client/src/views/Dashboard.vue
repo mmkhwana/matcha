@@ -68,10 +68,12 @@
 import Matches from '../views/Matches'
 import Preference from '../views/Preference'
 import Profile from '../views/Profile'
+import Settings from '../views/Settings'
 import Vue from 'vue'
 Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
+Vue.component('Settings', Settings)
 export default {
   name: 'Dashboard',
   data () {
@@ -91,6 +93,8 @@ export default {
         return 'Preference'
       } else if (this.titles === 'Matches') {
         return 'Matches'
+      } else if (this.titles === 'Settings') {
+        return 'Settings'
       } else {
         return 'Profile'
       }
