@@ -1,7 +1,5 @@
 <template>
 <v-card
-:loading="loading"
-class="mx-auto my-12"
 >
 <v-container id="dropdown-example-2">
 <v-row>
@@ -40,6 +38,7 @@ justify="center"
 align="center"
 class="mx-0"
 >
+  <v-icon>{{ icons.mdiPencil }}</v-icon>
 <v-col cols="12">
 <v-card flat>
 <v-card-title>Biography</v-card-title>
@@ -72,7 +71,6 @@ cols="4"
 v-model="selection"
 active-class="deep-purple accent-4 white--text"
 column
-v-if="selected"
 >
 <v-chip>isiZulu</v-chip>
 
@@ -113,7 +111,20 @@ column
 </v-card>
 </template>
 <script>
+import {
+  mdiAccount,
+  mdiPencil,
+  mdiShareVariant,
+  mdiDelete
+} from '@mdi/js'
 export default {
-
+  data: () => ({
+    icons: {
+      mdiAccount,
+      mdiPencil,
+      mdiShareVariant,
+      mdiDelete
+    }
+  })
 }
 </script>

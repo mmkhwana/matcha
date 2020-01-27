@@ -24,7 +24,7 @@
                 </v-row>
               </v-card-text>
               <v-card-actions>
-                  <a href ="#">Change Password?</a>
+                  <a href ="#">Change Password</a>
                   </v-card-actions>
           </v-card>
       </v-col>
@@ -35,8 +35,12 @@
 </template>
 <script>
 export default {
-  settings: [
-    { title: 'Name', value: 'Khanyisa' }
-  ]
+  default () {
+    return {
+      settings: [
+        { title: 'Name', value: 'Khanyisa' }
+      ]
+    }
+  }
 }
 </script>
