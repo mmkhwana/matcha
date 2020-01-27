@@ -4,6 +4,13 @@
 class="mx-auto my-12"
 >
 <v-container id="dropdown-example-2">
+    <v-row>
+        <v-col cols="12" class="text-right">
+            <v-btn icon @click="edit">
+                <v-icon>mdi-square-edit-outline</v-icon>
+            </v-btn>
+        </v-col>
+    </v-row>
 <v-row>
 <v-col
 v-for="n in 5"
@@ -113,7 +120,13 @@ column
 </v-card>
 </template>
 <script>
+// import DashboardVue from './Dashboard.vue'
 export default {
-
+  name: 'Edit',
+  methods: {
+    edit () {
+      this.$root.$emit('Edit')
+    }
+  }
 }
 </script>
