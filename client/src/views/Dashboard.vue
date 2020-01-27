@@ -55,7 +55,9 @@
     <v-card-text
     >
      <template>
-    <component :is="changeComponents"></component>
+       <keep-alive>
+    <component :is="titles"></component>
+       </keep-alive>
     </template>
     </v-card-text>
     </v-col>
@@ -68,6 +70,7 @@
 import Matches from '../views/Matches'
 import Preference from '../views/Preference'
 import Profile from '../views/Profile'
+import Edit from '../views/ProfileEdit'
 import router from '../router'
 import VueSession from 'vue-session'
 import Settings from '../views/Settings'
@@ -77,6 +80,7 @@ Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
+Vue.component('Edit', Edit)
 export default {
   name: 'Dashboard',
   data () {
@@ -98,14 +102,29 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
+      } else if (this.titles === 'Profile Edit') {
+        return 'Edit'
       } else {
         return 'Profile'
       }
     }
   },
+  mounted () {
+    this.$root.$on('Edit', () => {
+      this.titles = 'Edit'
+    })
+  },
   methods: {
     async changeTitles (titleName) {
-      this.titles = titleName
+      if (titleName === 'Log Out') {
+        if (this.$session.exists()) {
+          this.$session.clear()
+          this.$session.destroy()
+          router.push({ name: 'Login' })
+        }
+      } else {
+        this.titles = titleName
+      }
     },
     logout () {
     //  this.$session.start()

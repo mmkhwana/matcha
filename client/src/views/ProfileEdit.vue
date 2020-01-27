@@ -1,10 +1,28 @@
 <template>
   <v-card
-    :loading="loading"
     class="mx-auto my-12"
   >
      <v-container id="dropdown-example-2">
        <v-row>
+                     <v-col cols="2"
+                     class="d-flex child-flex"
+                     color="deep-purple lighten-3"
+                    dark
+                     >
+              <v-container class="text-center">
+                <picture-input
+                accept="image/jpeg, image/png"
+                :height="80"
+                :width="80"
+                color="deep-purple lighten-3"
+                >
+                <v-btn icon>
+                  <v-icon>mdi-camera-plus</v-icon>
+                </v-btn>
+                <v-card-text>Upload Photo</v-card-text>
+                </picture-input>
+              </v-container>
+            </v-col>
             <v-col
               v-for="n in 5"
               :key="n"

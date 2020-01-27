@@ -2,6 +2,13 @@
 <v-card
 >
 <v-container id="dropdown-example-2">
+    <v-row>
+        <v-col cols="12" class="text-right">
+            <v-btn icon @click="edit">
+                <v-icon>mdi-square-edit-outline</v-icon>
+            </v-btn>
+        </v-col>
+    </v-row>
 <v-row>
 <v-col
 v-for="n in 5"
@@ -118,6 +125,7 @@ import {
   mdiDelete
 } from '@mdi/js'
 export default {
+    name: 'Edit',
   data: () => ({
     icons: {
       mdiAccount,
@@ -125,6 +133,11 @@ export default {
       mdiShareVariant,
       mdiDelete
     }
-  })
+  }),
+    methods: {
+    edit () {
+      this.$root.$emit('Edit')
+    }
+  }
 }
 </script>
