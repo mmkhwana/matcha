@@ -1,26 +1,60 @@
 <template>
+
   <v-card
     class="mx-auto my-12"
   >
      <v-container id="dropdown-example-2">
        <v-row>
-                     <v-col cols="2"
-                     class="d-flex child-flex"
-                     color="deep-purple lighten-3"
-                    dark
-                     >
+          <v-col cols="2"
+          class="d-flex child-flex"
+          color="deep-purple lighten-3"
+        dark
+          >
               <v-container class="text-center">
-                <picture-input
-                accept="image/jpeg, image/png"
-                :height="80"
-                :width="80"
-                color="deep-purple lighten-3"
-                >
-                <v-btn icon>
-                  <v-icon>mdi-camera-plus</v-icon>
-                </v-btn>
-                <v-card-text>Upload Photo</v-card-text>
-                </picture-input>
+                    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="290px"
+      transition="dialog-bottom-transition"
+    >
+      <template v-slot:activator="{ on }">
+        <v-btn icon v-on="on">
+          <v-icon>mdi-camera-plus</v-icon>
+        </v-btn>
+        <v-card-text>Upload Photo</v-card-text>
+      </template>
+      <v-card>
+        <v-card-title class="headline">Choose Photo</v-card-title>
+
+        <v-card-text>
+          <input
+              accept="image/*"
+              color="deep-purple lighten-3"
+              type="file"
+          />
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            v-on:click.native="dialog = false"
+          >
+            cancel
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            v-on:click.stop="dialog = false"
+          >
+            save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
               </v-container>
             </v-col>
             <v-col
@@ -51,8 +85,8 @@
             </v-col>
           </v-row>
     </v-container>
-    <v-divider class="mx-4"></v-divider>
 
+    <v-divider class="mx-4"></v-divider>
     <v-card-text>
       <v-row
         align="center"
@@ -138,6 +172,16 @@
 </template>
 <script>
 export default {
+  name: 'Profile Edit',
+  default () {
+    return {
+      dialog: true
+    }
+  },
+  async close () {
+    this.dialog = false
+    this.dialog = null
+  },
   methods: {
     Going_out () {
       if ((this.$refs.out).color === 'green') {
