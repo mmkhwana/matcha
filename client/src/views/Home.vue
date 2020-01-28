@@ -157,6 +157,14 @@ export default {
       if (!this.username) {
         this.error = 'Name required.'
       }
+      if (!this.pass) {
+        this.error = 'Password required.'
+      } else if (!this.validPassword(this.pass)) {
+        this.error = 'Min. 8 characters with at least one capital letter, a number and a special character.'
+      }
+      if (!this.confirm) {
+        this.error = 'Confirm Password required.'
+      }
       if (!this.email) {
         this.error = 'Email required.'
       } else if (!this.validEmail(this.email)) {
@@ -166,6 +174,10 @@ export default {
     validEmail: function (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
+    },
+    validPassword: function (pass) {
+      var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
+      return pattern.test(pass)
     }
   }
 }

@@ -45,7 +45,6 @@ justify="center"
 align="center"
 class="mx-0"
 >
-  <v-icon>{{ icons.mdiPencil }}</v-icon>
 <v-col cols="12">
 <v-card flat>
 <v-card-title>Biography</v-card-title>
@@ -125,7 +124,7 @@ import {
   mdiDelete
 } from '@mdi/js'
 export default {
-    name: 'Edit',
+  name: 'Edit',
   data: () => ({
     icons: {
       mdiAccount,
@@ -134,7 +133,7 @@ export default {
       mdiDelete
     }
   }),
-    methods: {
+  methods: {
     edit () {
       this.$root.$emit('Edit')
     }
