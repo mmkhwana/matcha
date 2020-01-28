@@ -74,12 +74,14 @@ import Edit from '../views/ProfileEdit'
 import router from '../router'
 import VueSession from 'vue-session'
 import Settings from '../views/Settings'
+import Chat from '../views/Chat'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
+Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
 export default {
   name: 'Dashboard',
@@ -102,6 +104,8 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
+      } else if (this.titles === 'Chat') {
+        return 'Chat'
       } else if (this.titles === 'Profile Edit') {
         return 'Edit'
       } else {

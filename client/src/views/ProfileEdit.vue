@@ -50,7 +50,7 @@
           <v-btn
             color="purple darken-1"
             text
-            v-on:click.native="dialog = false"
+            v-on:click.native="dialog =  false"
           >
             cancel
           </v-btn>
@@ -109,8 +109,7 @@
               <v-card-subtitle>
                 <v-textarea
                 clearable
-                label="Bio"
-                value="Bio(optional)."
+                label="Bio(optional)."
                 ></v-textarea>
               </v-card-subtitle>
               <v-card-text>
