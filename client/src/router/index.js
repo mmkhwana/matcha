@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-<<<<<<< HEAD
-import Dashboard from '../views/Dashboard'
-=======
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
 
 Vue.use(VueRouter)
 
@@ -17,8 +13,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue')
   },
   {
-<<<<<<< HEAD
-=======
     path: '/Login',
     name: 'Login',
     // route level code-splitting
@@ -27,7 +21,6 @@ const routes = [
     component: () => import(/* webpackChunkName: "Login" */ '../components/Auth/Login.vue')
   },
   {
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
     path: '/about',
     name: 'about',
     // route level code-splitting
@@ -36,20 +29,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-<<<<<<< HEAD
-    path: '/user',
-=======
     path: '/Dashboard',
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
     name: 'Dashboard',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-<<<<<<< HEAD
-    component: Dashboard
-=======
     component: () => import(/* webpackChunkName: "Dashboard" */ '../views/Dashboard.vue')
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
   },
   {
     path: '/matches',
@@ -58,8 +43,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "Matches" */ '../views/Matches.vue')
-<<<<<<< HEAD
-=======
   },
   {
     path: '/preference',
@@ -76,7 +59,6 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "Settings" */ '../views/Settings.vue')
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
   }
 ]
 
