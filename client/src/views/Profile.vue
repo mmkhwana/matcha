@@ -119,7 +119,6 @@ column
 <script>
 import {
   mdiAccount,
-  mdiPencil,
   mdiShareVariant,
   mdiDelete
 } from '@mdi/js'
@@ -128,7 +127,6 @@ export default {
   data: () => ({
     icons: {
       mdiAccount,
-      mdiPencil,
       mdiShareVariant,
       mdiDelete
     }
