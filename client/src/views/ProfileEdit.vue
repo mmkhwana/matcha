@@ -11,10 +11,11 @@
         dark
           >
               <v-container class="text-center">
+                <template>
                     <v-dialog
       v-model="dialog"
       persistent
-      max-width="290px"
+      max-width="490px"
       transition="dialog-bottom-transition"
     >
       <template v-slot:activator="{ on }">
@@ -25,11 +26,20 @@
       </template>
       <v-card>
         <v-card-title class="headline">Choose Photo</v-card-title>
-
+      <v-card-text>
+                <v-img
+                  :src="`https://picsum.photos/500/300?image=${1 * 5 + 10}`"
+                  :lazy-src="`https://picsum.photos/10/6?image=${1 * 5 + 10}`"
+                  aspect-ratio="1.5"
+                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                  class="white--text align-end grey lighten-2"
+                >
+                </v-img>
+      </v-card-text>
         <v-card-text>
           <input
               accept="image/*"
-              color="deep-purple lighten-3"
+              color="primary"
               type="file"
           />
         </v-card-text>
@@ -38,7 +48,7 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="green darken-1"
+            color="purple darken-1"
             text
             v-on:click.native="dialog = false"
           >
@@ -46,7 +56,7 @@
           </v-btn>
 
           <v-btn
-            color="green darken-1"
+            color="purple darken-1"
             text
             v-on:click.stop="dialog = false"
           >
@@ -55,6 +65,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+                </template>
               </v-container>
             </v-col>
             <v-col
@@ -69,7 +80,7 @@
                   :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
+                  class="white--text  lighten-2"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -179,7 +190,6 @@ export default {
     }
   },
   async close () {
-    this.dialog = false
     this.dialog = null
   },
   methods: {
