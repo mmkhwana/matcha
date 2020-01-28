@@ -18,15 +18,12 @@
   },
   "homepage": "https://github.com/mmkhwana/matcha#readme",
   "dependencies": {
+    "body-parse": "^0.1.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-<<<<<<< HEAD
     "mongodb": "^3.5.1",
     "vue": "^2.6.11"
-=======
-    "mongodb": "^3.5.1"
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

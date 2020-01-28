@@ -1,8 +1,4 @@
 <template>
-<<<<<<< HEAD
-    <v-container fill-height>
-        <v-layout align-center justify-center>
-=======
 <v-parallax
   src="../../assets/home.jpg"
   height= "1000"
@@ -27,16 +23,11 @@
   </v-col>
   <v-col class="text-center" cols="12">
      <v-layout align-center justify-center>
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
             <v-flex xs12 sm8 md4 >
                 <v-form>
                     <v-card>
                         <v-toolbar
-<<<<<<< HEAD
-                            color="primary"
-=======
                             color="deep-purple lighten-3"
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
                             dark
                         >
                             <v-toolbar-title>
@@ -49,10 +40,7 @@
                                 name="username"
                                 label="Username"
                                 type="text"
-<<<<<<< HEAD
-=======
                                 v-model="username"
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
                             >
                             </v-text-field>
                             <v-text-field
@@ -60,22 +48,13 @@
                                 name="user_pwd"
                                 label="Password"
                                 type="password"
-<<<<<<< HEAD
-=======
                                 v-model="pass"
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
                             >
                             </v-text-field>
                         </v-card-text>
                         <v-divider light></v-divider>
                         <v-card-actions>
-<<<<<<< HEAD
-                            <v-btn rounded color ="indigo" dark>Sign Up</v-btn>
-                            <v-spacer></v-spacer>
-                            <v-btn rounded color ="primary" dark>Login
-=======
                             <v-btn rounded color="deep-purple lighten-3" dark v-on:click="login">Login
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
                             </v-btn>
                         </v-card-actions>
                         <v-divider light></v-divider>
@@ -86,13 +65,6 @@
                 </v-form>
             </v-flex>
         </v-layout>
-<<<<<<< HEAD
-    </v-container>
-</template>
-<script>
-export default {
-  name: 'Login'
-=======
   </v-col>
 </v-row>
 </v-parallax>
@@ -141,6 +113,5 @@ export default {
       }
     }
   }
->>>>>>> 3a8940fe04bdd06136e1d21fda12a8c2607afbae
 }
 </script>
