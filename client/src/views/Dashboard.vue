@@ -75,6 +75,7 @@ import router from '../router'
 import VueSession from 'vue-session'
 import Settings from '../views/Settings'
 import Chat from '../views/Chat'
+import Upload from '../views/dialog'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
@@ -83,6 +84,7 @@ Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
+Vue.component('Upload Photo', Upload)
 export default {
   name: 'Dashboard',
   data () {
@@ -116,6 +118,9 @@ export default {
   mounted () {
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
+    })
+    this.$root.$on('Upload', () => {
+      this.titles = 'Upload Photo'
     })
   },
   methods: {

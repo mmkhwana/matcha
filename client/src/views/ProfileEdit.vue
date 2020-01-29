@@ -11,61 +11,12 @@
         dark
           >
               <v-container class="text-center">
-                <template>
-                    <v-dialog
-      v-model="dialog"
-      persistent
-      max-width="490px"
-      transition="dialog-bottom-transition"
-    >
-      <template v-slot:activator="{ on }">
-        <v-btn icon v-on="on">
+                        <template>
+        <v-btn icon @click="upload">
           <v-icon>mdi-camera-plus</v-icon>
         </v-btn>
         <v-card-text>Upload Photo</v-card-text>
-      </template>
-      <v-card>
-        <v-card-title class="headline">Choose Photo</v-card-title>
-      <v-card-text>
-                <v-img
-                  :src="`https://picsum.photos/500/300?image=${1 * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${1 * 5 + 10}`"
-                  aspect-ratio="1.5"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
-                >
-                </v-img>
-      </v-card-text>
-        <v-card-text>
-          <input
-              accept="image/*"
-              color="primary"
-              type="file"
-          />
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="purple darken-1"
-            text
-            v-on:click.native="dialog =  false"
-          >
-            cancel
-          </v-btn>
-
-          <v-btn
-            color="purple darken-1"
-            text
-            v-on:click.stop="dialog = false"
-          >
-            save
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-                </template>
+    </template>
               </v-container>
             </v-col>
             <v-col
@@ -183,15 +134,15 @@
 <script>
 export default {
   name: 'Profile Edit',
-  default () {
-    return {
-      dialog: true
-    }
-  },
-  async close () {
-    this.dialog = null
+  mounted () {
+    this.$root.$on('Edit', () => {
+      this.titles = 'Edit'
+    })
   },
   methods: {
+    upload () {
+      this.$root.$emit('Upload')
+    },
     Going_out () {
       if ((this.$refs.out).color === 'green') {
         (this.$refs.out).color = 'lightGrey';
