@@ -9,12 +9,10 @@
         <v-card-title class="headline">Choose Photo</v-card-title>
       <v-card-text>
                 <v-img
-                  :src="image"
+                  :src= image
                   :lazy-src="image"
-                  aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   class="white--text align-end grey lighten-2"
-                  id="image"
                 ></v-img>
       </v-card-text>
         <v-card-text>
