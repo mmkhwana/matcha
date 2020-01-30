@@ -142,6 +142,7 @@ export default {
   methods: {
     upload () {
       this.$root.$emit('Upload')
+      this.$destroy()
     },
     Going_out () {
       if ((this.$refs.out).color === 'green') {

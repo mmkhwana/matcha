@@ -15,6 +15,17 @@ router.get('/login', async(req, res) => {
     res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
 });
 
+router.post('/upload', async(req, res) => {
+    if (!req.query){
+        return res.send({success: false})
+    }
+    else {
+        return res.send({success: true}).sendfile(path.join(__dirname),"../../client/uploads"+req.query.image)
+    }
+    /*const posts = await loadUsersCollection();
+    res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());*/
+});
+
 router.post('/', async(req, res) => {
     const posts = await loadUsersCollection();
     if (req.body.confirm == req.body.pass)
@@ -93,6 +104,4 @@ async function loadpreferencesCollection() {
 
     return client.db('Matcha').collection('preferences');
 }
-
-
 module.exports = router;

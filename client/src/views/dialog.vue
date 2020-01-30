@@ -5,14 +5,14 @@
       max-width="500px"
       transition="dialog-bottom-transition"
     >
-      <v-card  cols="12" sm="12">
+      <v-card  cols="12">
         <v-card-title class="headline">Choose Photo</v-card-title>
       <v-card-text>
                 <v-img
-                  :src= image
-                  :lazy-src="image"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
+                  :src="img"
+                  width="450px"
+                  height="350px"
+                  rel="photo"
                 ></v-img>
       </v-card-text>
         <v-card-text>
@@ -20,8 +20,8 @@
               accept="image/*"
               color="primary"
               type="file"
-              name="upload"
-              @change="changed"
+              rel="upload"
+              @change= "changed"
           />
         </v-card-text>
 
@@ -49,30 +49,38 @@
     </layout>
 </template>
 <script>
+import GeneralService from '../GeneralService'
+import VueSession from 'vue-session'
+import Vue from 'vue'
+Vue.use(VueSession)
 export default {
   name: 'Dialog',
   default () {
     return {
       file: null,
-      image: `https://picsum.photos/500/300?image=${1 * 5 + 10}`
+      img: '../assets/logo.png'
     }
   },
   methods: {
     changed (e) {
       this.file = e.target.files[0]
+      this.img = URL.createObjectURL(this.file)
       var reader = new FileReader()
       reader.readAsDataURL(this.file)
-      reader.onload = (event) => {
-        this.image = event.target.result
-      }
-      e.target.files[0] = null
+      reader.addEventListener('load', () => {
+        this.img = reader.result
+      })
     },
     cancel () {
       this.$root.$emit('Edit')
+      this.$destroy()
     },
-    save () {
-      alert(this.file)
+    async save () {
+      alert(this.img)
+      var res = await GeneralService.UploadPhoto(this.img)
+      alert(res.success)
       this.$root.$emit('Edit')
+      this.$destroy()
     }
   }
 }
