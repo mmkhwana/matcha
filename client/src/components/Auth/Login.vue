@@ -102,7 +102,6 @@ export default {
           this.$session.start()
           this.$session.set('email', this.users.email)
           this.$session.set('id', this.users._id)
-          alert(this.$session.get('id'))
           //  Vue.http.headers.common['Authorization'] = 'Bearer ' + this.users.email
           router.push({ name: 'Dashboard' })
         } else {

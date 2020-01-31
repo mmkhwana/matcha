@@ -55,7 +55,9 @@
     <v-card-text
     >
      <template>
-    <component :is="changeComponents"></component>
+       <keep-alive>
+    <component :is="titles"></component>
+       </keep-alive>
     </template>
     </v-card-text>
     </v-col>
@@ -72,13 +74,21 @@ import Edit from '../views/ProfileEdit'
 import router from '../router'
 import VueSession from 'vue-session'
 import Settings from '../views/Settings'
+import Chat from '../views/Chat'
+import Upload from '../views/dialog'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
+<<<<<<< HEAD
 Vue.component('Edit', Edit) 
+=======
+Vue.component('Chat', Chat)
+Vue.component('Edit', Edit)
+Vue.component('Upload Photo', Upload)
+>>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
 export default {
   name: 'Dashboard',
   data () {
@@ -100,6 +110,11 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
+<<<<<<< HEAD
+=======
+      } else if (this.titles === 'Chat') {
+        return 'Chat'
+>>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
       } else if (this.titles === 'Profile Edit') {
         return 'Edit'
       } else {
@@ -107,9 +122,25 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$root.$on('Edit', () => {
+      this.titles = 'Edit'
+    })
+    this.$root.$on('Upload', () => {
+      this.titles = 'Upload Photo'
+    })
+  },
   methods: {
     async changeTitles (titleName) {
-      this.titles = titleName
+      if (titleName === 'Log Out') {
+        if (this.$session.exists()) {
+          this.$session.clear()
+          this.$session.destroy()
+          router.push({ name: 'Login' })
+        }
+      } else {
+        this.titles = titleName
+      }
     },
     logout () {
     //  this.$session.start()

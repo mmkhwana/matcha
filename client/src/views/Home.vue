@@ -26,7 +26,10 @@
                     <v-card-text >{{ response }}</v-card-text>
                 </v-toolbar>
                     <v-card-text>
-                        <v-form>
+                      <v-alert-box>
+                        <p>{{ error }}</p>
+                      </v-alert-box>
+                        <v-form  >
                             <!-- <v-alert
                                 :value="true"
                                 color="error"
@@ -136,15 +139,45 @@ export default {
   },
   methods: {
     async insertUser () {
-      var respond = await SignupService.registerUser(this.username, this.email, this.date, this.pass, this.confirm)
-      this.response = respond.data
-      if (this.response === 'User Registered') {
-        router.push({ name: 'Login' })
+      this.error = ''
+      this.checkForm()
+      if (!this.error.length) {
+        var respond = await SignupService.registerUser(this.username, this.email, this.date, this.pass, this.confirm)
+        this.response = respond.data
+        if (this.response === 'User Registered') {
+          router.push({ name: 'Login' })
+        }
       }
     //  this.posts = await SignupService.getUsers()
     },
     Loginbtn () {
       router.push({ name: 'Login' })
+    },
+    checkForm: function () {
+      if (!this.username) {
+        this.error = 'Name required.'
+      }
+      if (!this.pass) {
+        this.error = 'Password required.'
+      } else if (!this.validPassword(this.pass)) {
+        this.error = 'Min. 8 characters with at least one capital letter, a number and a special character.'
+      }
+      if (!this.confirm) {
+        this.error = 'Confirm Password required.'
+      }
+      if (!this.email) {
+        this.error = 'Email required.'
+      } else if (!this.validEmail(this.email)) {
+        this.error = 'Valid email required.'
+      }
+    },
+    validEmail: function (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(email)
+    },
+    validPassword: function (pass) {
+      var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
+      return pattern.test(pass)
     }
   }
 }

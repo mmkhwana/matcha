@@ -1,10 +1,24 @@
 <template>
+
   <v-card
-    :loading="loading"
     class="mx-auto my-12"
   >
      <v-container id="dropdown-example-2">
        <v-row>
+          <v-col cols="2"
+          class="d-flex child-flex"
+          color="deep-purple lighten-3"
+        dark
+          >
+              <v-container class="text-center">
+                        <template>
+        <v-btn icon @click="upload">
+          <v-icon>mdi-camera-plus</v-icon>
+        </v-btn>
+        <v-card-text>Upload Photo</v-card-text>
+    </template>
+              </v-container>
+            </v-col>
             <v-col
               v-for="n in 5"
               :key="n"
@@ -17,7 +31,7 @@
                   :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
+                  class="white--text  lighten-2"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -33,8 +47,8 @@
             </v-col>
           </v-row>
     </v-container>
-    <v-divider class="mx-4"></v-divider>
 
+    <v-divider class="mx-4"></v-divider>
     <v-card-text>
       <v-row
         align="center"
@@ -46,8 +60,7 @@
               <v-card-subtitle>
                 <v-textarea
                 clearable
-                label="Bio"
-                value="Bio(optional)."
+                label="Bio(optional)."
                 ></v-textarea>
               </v-card-subtitle>
               <v-card-text>
@@ -120,7 +133,17 @@
 </template>
 <script>
 export default {
+  name: 'Profile Edit',
+  mounted () {
+    this.$root.$on('Edit', () => {
+      this.titles = 'Edit'
+    })
+  },
   methods: {
+    upload () {
+      this.$root.$emit('Upload')
+      this.$destroy()
+    },
     Going_out () {
       if ((this.$refs.out).color === 'green') {
         (this.$refs.out).color = 'lightGrey';

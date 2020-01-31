@@ -10,6 +10,9 @@ app.use(cors());
 const posts = require('./route/api/posts');
 
 app.use('/api/posts', posts);
+app.get('/', function(req, res){
+    res.send('<h1>Hello world</h1>');
+  });
 
 const port = process.env.PORT || 5000;
 
