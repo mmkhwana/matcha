@@ -9,7 +9,7 @@
               v-for="n in 5"
               :key="n"
               class="d-flex child-flex"
-              cols="2"
+              cols="12"
             >
               <v-card>
                 <v-img

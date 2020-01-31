@@ -8,7 +8,7 @@
         dark
         width="100%"
     >
-         <v-toolbar-title>{{titles}}</v-toolbar-title>
+         <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
         <v-btn icon>
@@ -68,6 +68,7 @@
 import Matches from '../views/Matches'
 import Preference from '../views/Preference'
 import Profile from '../views/Profile'
+import Edit from '../views/ProfileEdit'
 import router from '../router'
 import VueSession from 'vue-session'
 import Settings from '../views/Settings'
@@ -77,6 +78,7 @@ Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
+Vue.component('Edit', Edit) 
 export default {
   name: 'Dashboard',
   data () {
@@ -98,6 +100,8 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
+      } else if (this.titles === 'Profile Edit') {
+        return 'Edit'
       } else {
         return 'Profile'
       }
@@ -114,6 +118,9 @@ export default {
         this.$session.destroy()
         router.push({ name: 'home' })
       }
+    },
+    getRef () {
+      return (this.$refs.title).innerHTML
     }
   }
 }

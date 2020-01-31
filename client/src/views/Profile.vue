@@ -4,6 +4,17 @@
 class="mx-auto my-12"
 >
 <v-container id="dropdown-example-2">
+           <v-row>
+         <v-col
+         cols="12"
+         class="text-right"
+         >
+         <v-spacer></v-spacer>
+         <v-btn icon v-on:click="edit">
+           <v-icon>mdi-square-edit-outline</v-icon>
+         </v-btn>
+         </v-col>
+       </v-row>
 <v-row>
 <v-col
 v-for="n in 5"
@@ -113,7 +124,23 @@ column
 </v-card>
 </template>
 <script>
+import Dash from '../views/Dashboard'
+/* import Vue from 'vue'
+import VueSession from 'vue-session'
+Vue.use(VueSession)
+Vue.component('edit', Edit) */
 export default {
-
+  name: 'Profile',
+  default () {
+    return {
+    }
+  },
+  methods: {
+    edit () {
+      var title = Dash.methods.getRef()
+      alert(title)
+    //  alert((Dash.$refs.title.innerText)
+    }
+  }
 }
 </script>
