@@ -5,14 +5,13 @@ class GeneralService {
   static UploadPhoto (image) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.post(url + 'upload', { params: { image: image } }, {
-          onUploadProgress: ProgressEvent => {
-            console.log(ProgressEvent.loaded / ProgressEvent.total)
-          }
-        })
+        const res = await axios.post(url + 'upload', image)
         const data = res.data
         resolve(
-          data[0]
+          data
+        )
+        reject(
+          data
         )
       } catch (error) {
         alert(error.message)

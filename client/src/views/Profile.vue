@@ -2,19 +2,6 @@
 <v-card
 >
 <v-container id="dropdown-example-2">
-<<<<<<< HEAD
-           <v-row>
-         <v-col
-         cols="12"
-         class="text-right"
-         >
-         <v-spacer></v-spacer>
-         <v-btn icon v-on:click="edit">
-           <v-icon>mdi-square-edit-outline</v-icon>
-         </v-btn>
-         </v-col>
-       </v-row>
-=======
     <v-row>
         <v-col cols="12" class="text-right">
             <v-btn icon @click="edit">
@@ -22,7 +9,6 @@
             </v-btn>
         </v-col>
     </v-row>
->>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
 <v-row>
 <v-col
 v-for="n in 5"
@@ -32,11 +18,11 @@ cols="2"
 >
 <v-card>
 <v-img
-:src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-:lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-aspect-ratio="1.5"
-gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-class="white--text align-end grey lighten-2"
+:src='`https://picsum.photos/500/300?image=${n * 5 + 10}`'
+:lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`'
+aspect-ratio='1.5'
+gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
+class='white--text align-end grey lighten-2'
 >
 <template v-slot:placeholder>
 <v-row
@@ -131,24 +117,6 @@ column
 </v-card>
 </template>
 <script>
-<<<<<<< HEAD
-import Dash from '../views/Dashboard'
-/* import Vue from 'vue'
-import VueSession from 'vue-session'
-Vue.use(VueSession)
-Vue.component('edit', Edit) */
-export default {
-  name: 'Profile',
-  default () {
-    return {
-    }
-  },
-  methods: {
-    edit () {
-      var title = Dash.methods.getRef()
-      alert(title)
-    //  alert((Dash.$refs.title.innerText)
-=======
 import {
   mdiAccount,
   mdiShareVariant,
@@ -166,7 +134,6 @@ export default {
   methods: {
     edit () {
       this.$root.$emit('Edit')
->>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
     }
   }
 }

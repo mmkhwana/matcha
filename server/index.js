@@ -4,8 +4,9 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(bodyParser.json());
+
 app.use(cors());
+app.use(bodyParser.json({limit : "50mb", extended: true}));
 
 const posts = require('./route/api/posts');
 

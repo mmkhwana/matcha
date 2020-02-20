@@ -1,10 +1,11 @@
 const express = require('express');
 const mongodb = require('mongodb');
+const multer = require("multer");
+const path = require('path');
 
 const router = express.Router();
 
 //User
-
 router.get('/', async(req, res) => {
     const posts = await loadUsersCollection();
     res.send(await posts.find({}).toArray());
@@ -15,12 +16,31 @@ router.get('/login', async(req, res) => {
     res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
 });
 
-router.post('/upload', async(req, res) => {
-    if (!req.query){
-        return res.send({success: false})
+const store = multer.diskStorage({
+    dest: function (req, callback) {
+       callback(null, './server/route/api/uploads')},
+    filename: function (req, file,callback){
+        callback(null, file.filedname + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: multer.diskStorage({
+    filename: (req, file, cb) => {
+        cb(null, file.filedname + path.extname(file.originalname))
+    },   
+    dest: (req, file, cb) => {
+        cb(null,'./server/route/api/uploads')
+    }})
+});
+
+router.post('/upload', upload.single('file'), async(req, res) => 
+{ 
+    if (!req.file){
+        return res.send({success: false});
     }
     else {
-        return res.send({success: true}).sendfile(path.join(__dirname),"../../client/uploads"+req.query.image)
+        //   res.status(200).json({file: req.query.file});
+        return res.send({success: true});
     }
     /*const posts = await loadUsersCollection();
     res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());*/

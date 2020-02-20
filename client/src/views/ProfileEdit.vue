@@ -23,7 +23,7 @@
               v-for="n in 5"
               :key="n"
               class="d-flex child-flex"
-              cols="12"
+              cols="2"
             >
               <v-card>
                 <v-img

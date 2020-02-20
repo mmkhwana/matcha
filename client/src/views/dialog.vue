@@ -12,7 +12,7 @@
                   :src="img"
                   width="450px"
                   height="350px"
-                  rel="photo"
+                  ref="photo"
                 ></v-img>
       </v-card-text>
         <v-card-text>
@@ -20,8 +20,8 @@
               accept="image/*"
               color="primary"
               type="file"
-              rel="upload"
-              @change= "changed"
+              ref="upload"
+              @change="changed"
           />
         </v-card-text>
 
@@ -61,23 +61,27 @@ export default {
       img: '../assets/logo.png'
     }
   },
+  mounted: () => {
+    this.$refs['photo'].src = '../../assets/logo.png'
+  },
   methods: {
     changed (e) {
       this.file = e.target.files[0]
-      this.img = URL.createObjectURL(this.file)
       var reader = new FileReader()
-      reader.readAsDataURL(this.file)
       reader.addEventListener('load', () => {
-        this.img = reader.result
+        this.$refs.photo.src = reader.result
       })
+      reader.readAsDataURL(this.file)
     },
     cancel () {
       this.$root.$emit('Edit')
       this.$destroy()
     },
     async save () {
-      alert(this.img)
-      var res = await GeneralService.UploadPhoto(this.img)
+      alert(this.$refs.photo.src)
+      var fileform = new FormData()
+      fileform.append('file', this.file, this.file.name)
+      var res = await GeneralService.UploadPhoto(fileform)
       alert(res.success)
       this.$root.$emit('Edit')
       this.$destroy()

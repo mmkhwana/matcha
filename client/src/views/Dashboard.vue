@@ -82,13 +82,9 @@ Vue.component('Preference', Preference)
 Vue.component('Matches', Matches)
 Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
-<<<<<<< HEAD
-Vue.component('Edit', Edit) 
-=======
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
 Vue.component('Upload Photo', Upload)
->>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
 export default {
   name: 'Dashboard',
   data () {
@@ -110,11 +106,8 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
-<<<<<<< HEAD
-=======
       } else if (this.titles === 'Chat') {
         return 'Chat'
->>>>>>> 31eaa8d9e4c76d306a88dd577a884e879d5870e5
       } else if (this.titles === 'Profile Edit') {
         return 'Edit'
       } else {
