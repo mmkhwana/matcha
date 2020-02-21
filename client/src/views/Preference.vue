@@ -5,13 +5,12 @@
   >
 
     <v-card-title>Khanyisa</v-card-title>
-     <v-container id="dropdown-example-2">
+     <v-container id="dropdown-example-1">
         <v-overflow-btn
         class="my-2"
         :items="dropdown_icon"
         label="Age preference"
         segmented
-        target="#dropdown-example-2"
         ></v-overflow-btn>
     </v-container>
 
@@ -37,7 +36,7 @@
     <v-container id="dropdown-example-2">
         <v-overflow-btn
         class="my-2"
-        :items="dropdown_icon"
+        :items="language"
         label="Location preference"
         segmented
         target="#dropdown-example-2"
@@ -72,7 +71,10 @@
 <script>
 export default {
   default () {
-    return { dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'] }
+    return {
+      dropdown_icon: [{ text: '18-21' }, { text: '22-25' }, { text: '26-29' }, { text: '30-33' }, { text: '34-37' }],
+      language: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }]
+    }
   }
 }
 </script>
