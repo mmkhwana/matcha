@@ -65,13 +65,14 @@
               </v-card-subtitle>
               <v-card-text>
                 <v-row
-                    v-for="n in 5"
+                    v-for="n in attributes"
+                    v-bind:item="n"
                     :key="n"
                     class="d-flex child-flex"
                     cols="4"
                 >
                     <v-col cols="3">
-                        <v-card-text>Relationship:</v-card-text>
+                        <v-card-text>{{ n.name }}</v-card-text>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
@@ -107,7 +108,7 @@
 
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Interest</v-card-title>
+    <v-card-title>Interests</v-card-title>
 
     <v-card-text>
       <v-chip-group
@@ -126,7 +127,13 @@
         <v-chip @click="Some" ref="Some">Some Nice honeys</v-chip>
       </v-chip-group>
     </v-card-text>
-
+          <v-row>
+        <v-col cols="12" class="text-right">
+            <v-btn icon @click="edit">
+                <v-icon>mdi-account-check</v-icon>
+            </v-btn>
+        </v-col>
+    </v-row>
     <v-card-actions>
     </v-card-actions>
   </v-card>
@@ -134,6 +141,12 @@
 <script>
 export default {
   name: 'Profile Edit',
+  default () {
+    return {
+      interests: [],
+      attributes: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]
+    }
+  },
   mounted () {
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
@@ -148,6 +161,7 @@ export default {
       if ((this.$refs.out).color === 'green') {
         (this.$refs.out).color = 'lightGrey';
         (this.$refs.out).textColor = 'black'
+        this.interests.add('Going Out')
       } else {
         (this.$refs.out).color = 'green';
         (this.$refs.out).textColor = 'white'
@@ -157,6 +171,7 @@ export default {
       if ((this.$refs.Drink).color === 'green') {
         (this.$refs.Drink).color = 'LightGrey';
         (this.$refs.Drink).textColor = 'black'
+        this.interests.add('Drink')
       } else {
         (this.$refs.Drink).color = 'green';
         (this.$refs.Drink).textColor = 'white'

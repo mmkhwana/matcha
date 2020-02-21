@@ -17,21 +17,11 @@ router.get('/login', async(req, res) => {
 });
 
 const store = multer.diskStorage({
-    dest: function (req, callback) {
-       callback(null, './server/route/api/uploads')},
-    filename: function (req, file,callback){
-        callback(null, file.filedname + path.extname(file.originalname));
-    }
+    filename: (req, file, cb) => { cb(null, file.originalname)},  
+    destination: function (res, file, cb){ cb(null, 'server/route/api/uploads')}
 });
 
-const upload = multer({ storage: multer.diskStorage({
-    filename: (req, file, cb) => {
-        cb(null, file.filedname + path.extname(file.originalname))
-    },   
-    dest: (req, file, cb) => {
-        cb(null,'./server/route/api/uploads')
-    }})
-});
+const upload = multer({storage: store});
 
 router.post('/upload', upload.single('file'), async(req, res) => 
 { 
@@ -40,6 +30,13 @@ router.post('/upload', upload.single('file'), async(req, res) =>
     }
     else {
         //   res.status(200).json({file: req.query.file});
+        var file_path = 'http://localhost:5000/api/uploads/' + req.file.originalname;
+        const images = await loadUsersImages();
+        images.insertOne({
+           image_path: file_path,
+           image_type: false,
+           user_id: '1'
+        });
         return res.send({success: true});
     }
     /*const posts = await loadUsersCollection();
@@ -56,8 +53,8 @@ router.post('/', async(req, res) => {
             email: req.body.email,
             birth: req.body.date,
             pass: password
-    });
-    res.status(200).send("User Registered");
+        });
+        res.status(200).send("User Registered");
     }
 });
 
@@ -80,6 +77,20 @@ async function loadUsersCollection() {
     return client.db('Matcha').collection('Users');
     
 }
+
+async function loadUsersImages() {
+    /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
+         useUnifiedTopology: true, useNewUrlParser: true
+     });
+     return client.db('Matcha').collection('Users');*/
+ 
+     const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
+         useNewUrlParser: true, useUnifiedTopology: true
+     });
+ 
+     return client.db('Matcha').collection('Images');
+     
+ }
 
 //interets
 

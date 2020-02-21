@@ -11,6 +11,7 @@ app.use(bodyParser.json({limit : "50mb", extended: true}));
 const posts = require('./route/api/posts');
 
 app.use('/api/posts', posts);
+app.use(express.static('/api/uploads'));
 app.get('/', function(req, res){
     res.send('<h1>Hello world</h1>');
   });

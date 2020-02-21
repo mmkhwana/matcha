@@ -92,7 +92,7 @@ column
 
 <v-divider class="mx-4"></v-divider>
 
-<v-card-title>Interest</v-card-title>
+<v-card-title>Interests</v-card-title>
 
 <v-card-text>
 <v-chip-group
