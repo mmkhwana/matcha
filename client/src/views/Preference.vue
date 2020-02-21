@@ -4,7 +4,7 @@
     class="mx-auto my-12"
   >
 
-    <v-card-title>Khanyisa Mbukts</v-card-title>
+    <v-card-title>Khanyisa</v-card-title>
      <v-container id="dropdown-example-2">
         <v-overflow-btn
         class="my-2"
@@ -50,7 +50,6 @@
 
     <v-card-text>
       <v-chip-group
-        v-model="selection"
         active-class="deep-purple accent-4 white--text"
         column
       >
@@ -70,3 +69,10 @@
     </v-card-actions>
   </v-card>
 </template>
+<script>
+export default {
+  default () {
+    return { dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'] }
+  }
+}
+</script>

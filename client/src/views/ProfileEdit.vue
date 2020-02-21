@@ -65,14 +65,13 @@
               </v-card-subtitle>
               <v-card-text>
                 <v-row
-                    v-for="n in attributes"
-                    v-bind:item="n"
-                    :key="n"
+                    v-for="item in items"
+                    v-bind:key="item.name"
                     class="d-flex child-flex"
                     cols="4"
                 >
                     <v-col cols="3">
-                        <v-card-text>{{ n.name }}</v-card-text>
+                      <v-card-text>{{ item.name }}</v-card-text>
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
@@ -144,7 +143,7 @@ export default {
   default () {
     return {
       interests: [],
-      attributes: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]
+      items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]
     }
   },
   mounted () {
