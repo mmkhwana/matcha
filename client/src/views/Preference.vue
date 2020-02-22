@@ -1,17 +1,16 @@
 <template>
   <v-card
-    :loading="loading"
     class="mx-auto my-12"
   >
-
-    <v-card-title>Khanyisa</v-card-title>
      <v-container id="dropdown-example-1">
         <v-overflow-btn
-        class="my-2"
+        v-model="item"
         :items="dropdown_icon"
         label="Age preference"
-        segmented
-        ></v-overflow-btn>
+        target = "#dropdown-example-1"
+        >
+        <v-div></v-div>
+        </v-overflow-btn>
     </v-container>
 
     <v-card-text>
@@ -21,24 +20,25 @@
       >
       <v-card-title>Profile Rating</v-card-title>
         <v-rating
-          :value="2.5"
+          v-model="rating"
           dense
           half-increments
-          readonly
+          hover
           size="14"
           background-color="purple lighten-3"
           color="purple"
         ></v-rating>
 
-        <div class="grey--text ml-3">2.5 (413)</div>
+        <div class="grey--text ml-3">({{rating}})</div>
       </v-row>
     </v-card-text>
     <v-container id="dropdown-example-2">
         <v-overflow-btn
         class="my-2"
+        v-model="location"
         :items="language"
         label="Location preference"
-        segmented
+        overflow
         target="#dropdown-example-2"
         ></v-overflow-btn>
     </v-container>
@@ -70,8 +70,12 @@
 </template>
 <script>
 export default {
-  default () {
+  name: 'Preference',
+  data: function () {
     return {
+      rating: '0.5',
+      item: 'Age preference',
+      location: 'Location preference',
       dropdown_icon: [{ text: '18-21' }, { text: '22-25' }, { text: '26-29' }, { text: '30-33' }, { text: '34-37' }],
       language: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }]
     }

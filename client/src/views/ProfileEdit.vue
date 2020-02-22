@@ -5,13 +5,20 @@
   >
      <v-container id="dropdown-example-2">
        <v-row>
+          <v-col cols="12" class="text-right">
+            <v-btn rounded outlined color="success" dark v-on:click="login">
+              <v-icon left>mdi-check</v-icon>save
+            </v-btn>
+          </v-col>
+      </v-row>
+       <v-row>
           <v-col cols="2"
           class="d-flex child-flex"
           color="deep-purple lighten-3"
         dark
           >
               <v-container class="text-center">
-                        <template>
+    <template>
         <v-btn icon @click="upload">
           <v-icon>mdi-camera-plus</v-icon>
         </v-btn>
@@ -73,6 +80,9 @@
                     <v-col cols="3">
                       <v-card-text>{{ item.name }}</v-card-text>
                     </v-col>
+                    <v-col cols="2">
+                      <v-card-text>:</v-card-text>
+                    </v-col>
                     <v-col cols="6">
                       <v-text-field
                       label="Your status"
@@ -126,21 +136,21 @@
         <v-chip @click="Some" ref="Some">Some Nice honeys</v-chip>
       </v-chip-group>
     </v-card-text>
-          <v-row>
-        <v-col cols="12" class="text-right">
-            <v-btn icon @click="edit">
-                <v-icon>mdi-account-check</v-icon>
-            </v-btn>
-        </v-col>
-    </v-row>
     <v-card-actions>
+             <v-row>
+          <v-col cols="12" class="text-right">
+            <v-btn rounded outlined color="success" dark v-on:click="login">
+              <v-icon left>mdi-check</v-icon>save
+            </v-btn>
+          </v-col>
+      </v-row>
     </v-card-actions>
   </v-card>
 </template>
 <script>
 export default {
   name: 'Profile Edit',
-  default () {
+  data () {
     return {
       interests: [],
       items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]

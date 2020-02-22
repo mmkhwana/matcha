@@ -29,7 +29,7 @@
           <v-img src="../assets/home.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title class="title">Khanyisa Mbukutshe</v-list-item-title>
+        <v-list-item-title class="title ">Khanyisa Mbukutshe</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
@@ -89,6 +89,7 @@ export default {
   name: 'Dashboard',
   data () {
     return {
+      dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'],
       items: [{ title: 'Profile', icon: 'mdi-account' },
         { title: 'Preference', icon: 'mdi-settings-transfer' },
         { title: 'Matches', icon: 'mdi-account-group' },
