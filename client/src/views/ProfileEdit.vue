@@ -6,7 +6,7 @@
      <v-container id="dropdown-example-2">
        <v-row>
           <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success" dark v-on:click="login">
+            <v-btn rounded outlined color="success">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
           </v-col>
@@ -18,12 +18,12 @@
         dark
           >
               <v-container class="text-center">
-    <template>
-        <v-btn icon @click="upload">
-          <v-icon>mdi-camera-plus</v-icon>
-        </v-btn>
-        <v-card-text>Upload Photo</v-card-text>
-    </template>
+              <template>
+                  <v-btn icon @click="upload">
+                    <v-icon>mdi-camera-plus</v-icon>
+                  </v-btn>
+                  <v-card-text>Upload Photo</v-card-text>
+              </template>
               </v-container>
             </v-col>
             <v-col
@@ -38,7 +38,7 @@
                   :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text  lighten-2"
+                  class="white--text align-end grey lighten-2"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -86,6 +86,7 @@
                     <v-col cols="6">
                       <v-text-field
                       label="Your status"
+                      v-model="interests[0]"
                       ></v-text-field>
                     </v-col>
                 </v-row>
@@ -100,18 +101,19 @@
 
     <v-card-text>
       <v-chip-group
-        v-model="selection"
+        v-model="languages"
         column
+        multiple
       >
-        <v-chip @click="Zulu" ref="Zulu">isiZulu</v-chip>
+        <v-chip filter outlined>isiZulu</v-chip>
 
-        <v-chip @click="English" ref="English">English</v-chip>
+        <v-chip filter outlined>English</v-chip>
 
-        <v-chip @click="Afrikaans" ref="Afrikaans">Afrikaans</v-chip>
+        <v-chip filter outlined>Afrikaans</v-chip>
 
-        <v-chip @click="Xhosa" ref="Xhosa">isiXhosa</v-chip>
+        <v-chip filter outlined>isiXhosa</v-chip>
 
-        <v-chip @click="Tshwana" ref="Tshwana">Tshwana</v-chip>
+        <v-chip filter outlined>Tshwana</v-chip>
       </v-chip-group>
     </v-card-text>
 
@@ -123,23 +125,24 @@
       <v-chip-group
         v-model="selection"
         column
+        multiple
       >
 
-        <v-chip @click="Going_out" ref="out">Going out</v-chip>
+        <v-chip filter outlined>Going out</v-chip>
 
-        <v-chip @click="Drinking" ref="Drink">Drinking</v-chip>
+        <v-chip filter outlined>Drinking</v-chip>
 
-        <v-chip @click="Smoking" ref="Smoking">Smoking</v-chip>
+        <v-chip filter outlined>Smoking</v-chip>
 
-        <v-chip @click="Tattoos" ref="Tattoos">Tattoos</v-chip>
+        <v-chip filter outlined>Tattoos</v-chip>
 
-        <v-chip @click="Some" ref="Some">Some Nice honeys</v-chip>
+        <v-chip filter outlined>Some Nice honeys</v-chip>
       </v-chip-group>
     </v-card-text>
     <v-card-actions>
              <v-row>
           <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success" dark v-on:click="login">
+            <v-btn rounded outlined color="success" >
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
           </v-col>
@@ -152,6 +155,8 @@ export default {
   name: 'Profile Edit',
   data () {
     return {
+      selection: [1, 4],
+      languages: [1, 4],
       interests: [],
       items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]
     }
@@ -170,10 +175,10 @@ export default {
       if ((this.$refs.out).color === 'green') {
         (this.$refs.out).color = 'lightGrey';
         (this.$refs.out).textColor = 'black'
-        this.interests.add('Going Out')
       } else {
         (this.$refs.out).color = 'green';
         (this.$refs.out).textColor = 'white'
+        this.interests.push('Going Out')
       }
     },
     Drinking () {

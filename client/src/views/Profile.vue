@@ -4,7 +4,7 @@
 <v-container id="dropdown-example-2">
 <v-row>
     <v-col cols="12" class="text-right">
-        <v-btn icon @click="edit">
+        <v-btn icon v-on:click="edit">
             <v-icon>mdi-square-edit-outline</v-icon>
         </v-btn>
     </v-col>
