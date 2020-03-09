@@ -116,16 +116,18 @@ async function loadInterestsCollection() {
 
 //Preferences
 
-router.post('/preferences', async(req, res) => {
+router.post('/preference', async(req, res) => {
     const posts = await loadpreferencesCollection();
-    await posts.insertOne ({
+    await posts.insert ({
         age: req.body.age,
-        fame: req.body.number,
+        rating: req.body.rating,
+        gender: req.body.gender,
+        language: req.body.language,
         location: req.body.location,
-        user_id: req.params.id,
-        createdAt: new Date()
+        interests: req.body.interests,
+        user_id: req.params.id
     });
-    res.status(201).send();
+    res.status(201).send('done');
 });
 
 async function loadpreferencesCollection() {

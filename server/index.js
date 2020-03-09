@@ -1,15 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const posts = require('./route/api/posts');
 const cors = require('cors');
-
 const app = express();
 
 
 app.use(cors());
 app.use(bodyParser.json({limit : "50mb", extended: true}));
-
-const posts = require('./route/api/posts');
-
 app.use('/api/posts', posts);
 app.use(express.static('/api/uploads'));
 app.get('/', function(req, res){
