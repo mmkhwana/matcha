@@ -45,7 +45,7 @@ router.post('/upload', upload.single('file'), async(req, res) =>
 
 router.post('/', async(req, res) => {
     const posts = await loadUsersCollection();
-    if (req.body.confirm == req.body.pass)
+    if (req.body.confirm === req.body.pass)
     {
         var password = req.body.pass;
         await posts.insertOne({
@@ -56,6 +56,24 @@ router.post('/', async(req, res) => {
         });
         res.status(200).send("User Registered");
     }
+    else
+    {
+        res.status(200).send("Password do not match!");
+    }
+});
+//Update User Profile
+router.post('/update_profile', async(req, res) => {
+    const profile = await loadUsersCollection();
+    await profile.insertOne({
+        biography: req.body.biography,
+        Relationship: req.body.relation,
+        Height: req.body.height,
+        Age: req.body.age,
+        Hair: req.body.hair,
+        languages: req.body.languages,
+        Interests: req.body.interests
+    });
+    res.status(200).send("Profile Udated Successfully");
 });
 
 router.delete('/:id', async(req, res) => {

@@ -61,13 +61,8 @@
         <v-overflow-btn
         class="my-2"
         v-model="location"
-<<<<<<< HEAD
-        :items="locations"
-        label=""
-=======
         :items="results"
         label="Location preference"
->>>>>>> 4a6f6d31ec41caf088dde985d1db72771d9b8fad
         overflow
         target="#dropdown-example-2"
         ></v-overflow-btn>
@@ -120,23 +115,19 @@ export default {
       location: null,
       locations: [],
       dropdown_icon: [{ text: '18-21' }, { text: '22-25' }, { text: '26-29' }, { text: '30-33' }, { text: '34-37' }],
-<<<<<<< HEAD
       languages: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
-      gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }]
+      gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }],
+      results: [],
+      city: ''
     }
   },
   methods: {
     async sendData () {
       let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, this.location, this.interests, 1)
       alert(result.data)
-=======
-      language: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
-      results: [],
-      city: ''
->>>>>>> 4a6f6d31ec41caf088dde985d1db72771d9b8fad
     }
   },
-  mounted: {
+  watch: {
     results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
       .then(result => result.json()).then(result => {
         result.forEach(element => {
