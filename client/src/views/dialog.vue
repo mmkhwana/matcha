@@ -29,16 +29,14 @@
           <v-spacer></v-spacer>
 
           <v-btn
-            color="purple darken-1"
-            text
+            rounded outlined color="error"
             @click="cancel"
           >
             cancel
           </v-btn>
 
           <v-btn
-            color="purple darken-1"
-            text
+            rounded outlined color="success"
             @click="save"
           >
             save

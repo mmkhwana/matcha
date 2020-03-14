@@ -43,6 +43,10 @@ router.post('/upload', upload.single('file'), async(req, res) =>
     res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());*/
 });
 
+router.get('/uploads/:name', (req, res) => {
+    res.sendFile(path.join(__dirname, "./uploads/" + req.params.name));
+});
+
 router.post('/', async(req, res) => {
     const posts = await loadUsersCollection();
     if (req.body.confirm === req.body.pass)
