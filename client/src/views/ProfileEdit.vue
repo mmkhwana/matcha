@@ -67,6 +67,7 @@
               <v-card-subtitle>
                 <v-textarea
                 clearable
+                v-model="biography"
                 label="Bio(optional)."
                 ></v-textarea>
               </v-card-subtitle>
@@ -85,8 +86,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                      label="Your status"
-                      v-model="interests[0]"
+                      v-model="interests[Relationship]"
                       ></v-text-field>
                     </v-col>
                 </v-row>
@@ -142,7 +142,7 @@
     <v-card-actions>
              <v-row>
           <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success" >
+            <v-btn rounded outlined color="success" v-on:click="updateProfile">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
           </v-col>
@@ -151,14 +151,22 @@
   </v-card>
 </template>
 <script>
+import UserProfileService from '../UserProfileService'
+
 export default {
   name: 'Profile Edit',
   data () {
     return {
       selection: [1, 4],
       languages: [1, 4],
-      interests: [],
-      items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }]
+      biography: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      interests: [{ 'Relationship': 'complicated' }, { 'Height': '1.5m' }, { 'Age': '18yrs' }, { 'Race': 'Black' }, { 'Hair': 'Curly Blackish' }],
+      items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }],
+      profileObj: [],
+      relation: '',
+      height: '',
+      age: '',
+      hair: ''
     }
   },
   mounted () {
@@ -167,6 +175,17 @@ export default {
     })
   },
   methods: {
+    async updateProfile () {
+      try {
+        let results = await UserProfileService.updateProfile(this.biography, this.relation, this.height, this.age, this.hair, this.languages, this.interests)
+        alert(results)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    addOject (key, value) {
+      this.$set(this.profileObj, key, value)
+    },
     upload () {
       this.$root.$emit('Upload')
       this.$destroy()

@@ -61,8 +61,8 @@
         <v-overflow-btn
         class="my-2"
         v-model="location"
-        :items="locations"
-        label=""
+        :items="results"
+        label="Location preference"
         overflow
         target="#dropdown-example-2"
         ></v-overflow-btn>
@@ -116,7 +116,9 @@ export default {
       locations: [],
       dropdown_icon: [{ text: '18-21' }, { text: '22-25' }, { text: '26-29' }, { text: '30-33' }, { text: '34-37' }],
       languages: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
-      gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }]
+      gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }],
+      results: [],
+      city: ''
     }
   },
   methods: {
@@ -125,15 +127,15 @@ export default {
       alert(result.data)
     }
   },
-  mounted: {
-      results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
-        .then(result => result.json()).then(result => {
-          result.forEach(element => {
-            this.results.push(element.address.country)
-          })
-        }, error => {
-          alert(error.message)
+  watch: {
+    results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
+      .then(result => result.json()).then(result => {
+        result.forEach(element => {
+          this.results.push(element.address.country)
         })
+      }, error => {
+        alert(error.message)
+      })
   }
 }
 </script>
