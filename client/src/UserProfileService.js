@@ -19,6 +19,18 @@ class UserProfileService {
       }
     })
   }
+
+  static readImages () {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(url + '/uploads')
+        resolve(res)
+        reject(res)
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
 }
 
 export default UserProfileService

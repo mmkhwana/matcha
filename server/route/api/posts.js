@@ -2,7 +2,7 @@ const express = require('express');
 const mongodb = require('mongodb');
 const multer = require("multer");
 const path = require('path');
-
+const fs = require('fs');
 const router = express.Router();
 
 //User
@@ -30,7 +30,7 @@ router.post('/upload', upload.single('file'), async(req, res) =>
     }
     else {
         //   res.status(200).json({file: req.query.file});
-        var file_path = 'http://localhost:5000/api/uploads/' + req.file.originalname;
+        var file_path = 'http://localhost:5000/api/posts/uploads/' + req.file.originalname;
         const images = await loadUsersImages();
         images.insertOne({
            image_path: file_path,
@@ -45,6 +45,10 @@ router.post('/upload', upload.single('file'), async(req, res) =>
 
 router.get('/uploads/:name', (req, res) => {
     res.sendFile(path.join(__dirname, "./uploads/" + req.params.name));
+});
+
+router.get('/uploads', (req, res) => {
+    res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.startsWith('picture')));
 });
 
 router.post('/', async(req, res) => {

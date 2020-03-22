@@ -11,15 +11,15 @@
 </v-row>
 <v-row>
 <v-col
-v-for="n in 5"
+v-for="n in pictures"
 :key="n"
 class="d-flex child-flex"
 cols="2"
 >
 <v-card>
 <v-img
-:src='`https://picsum.photos/500/300?image=${n * 5 + 10}`'
-:lazy-src='`https://picsum.photos/10/6?image=${n * 5 + 10}`'
+:src='`http://localhost:5000/api/posts/uploads/${n}`'
+:lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
 aspect-ratio='1.5'
 gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
 class='white--text align-end grey lighten-2'
@@ -117,20 +117,19 @@ column
 </v-card>
 </template>
 <script>
-import {
-  mdiAccount,
-  mdiShareVariant,
-  mdiDelete
-} from '@mdi/js'
+import UserProfileService from '../UserProfileService'
+
 export default {
   name: 'Edit',
-  data: () => ({
-    icons: {
-      mdiAccount,
-      mdiShareVariant,
-      mdiDelete
+  data: () => {
+    return {
+      pictures: []
     }
-  }),
+  },
+  async mounted () {
+    const pics = await UserProfileService.readImages()
+    this.pictures = pics.data
+  },
   methods: {
     edit () {
       this.$root.$emit('Edit')

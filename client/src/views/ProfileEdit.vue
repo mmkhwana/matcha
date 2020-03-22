@@ -27,15 +27,15 @@
               </v-container>
             </v-col>
             <v-col
-              v-for="n in 5"
+              v-for="n in pictures"
               :key="n"
               class="d-flex child-flex"
               cols="2"
             >
               <v-card>
                 <v-img
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                  :src='`http://localhost:5000/api/posts/uploads/${n}`'
+                  :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   class="white--text align-end grey lighten-2"
@@ -142,7 +142,7 @@
     <v-card-actions>
              <v-row>
           <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success" v-on:click="updateProfile">
+            <v-btn rounded outlined color="success" v-on:click="getSelectedItem">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
           </v-col>
@@ -157,8 +157,9 @@ export default {
   name: 'Profile Edit',
   data () {
     return {
-      selection: [1, 4],
-      languages: [1, 4],
+      pictures: [],
+      selection: [],
+      languages: [],
       biography: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       interests: [{ 'Relationship': 'complicated' }, { 'Height': '1.5m' }, { 'Age': '18yrs' }, { 'Race': 'Black' }, { 'Hair': 'Curly Blackish' }],
       items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }],
@@ -169,10 +170,12 @@ export default {
       hair: ''
     }
   },
-  mounted () {
+  async mounted () {
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
     })
+    const pics = await UserProfileService.readImages()
+    this.pictures = pics.data
   },
   methods: {
     async updateProfile () {
@@ -182,6 +185,9 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    getSelectedItem () {
+      alert(JSON.stringify(this.selection))
     },
     addOject (key, value) {
       this.$set(this.profileObj, key, value)
