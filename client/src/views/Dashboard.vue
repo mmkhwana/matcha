@@ -52,8 +52,7 @@
     </v-navigation-drawer>
     </v-col>
     <v-col cols="10" sm="8">
-    <v-card-text
-    >
+    <v-card-text>
      <template>
        <keep-alive>
     <component :is="titles"></component>
