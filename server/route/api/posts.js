@@ -16,9 +16,9 @@ router.get('/login', async(req, res) => {
     res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
 });
 
-const store = multer.diskStorage({
+const store = multer.memoryStorage({
     filename: (req, file, cb) => { cb(null, file.originalname)},  
-    destination: function (res, file, cb){ cb(null, 'server/route/api/uploads')}
+    destination: function (res, file, cb){ cb(null, 'http://matcha.cloudaccess.host/images')}
 });
 
 const upload = multer({storage: store});
@@ -29,7 +29,6 @@ router.post('/upload', upload.single('file'), async(req, res) =>
         return res.send({success: false});
     }
     else {
-        //   res.status(200).json({file: req.query.file});
         var file_path = 'http://localhost:5000/api/posts/uploads/' + req.file.originalname;
         const images = await loadUsersImages();
         images.insertOne({
@@ -39,8 +38,6 @@ router.post('/upload', upload.single('file'), async(req, res) =>
         });
         return res.send({success: true});
     }
-    /*const posts = await loadUsersCollection();
-    res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());*/
 });
 
 router.get('/uploads/:name', (req, res) => {
@@ -48,7 +45,7 @@ router.get('/uploads/:name', (req, res) => {
 });
 
 router.get('/uploads', (req, res) => {
-    res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.startsWith('picture')));
+    res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
 });
 
 router.post('/', async(req, res) => {

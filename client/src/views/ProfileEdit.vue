@@ -13,7 +13,7 @@
       </v-row>
        <v-row>
           <v-col cols="2"
-          class="d-flex child-flex"
+          class="d-xs-flex"
           color="deep-purple lighten-3"
         dark
           >
@@ -29,7 +29,7 @@
             <v-col
               v-for="n in pictures"
               :key="n"
-              class="d-flex child-flex"
+              class="d-xs-inline-flex"
               cols="2"
             >
               <v-card>
@@ -38,23 +38,22 @@
                   :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
+                  class="fill-height white--text align-end grey lighten-2"
                 >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                  </v-row>
+                </template>
                 </v-img>
               </v-card>
             </v-col>
           </v-row>
     </v-container>
-
     <v-divider class="mx-4"></v-divider>
     <v-card-text>
       <v-row
@@ -86,7 +85,7 @@
                     </v-col>
                     <v-col cols="6">
                       <v-text-field
-                      v-model="interests[Relationship]"
+                      v-model="item.value"
                       ></v-text-field>
                     </v-col>
                 </v-row>
@@ -161,8 +160,7 @@ export default {
       selection: [],
       languages: [],
       biography: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      interests: [{ 'Relationship': 'complicated' }, { 'Height': '1.5m' }, { 'Age': '18yrs' }, { 'Race': 'Black' }, { 'Hair': 'Curly Blackish' }],
-      items: [{ name: 'Relationship' }, { name: 'Height' }, { name: 'Age' }, { name: 'Race' }, { name: 'Hair' }],
+      items: [{ name: 'Relationship', value: 'Complicated' }, { name: 'Height', value: '1.5m' }, { name: 'Age', value: '24yrs' }, { name: 'Race', value: 'Black' }, { name: 'Hair', value: 'Curly Blackish' }],
       profileObj: [],
       relation: '',
       height: '',

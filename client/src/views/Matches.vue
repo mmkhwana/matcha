@@ -1,5 +1,4 @@
 <template>
-        <v-card>
         <v-container fluid>
           <v-row>
             <v-col
@@ -47,5 +46,4 @@
             </v-col>
           </v-row>
         </v-container>
-        </v-card>
 </template>

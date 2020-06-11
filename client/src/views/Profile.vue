@@ -46,20 +46,20 @@
     >
     <v-col cols="12">
     <v-card flat>
-    <v-card-title>Biography</v-card-title>
-    <v-card-subtitle>ghjvjxvjzvcjchZVjchv</v-card-subtitle>
+    <v-card-title>Personal Info.</v-card-title>
+    <v-card-subtitle>{{ biography }}</v-card-subtitle>
     <v-card-text>
     <v-row
-    v-for="n in 5"
-    :key="n"
+    v-for="n in personality"
+    :key="n.name"
     class="d-flex child-flex"
     cols="4"
     >
     <v-col cols="3">
-    <v-card-text>Relationship:</v-card-text>
+    <v-card-text>{{ n.name }}:</v-card-text>
     </v-col>
     <v-col cols="6">
-    <v-card-text>Complicated</v-card-text>
+    <v-card-text>{{ n.value }}</v-card-text>
     </v-col>
     </v-row>
     </v-card-text>
@@ -122,12 +122,18 @@ export default {
   name: 'Edit',
   data: () => {
     return {
-      pictures: []
+      pictures: [],
+      biography: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
+      eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+      ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
+      esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+      personality: [{ name: 'Relationship', value: 'Complicated' }, { name: 'Height', value: '1.5m' }, { name: 'Age', value: '25yrs' }, { name: 'Race', value: 'Black' }, { name: 'Hair', value: 'Curled' }]
     }
   },
   async mounted () {
     const pics = await UserProfileService.readImages()
     this.pictures = pics.data
+    alert(this.pictures)
   },
   methods: {
     edit () {
