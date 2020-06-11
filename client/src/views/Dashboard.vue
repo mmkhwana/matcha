@@ -91,7 +91,7 @@ export default {
     return {
       dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'],
       items: [{ title: 'Profile', icon: 'mdi-account' },
-        { title: 'Preference', icon: 'mdi-settings-transfer' },
+        { title: 'Preference', icon: 'mdi-settings' },
         { title: 'Matches', icon: 'mdi-account-group' },
         { title: 'Chat', icon: 'mdi-chat' },
         { title: 'Settings', icon: 'mdi-settings' },
