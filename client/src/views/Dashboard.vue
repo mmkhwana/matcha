@@ -12,7 +12,12 @@
 
       <v-spacer></v-spacer>
         <v-btn icon>
+          <v-badge
+            color="red"
+            content="1"
+          >
             <v-icon>mdi-bell</v-icon>
+          </v-badge>
         </v-btn>
         <v-btn icon @click="logout">
             <v-icon>mdi-logout</v-icon>
@@ -29,7 +34,7 @@
           <v-img src="../assets/home.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title class="title ">Khanyisa Mbukutshe</v-list-item-title>
+        <v-list-item-title >Khanyisa Mbukutshe</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>

@@ -1,11 +1,11 @@
 import axios from 'axios'
+import Constant from './constants'
 
-const url = 'http://localhost:5000/api/posts/'
 class GeneralService {
   static UploadPhoto (image) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.post(url + 'upload', image)
+        const res = await axios.post(Constant.URL + 'upload', image)
         const data = res.data
         resolve(
           data
@@ -18,6 +18,30 @@ class GeneralService {
       }
     }
     )
+  }
+
+  static PostExecution (router, params) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.post(Constant.URL + router, params)
+        resolve(res.data)
+        reject(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
+  static GetExecution (router, param) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(Constant.URL + router + param)
+        resolve(res.data)
+        reject(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })
   }
 }
 export default GeneralService

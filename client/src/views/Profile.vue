@@ -8,7 +8,10 @@
             </v-btn>
         </v-col>
     </v-row>
-    <v-row>
+    <v-row
+    align="center"
+    justify="center"
+    >
     <v-col
     v-for="n in pictures"
     :key="n"
@@ -72,21 +75,15 @@
     <v-card-title>Languages</v-card-title>
 
     <v-card-text>
-    <v-chip-group
-    v-model="selection"
-    active-class="deep-purple accent-4 white--text"
-    column
-    >
-    <v-chip>isiZulu</v-chip>
-
-    <v-chip>English</v-chip>
-
-    <v-chip>Afrikaans</v-chip>
-
-    <v-chip>isiXhosa</v-chip>
-
-    <v-chip>Tshwana</v-chip>
-    </v-chip-group>
+    <v-row>
+      <v-col
+        v-for='(item, index) in languages'
+        :key='index'
+        class="shrink"
+      >
+        <v-chip filter outlined >{{ item }}</v-chip>
+      </v-col>
+    </v-row>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
@@ -94,21 +91,16 @@
     <v-card-title>Interests</v-card-title>
 
     <v-card-text>
-    <v-chip-group
-    v-model="selection"
-    active-class="deep-purple accent-4 white--text"
-    column
-    >
-    <v-chip >Going out</v-chip>
-
-    <v-chip >Drinking</v-chip>
-
-    <v-chip >Smoking</v-chip>
-
-    <v-chip >Tattoos</v-chip>
-
-    <v-chip >Some Nice honeys</v-chip>
-    </v-chip-group>
+    <v-row>
+      <v-col
+        v-for='(item, index) in interests'
+        :key='index'
+        class="shrink"
+        ref="lang"
+      >
+        <v-chip filter outlined>{{ item }}</v-chip>
+      </v-col>
+    </v-row>
     </v-card-text>
 
     <v-card-actions>
@@ -117,25 +109,47 @@
 </template>
 <script>
 import UserProfileService from '../UserProfileService'
+import Table from '../tables'
+import Constant from '../constants'
 
 export default {
   name: 'Edit',
   data: () => {
     return {
       pictures: [],
-      biography: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do 
-      eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
-      ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit 
-      esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-      personality: [{ name: 'Relationship', value: 'Complicated' }, { name: 'Height', value: '1.5m' }, { name: 'Age', value: '25yrs' }, { name: 'Race', value: 'Black' }, { name: 'Hair', value: 'Curled' }]
+      biography: '',
+      languages: [],
+      interests: [],
+      personality: [
+        { name: Constant.relationship, value: '' },
+        { name: Constant.height, value: '' },
+        { name: Constant.age, value: '' },
+        { name: Constant.race, value: '' },
+        { name: Constant.hair, value: '' }
+      ]
     }
   },
   async mounted () {
     const pics = await UserProfileService.readImages()
     this.pictures = pics.data
-    alert(this.pictures)
+    const res = (await UserProfileService.getUserDetails(1))[0]
+    let output = await UserProfileService.getInterest(1)
+    let lang = await UserProfileService.getLanguage(1)
+    this.biography = res[Table.User.biography]
+    this.personality[0].value = res[Table.User.status]
+    this.personality[1].value = res[Table.User.height] + 'm'
+    this.personality[2].value = res[Table.User.age] + 'yrs'
+    this.personality[3].value = res[Table.User.race]
+    this.personality[4].value = res[Table.User.hair]
+    lang.forEach(lang => {
+      this.languages.push(lang[Table.Languages.name])
+    })
+    output.forEach(interest => {
+      this.interests.push(interest[Table.Interests.name])
+    })
   },
-  methods: {
+  methods:
+  {
     edit () {
       this.$root.$emit('Edit')
     }

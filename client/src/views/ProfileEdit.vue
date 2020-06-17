@@ -1,5 +1,4 @@
 <template>
-
   <v-card
     class="mx-auto my-12"
   >
@@ -11,7 +10,8 @@
             </v-btn>
           </v-col>
       </v-row>
-       <v-row>
+       <v-row
+       >
           <v-col cols="2"
           class="d-xs-flex"
           color="deep-purple lighten-3"
@@ -62,6 +62,33 @@
       >
       <v-col cols="12">
           <v-card flat>
+            <v-card-text>
+               <v-container>
+      <v-row>
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-text-field
+            v-model="firstname"
+            label="First name"
+            required
+          ></v-text-field>
+        </v-col>
+
+        <v-col
+          cols="12"
+          md="4"
+        >
+          <v-text-field
+            v-model="lastname"
+            label="Last name"
+            required
+          ></v-text-field>
+        </v-col>
+      </v-row>
+               </v-container>
+            </v-card-text>
               <v-card-title>Biography</v-card-title>
               <v-card-subtitle>
                 <v-textarea
@@ -98,22 +125,57 @@
 
     <v-card-title>Languages</v-card-title>
 
-    <v-card-text>
-      <v-chip-group
-        v-model="languages"
-        column
-        multiple
+    <v-card-text full-width>
+      <v-expansion-panels>
+        <v-expansion-panel
+        >
+          <v-expansion-panel-header>Enter additional Language(s)</v-expansion-panel-header>
+          <v-expansion-panel-content>
+          <v-dialog v-model="modal" fullscreen hide-overlay transition="scroll-y-reverse-transition">
+            <template v-slot:activator="{ on, attrs }">
+            <v-text-field
+              v-model="lang"
+              placeholder="type here..."
+              @keyup.enter="addLanguage"
+              v-bind="attrs"
+              v-on="on"
+            ></v-text-field>
+            </template>
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-toolbar-title>Select Languages </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                <v-btn icon dark @click="modal = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <v-row class="pa-12">
+              <v-col
+                v-for='(item, index) in defaultInterests'
+                :key='index'
+                class="shrink"
+                ref="lang"
+                cols="2"
+              >
+                <v-chip filter outlined>{{ item }}</v-chip>
+              </v-col>
+              </v-row>
+            </v-card>
+          </v-dialog>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+      <v-row>
+      <v-col
+        v-for='(item, index) in languages'
+        :key='index'
+        class="shrink"
       >
-        <v-chip filter outlined>isiZulu</v-chip>
-
-        <v-chip filter outlined>English</v-chip>
-
-        <v-chip filter outlined>Afrikaans</v-chip>
-
-        <v-chip filter outlined>isiXhosa</v-chip>
-
-        <v-chip filter outlined>Tshwana</v-chip>
-      </v-chip-group>
+        <v-chip close filter outlined @click:close="close(index)">{{ item }}</v-chip>
+      </v-col>
+      </v-row>
     </v-card-text>
 
     <v-divider class="mx-4"></v-divider>
@@ -121,29 +183,56 @@
     <v-card-title>Interests</v-card-title>
 
     <v-card-text>
-      <v-chip-group
-        v-model="selection"
-        column
-        multiple
+      <v-expansion-panels>
+        <v-expansion-panel
+        >
+          <v-expansion-panel-header>Enter additional interest(s)</v-expansion-panel-header>
+          <v-expansion-panel-content>
+          <v-text-field
+            placeholder="type here..."
+            v-model="interest"
+            @keyup.enter="addInterest"
+          ></v-text-field>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+      <v-row>
+      <v-col
+        v-for='(item, index) in interests'
+        :key='index'
+        class="shrink"
+        ref="lang"
       >
-
-        <v-chip filter outlined>Going out</v-chip>
-
-        <v-chip filter outlined>Drinking</v-chip>
-
-        <v-chip filter outlined>Smoking</v-chip>
-
-        <v-chip filter outlined>Tattoos</v-chip>
-
-        <v-chip filter outlined>Some Nice honeys</v-chip>
-      </v-chip-group>
+        <v-chip close filter outlined @click:close="removeInterest(index)">{{ item }}</v-chip>
+      </v-col>
+      </v-row>
     </v-card-text>
     <v-card-actions>
-             <v-row>
+            <v-row>
           <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success" v-on:click="getSelectedItem">
+            <v-btn rounded outlined color="success" :disabled="loading" :loading="loading" v-on:click="updateProfile">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
+          <!-- <v-progress-circular
+            :width="3"
+            color="green"
+            indeterminate
+            ></v-progress-circular> -->
+          <!-- <v-dialog
+            v-model="dialog"
+            class="elevation-12"
+            max-width="500px"
+          >
+          <v-card>
+          <v-alert
+            dense
+            text
+            type="success"
+          >
+          {{ success }}
+          </v-alert>
+          </v-card>
+          </v-dialog> -->
           </v-col>
       </v-row>
     </v-card-actions>
@@ -151,6 +240,9 @@
 </template>
 <script>
 import UserProfileService from '../UserProfileService'
+import Table from '../tables'
+import Constant from '../constants'
+import Interests from '../jsons/interests'
 
 export default {
   name: 'Profile Edit',
@@ -159,29 +251,87 @@ export default {
       pictures: [],
       selection: [],
       languages: [],
-      biography: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-      items: [{ name: 'Relationship', value: 'Complicated' }, { name: 'Height', value: '1.5m' }, { name: 'Age', value: '24yrs' }, { name: 'Race', value: 'Black' }, { name: 'Hair', value: 'Curly Blackish' }],
+      interests: [],
+      defaultInterests: [],
+      firstname: '',
+      lastname: '',
+      biography: '',
+      items: [
+        { name: Constant.relationship, value: '' },
+        { name: Constant.height, value: '' },
+        { name: Constant.age, value: '' },
+        { name: Constant.race, value: '' },
+        { name: Constant.hair, value: '' }
+      ],
       profileObj: [],
-      relation: '',
-      height: '',
-      age: '',
-      hair: ''
+      success: '',
+      dialog: false,
+      loading: false,
+      modal: false
     }
+  },
+  props: {
+    lang: { type: String },
+    interest: { type: String }
   },
   async mounted () {
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
     })
+    this.defaultInterests = Interests
     const pics = await UserProfileService.readImages()
     this.pictures = pics.data
+    const res = (await UserProfileService.getUserDetails(1))[0]
+    let output = await UserProfileService.getInterest(1)
+    let lang = await UserProfileService.getLanguage(1)
+    this.firstname = res[Table.User.firstName]
+    this.lastname = res[Table.User.lastName]
+    this.biography = res[Table.User.biography]
+    this.items[0].value = res[Table.User.status]
+    this.items[1].value = res[Table.User.height] + 'm'
+    this.items[2].value = res[Table.User.age] + 'yrs'
+    this.items[3].value = res[Table.User.race]
+    this.items[4].value = res[Table.User.hair]
+    lang.forEach(lang => {
+      this.languages.push(lang[Table.Languages.name])
+    })
+    output.forEach(interest => {
+      this.interests.push(interest[Table.Interests.name])
+    })
   },
   methods: {
     async updateProfile () {
+      this.dialog = true
       try {
-        let results = await UserProfileService.updateProfile(this.biography, this.relation, this.height, this.age, this.hair, this.languages, this.interests)
-        alert(results)
+        let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
+          this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
+          this.items[4].value, 1, this.languages, this.interests)
+        await UserProfileService.insertInterest(this.interests, 1)
+        await UserProfileService.insertLanguage(this.languages, 1)
+        this.success = results
+        this.dialog = false
       } catch (error) {
         console.log(error)
+      }
+    },
+    close (index) {
+      this.languages.splice(index, 1)
+    },
+    removeInterest (index) {
+      this.interests.splice(index, 1)
+    },
+    addLanguage () {
+      let res = this.languages.filter(lang => lang === this.lang)
+      if (this.lang && (res !== this.lang)) {
+        this.languages.push(this.lang)
+        this.lang = ''
+      }
+    },
+    addInterest () {
+      let res = this.interests.filter(interest => interest === this.interest)
+      if (this.interest && (res !== this.interest)) {
+        this.interests.push(this.interest)
+        this.interest = ''
       }
     },
     getSelectedItem () {
@@ -193,98 +343,6 @@ export default {
     upload () {
       this.$root.$emit('Upload')
       this.$destroy()
-    },
-    Going_out () {
-      if ((this.$refs.out).color === 'green') {
-        (this.$refs.out).color = 'lightGrey';
-        (this.$refs.out).textColor = 'black'
-      } else {
-        (this.$refs.out).color = 'green';
-        (this.$refs.out).textColor = 'white'
-        this.interests.push('Going Out')
-      }
-    },
-    Drinking () {
-      if ((this.$refs.Drink).color === 'green') {
-        (this.$refs.Drink).color = 'LightGrey';
-        (this.$refs.Drink).textColor = 'black'
-        this.interests.add('Drink')
-      } else {
-        (this.$refs.Drink).color = 'green';
-        (this.$refs.Drink).textColor = 'white'
-      }
-    },
-    Smoking () {
-      if ((this.$refs.Smoking).color === 'green') {
-        (this.$refs.Smoking).color = 'LightGrey';
-        (this.$refs.Smoking).textColor = 'black'
-      } else {
-        (this.$refs.Smoking).color = 'green';
-        (this.$refs.Smoking).textColor = 'white'
-      }
-    },
-    Tattoos () {
-      if ((this.$refs.Tattoos).color === 'green') {
-        (this.$refs.Tattoos).color = 'LightGrey';
-        (this.$refs.Tattoos).textColor = 'black'
-      } else {
-        (this.$refs.Tattoos).color = 'green';
-        (this.$refs.Tattoos).textColor = 'white'
-      }
-    },
-    Some () {
-      if ((this.$refs.Some).color === 'green') {
-        (this.$refs.Some).color = 'LightGrey';
-        (this.$refs.Some).textColor = 'black'
-      } else {
-        (this.$refs.Some).color = 'green';
-        (this.$refs.Some).textColor = 'white'
-      }
-    },
-    Zulu () {
-      if ((this.$refs.Zulu).color === 'green') {
-        (this.$refs.Zulu).color = 'lightGrey';
-        (this.$refs.Zulu).textColor = 'black'
-      } else {
-        (this.$refs.Zulu).color = 'green';
-        (this.$refs.Zulu).textColor = 'white'
-      }
-    },
-    English () {
-      if ((this.$refs.English).color === 'green') {
-        (this.$refs.English).color = 'lightGrey';
-        (this.$refs.English).textColor = 'black'
-      } else {
-        (this.$refs.English).color = 'green';
-        (this.$refs.English).textColor = 'white'
-      }
-    },
-    Afrikaans () {
-      if ((this.$refs.Afrikaans).color === 'green') {
-        (this.$refs.Afrikaans).color = 'lightGrey';
-        (this.$refs.Afrikaans).textColor = 'black'
-      } else {
-        (this.$refs.Afrikaans).color = 'green';
-        (this.$refs.Afrikaans).textColor = 'white'
-      }
-    },
-    Xhosa () {
-      if ((this.$refs.Xhosa).color === 'green') {
-        (this.$refs.Xhosa).color = 'lightGrey';
-        (this.$refs.Xhosa).textColor = 'black'
-      } else {
-        (this.$refs.Xhosa).color = 'green';
-        (this.$refs.Xhosa).textColor = 'white'
-      }
-    },
-    Tshwana () {
-      if ((this.$refs.Tshwana).color === 'green') {
-        (this.$refs.Tshwana).color = 'lightGrey';
-        (this.$refs.Tshwana).textColor = 'black'
-      } else {
-        (this.$refs.Tshwana).color = 'green';
-        (this.$refs.Tshwana).textColor = 'white'
-      }
     }
   }
 }

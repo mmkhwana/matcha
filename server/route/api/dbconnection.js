@@ -1,10 +1,11 @@
 const mysql = require('mysql');
 
-con = mysql.createConnection({
+con = mysql.createPool({
     host: 'matcha.cloudaccess.host',
     user: 'lpnwzqqm',
     password: 'Khanyisa18',
     database: 'lpnwzqqm',
+    multipleStatements: true
 });
 
-module.exports = con;
+module.exports = {'con': con, 'mysql': mysql};

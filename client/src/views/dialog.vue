@@ -60,7 +60,7 @@ export default {
     }
   },
   mounted: () => {
-    this.$refs['photo'].src = '../../assets/logo.png'
+    this.$refs.photo.src = '../assets/logo.png'
   },
   methods: {
     changed (e) {
@@ -79,6 +79,7 @@ export default {
       alert(this.$refs.photo.src)
       var fileform = new FormData()
       fileform.append('file', this.file, this.file.name)
+      fileform.append('userid', 1)
       var res = await GeneralService.UploadPhoto(fileform)
       alert(res.success)
       this.$root.$emit('Edit')
