@@ -1,20 +1,9 @@
-import axios from 'axios'
+import Constant from './constants'
+import GeneralService from './GeneralService'
 
-const url = 'http://localhost:5000/api/posts/'
 class LoginService {
   static userLogin (email, pass) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await axios.post(url + 'login', { email, pass })
-        const data = res.data
-        resolve(
-          data[0]
-        )
-      } catch (error) {
-        alert(error.message)
-      }
-    }
-    )
+    return GeneralService.PostExecution(Constant.LoginUser, { email, pass })
   }
 }
 export default LoginService

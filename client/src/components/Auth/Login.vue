@@ -83,7 +83,7 @@ export default {
   methods: {
     async login () {
       try {
-        const users = await LoginService.userLogin(this.username, this.pass)
+        const users = (await LoginService.userLogin(this.username, this.pass))[0]
         if (users[Table.User.userName]) {
           this.$session.start()
           this.$session.set('email', users[Table.User.userName])
