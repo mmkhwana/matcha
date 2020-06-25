@@ -104,6 +104,11 @@ export default {
       titles: 'Profile'
     }
   },
+  async created () {
+    if (!this.$session.exists()) {
+      router.push({ name: 'home' })
+    }
+  },
   computed: {
     changeComponents () {
       if (this.titles === 'Preference') {
@@ -135,7 +140,7 @@ export default {
         if (this.$session.exists()) {
           this.$session.clear()
           this.$session.destroy()
-          router.push({ name: 'Login' })
+          router.push({ name: '/' })
         }
       } else {
         this.titles = titleName

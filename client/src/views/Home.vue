@@ -186,7 +186,7 @@ export default {
       if (this.$session.exists()) {
         router.push({ name: 'Dashboard' })
       }
-      this.posts = await SignupService.getUsers()
+    //  this.posts = await SignupService.getUsers()
     } catch (error) {
       this.error = error.message
     }
@@ -205,7 +205,6 @@ export default {
           router.push({ name: 'Login' })
         }
       }
-    //  this.posts = await SignupService.getUsers()
     },
     Loginbtn () {
       router.push({ name: 'Login' })
