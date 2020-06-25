@@ -181,7 +181,7 @@ export default {
       ]
     }
   },
-  async created () {
+  beforeCreate () {
     try {
       if (this.$session.exists()) {
         router.push({ name: 'Dashboard' })

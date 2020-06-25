@@ -75,7 +75,7 @@ export default {
       pass: ''
     }
   },
-  async created () {
+  beforeCreate () {
     if (this.$session.exists()) {
       router.push({ name: 'Dashboard' })
     }

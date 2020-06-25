@@ -104,7 +104,7 @@ export default {
       titles: 'Profile'
     }
   },
-  async created () {
+  beforeCreate () {
     if (!this.$session.exists()) {
       router.push({ name: 'home' })
     }
@@ -140,14 +140,13 @@ export default {
         if (this.$session.exists()) {
           this.$session.clear()
           this.$session.destroy()
-          router.push({ name: '/' })
+          router.push({ name: 'home' })
         }
       } else {
         this.titles = titleName
       }
     },
     logout () {
-    //  this.$session.start()
       if (this.$session.exists()) {
         this.$session.clear()
         this.$session.destroy()
