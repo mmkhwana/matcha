@@ -64,11 +64,10 @@ router.post('/login', async(req, res) =>
                 res.status(200).send(results);
                 return;
             }
-            console.log(results[0]);
             bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
             {
-                console.log(results[0].user_password);
-                console.log(response);
+                if(error)
+                    return;
                 if (response)
                     res.status(200).send(results);
                 else
@@ -184,10 +183,6 @@ router.get('/get_interest:userid', async(req, res) =>
     {
         if (error)
             return;
-        // let sql = `
-        // SELECT interest_name
-        // FROM Matcha_User_Interests
-        // WHERE user_id = ?`;
         let params = [req.params.userid];
         connect.query(sql.select.interest.all, params, (error, results) =>
         {
@@ -208,12 +203,8 @@ router.get('/get_language:userid', async(req, res) =>
     {
         if (error)
             return;
-        let sql = `
-        SELECT lang_name
-        FROM Matcha_User_Languages
-        WHERE user_id = ?`;
         let params = [req.params.userid];
-        connect.query(sql, params, (error, results) => 
+        connect.query(sql.select.language.all, params, (error, results) => 
         {
             connect.release();
             if (error)
