@@ -46,7 +46,7 @@ router.post('/register_user', async(req, res) =>
     }
 });
 
-router.post('/login', async(req, res) => 
+router.post('/login_user', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
     {
@@ -135,7 +135,8 @@ router.post('/insert_language', async(req, res) =>
             return;
         let values = [];
         let arr = req.body.langName;
-        arr.forEach(lang => {
+        arr.forEach(lang => 
+        {
             values.push([lang, req.body.userId]);
         });
         connect.query(sql.insert.language.fields, [values], (error, results) => 
@@ -160,7 +161,8 @@ router.post('/insert_interest', async(req, res) =>
             return;
         let params = [];
         let arr = req.body.interestName;
-        arr.forEach(element => {
+        arr.forEach(element => 
+        {
             params.push([element, req.body.userId]);
         });
         connect.query(sql.insert.interest.fields, [params], (error, results) => 
