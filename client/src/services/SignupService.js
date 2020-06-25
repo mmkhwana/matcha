@@ -1,4 +1,6 @@
 import axios from 'axios'
+import Constant from './constants'
+import GeneralService from './GeneralService'
 
 const url = 'http://localhost:5000/api/posts/'
 class SignupService {
@@ -21,8 +23,8 @@ class SignupService {
     )
   }
 
-  static registerUser (username, email, date, pass, confirm) {
-    return axios.post(url, { username, email, date, pass, confirm })
+  static registerUser (firstname, lastname, username, email, date, pass, confirm) {
+    return GeneralService.PostExecution(Constant.RegisterUser, { firstname, lastname, username, email, date, pass, confirm })
   }
 
   static deleteUser (id) {

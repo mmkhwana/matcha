@@ -6,11 +6,49 @@ const fs = require('fs');
 const Connection = require('./dbconnection');
 const router = express.Router();
 const sql = require('./sql');
+const bcrypt = require('bcrypt');
 
 //User
-router.get('/', async(req, res) => {
-    const posts = await loadUsersCollection();
-    res.send(await posts.find({}).toArray());
+// router.get('/', async(req, res) => {
+//     const posts = await loadUsersCollection();
+//     res.send(await posts.find({}).toArray());
+// });
+
+router.post('/register_user', async(req, res) => 
+{
+    console.log("it's here now");
+    if (req.body.confirm === req.body.pass)
+    {
+        let password = bcrypt.hashSync(req.body.pass, 10);
+        console.log("password hashed");
+        values = [
+            req.body.firstname,
+            req.body.lastname,
+            req.body.username,
+            req.body.email,
+            password,
+            req.body.date
+        ];
+        Connection.con.getConnection((err, connect) => 
+        {
+            if (err)
+                return;
+            connect.query(sql.insert.user.fields, values, (err, results) => 
+            {
+                connect.release();
+                if (err)
+                {
+                    res.status(200).send(results);
+                    return;
+                }
+                res.status(200).send("User Registered");
+            });
+        });
+    }
+    else
+    {
+        res.status(200).send("Password do not match!");
+    }
 });
 
 router.get('/login', async(req, res) => {
@@ -66,24 +104,24 @@ router.get('/uploads', (req, res) => {
     res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file));
 });
 
-router.post('/', async(req, res) => {
-    const posts = await loadUsersCollection();
-    if (req.body.confirm === req.body.pass)
-    {
-        var password = req.body.pass;
-        await posts.insertOne({
-            name: req.body.username,
-            email: req.body.email,
-            birth: req.body.date,
-            pass: password
-        });
-        res.status(200).send("User Registered");
-    }
-    else
-    {
-        res.status(200).send("Password do not match!");
-    }
-});
+// router.post('/', async(req, res) => {
+//     const posts = await loadUsersCollection();
+//     if (req.body.confirm === req.body.pass)
+//     {
+//         var password = req.body.pass;
+//         await posts.insertOne({
+//             name: req.body.username,
+//             email: req.body.email,
+//             birth: req.body.date,
+//             pass: password
+//         });
+//         res.status(200).send("User Registered");
+//     }
+//     else
+//     {
+//         res.status(200).send("Password do not match!");
+//     }
+// });
 
 router.post('/insert_language', async(req, res) => 
 {

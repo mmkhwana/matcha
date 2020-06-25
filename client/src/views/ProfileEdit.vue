@@ -4,18 +4,10 @@
   >
      <v-container id="dropdown-example-2">
        <v-row>
-          <v-col cols="12" class="text-right">
-            <v-btn rounded outlined color="success">
-              <v-icon left>mdi-check</v-icon>save
-            </v-btn>
-          </v-col>
-      </v-row>
-       <v-row
-       >
-          <v-col cols="2"
+        <v-col cols="2"
           class="d-xs-flex"
           color="deep-purple lighten-3"
-        dark
+          dark
           >
               <v-container class="text-center">
               <template>
@@ -26,11 +18,20 @@
               </template>
               </v-container>
             </v-col>
+          <v-col cols="10" class="text-right">
+            <v-btn rounded outlined color="success">
+              <v-icon left>mdi-check</v-icon>save
+            </v-btn>
+          </v-col>
+      </v-row>
+       <v-row
+       justify="space-around"
+       >
             <v-col
               v-for="n in pictures"
               :key="n"
               class="d-xs-inline-flex"
-              cols="2"
+              cols="3"
             >
               <v-card>
                 <v-img
@@ -123,47 +124,72 @@
     </v-card-text>
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Languages</v-card-title>
-
-    <v-card-text full-width>
-      <v-expansion-panels>
-        <v-expansion-panel
+    <v-card-title>
+      <v-row>
+        <v-col
+        cols="2"
         >
-          <v-expansion-panel-header>Enter additional Language(s)</v-expansion-panel-header>
-          <v-expansion-panel-content>
-          <v-dialog v-model="modal" fullscreen hide-overlay transition="scroll-y-reverse-transition">
-            <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="lang"
-              placeholder="type here..."
-              @keyup.enter="addLanguage"
+        Languages
+        </v-col>
+        <v-col
+        cols="10"
+        class="text-right"
+        >
+        <v-dialog v-model="modal" hide-overlay transition="scroll-y-reverse-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon
               v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-            </template>
-            <v-card>
-              <v-toolbar dark color="primary">
+              v-on="on">
+            <v-icon>mdi-plus-circle-outline</v-icon>
+          </v-btn>
+        </template>
+        <template>
+        <div class="languages">
+              <v-toolbar dark color="deep-purple lighten-3">
                 <v-toolbar-title>Select Languages </v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
+                <v-btn icon dark @click="modal = false">
+                  <v-icon>mdi-check</v-icon>
+                </v-btn>
                 <v-btn icon dark @click="modal = false">
                   <v-icon>mdi-close</v-icon>
                 </v-btn>
                 </v-toolbar-items>
               </v-toolbar>
               <v-row class="pa-12">
+              <v-chip-group
+              v-model="toLanguages"
+              multiple
+              >
               <v-col
-                v-for='(item, index) in defaultInterests'
+                v-for='(item, index) in defaultLanguages'
                 :key='index'
                 class="shrink"
                 ref="lang"
-                cols="2"
+                cols="5"
               >
-                <v-chip filter outlined>{{ item }}</v-chip>
+                <v-chip filter>{{ item }}</v-chip>
               </v-col>
+              </v-chip-group>
               </v-row>
-            </v-card>
+        </div>
+        </template>
           </v-dialog>
+        </v-col>
+      </v-row>
+    </v-card-title>
+    <v-card-text full-width>
+      <v-expansion-panels>
+        <v-expansion-panel
+        >
+          <v-expansion-panel-header>Enter additional Language(s)</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-text-field
+              v-model="lang"
+              placeholder="type here..."
+              @keyup.enter="addLanguage"
+            ></v-text-field>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -180,12 +206,65 @@
 
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Interests</v-card-title>
+    <v-card-title>
+      <v-row>
+        <v-col
+        cols="2"
+        >
+        Interests
+        </v-col>
+        <v-col
+        cols="10"
+        class="text-right"
+        >
+        <v-dialog v-model="dialogBox" hide-overlay transition="scroll-y-reverse-transition">
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn icon
+              v-bind="attrs"
+              v-on="on">
+            <v-icon>mdi-plus-circle-outline</v-icon>
+          </v-btn>
+        </template>
+        <template>
+        <div class="languages">
+              <v-toolbar dark color="deep-purple lighten-3">
+                <v-toolbar-title>Select Interest(s) </v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                <v-btn icon dark @click="getSelectedItem">
+                  <v-icon>mdi-check</v-icon>
+                </v-btn>
+                <v-btn icon dark @click="dialogBox = false">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <v-row class="pa-12">
+              <v-chip-group
+                v-model="toInterests"
+                multiple
+              >
+              <v-col
+                v-for='(item, index) in defaultInterests'
+                :key='index'
+                class="shrink"
+                ref="lang"
+                cols="2"
+              >
+                <v-chip filter>{{ item }}</v-chip>
+              </v-col>
+              </v-chip-group>
+              </v-row>
+        </div>
+        </template>
+        </v-dialog>
+        </v-col>
+      </v-row>
+    </v-card-title>
 
     <v-card-text>
       <v-expansion-panels>
-        <v-expansion-panel
-        >
+        <v-expansion-panel>
           <v-expansion-panel-header>Enter additional interest(s)</v-expansion-panel-header>
           <v-expansion-panel-content>
           <v-text-field
@@ -213,36 +292,29 @@
             <v-btn rounded outlined color="success" :disabled="loading" :loading="loading" v-on:click="updateProfile">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
-          <!-- <v-progress-circular
-            :width="3"
-            color="green"
-            indeterminate
-            ></v-progress-circular> -->
-          <!-- <v-dialog
-            v-model="dialog"
-            class="elevation-12"
-            max-width="500px"
-          >
-          <v-card>
-          <v-alert
-            dense
-            text
-            type="success"
-          >
-          {{ success }}
-          </v-alert>
-          </v-card>
-          </v-dialog> -->
           </v-col>
       </v-row>
     </v-card-actions>
   </v-card>
 </template>
+<style scoped>
+ .languages
+ {
+   background: #fff;
+   padding: 0;
+   overflow: hidden;
+ }
+ .dialog-style
+ {
+   width: 400px;
+ }
+</style>
 <script>
-import UserProfileService from '../UserProfileService'
-import Table from '../tables'
-import Constant from '../constants'
+import UserProfileService from '../services/UserProfileService'
+import Table from '../services/tables'
+import Constant from '../services/constants'
 import Interests from '../jsons/interests'
+import Languages from '../jsons/languages'
 
 export default {
   name: 'Profile Edit',
@@ -253,6 +325,9 @@ export default {
       languages: [],
       interests: [],
       defaultInterests: [],
+      defaultLanguages: [],
+      toInterest: [],
+      toLanguages: [],
       firstname: '',
       lastname: '',
       biography: '',
@@ -267,7 +342,8 @@ export default {
       success: '',
       dialog: false,
       loading: false,
-      modal: false
+      modal: false,
+      dialogBox: false
     }
   },
   props: {
@@ -279,6 +355,7 @@ export default {
       this.titles = 'Edit'
     })
     this.defaultInterests = Interests
+    this.defaultLanguages = Languages
     const pics = await UserProfileService.readImages()
     this.pictures = pics.data
     const res = (await UserProfileService.getUserDetails(1))[0]
@@ -335,7 +412,8 @@ export default {
       }
     },
     getSelectedItem () {
-      alert(JSON.stringify(this.selection))
+      this.dialogBox = false
+      alert(JSON.stringify(this.toInterest))
     },
     addOject (key, value) {
       this.$set(this.profileObj, key, value)

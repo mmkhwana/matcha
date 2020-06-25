@@ -2,7 +2,7 @@
 <v-parallax
   dark
   src="../assets/home.jpg"
-  height="800"
+  height="900"
 >
 <v-row
   align="center"
@@ -14,7 +14,7 @@
     <h4 class="subheading font-weight-thin display-1">Want to find your perfect date today?</h4>
     <v-btn v-on:click="Loginbtn" rounded color="deep-purple lighten-3" dark lg >Log in</v-btn>
   </v-flex>
-  <v-flex xs12 sm8 md4 >
+  <v-flex xs8 sm8 md4 >
       <v-card>
           <v-card-text >{{ response }}</v-card-text>
               <v-card-text>
@@ -29,6 +29,29 @@
                       >
                       This user already exist, try a different set of data.
                       </v-alert> -->
+                  <v-row>
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-text-field
+                      v-model="firstname"
+                      label="First name"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="6"
+                  >
+                    <v-text-field
+                      v-model="lastname"
+                      label="Last name"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
                       <v-text-field
                           icon="person"
                           name="username"
@@ -127,7 +150,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import SignupService from '../SignupService'
+import SignupService from '../services/SignupService'
 import router from '../router'
 import VueSession from 'vue-session'
 import Vue from 'vue'
@@ -142,6 +165,8 @@ export default {
     return {
       posts: [],
       error: '',
+      firstname: '',
+      lastname: '',
       username: '',
       email: '',
       pass: '',
@@ -171,8 +196,11 @@ export default {
       this.error = ''
       this.checkForm()
       if (!this.error.length) {
-        var respond = await SignupService.registerUser(this.username, this.email, this.date, this.pass, this.confirm)
-        this.response = respond.data
+        let year = new Date().getFullYear()
+        let birthYear = new Date(this.date).getFullYear()
+        var respond = await SignupService.registerUser(this.firstname, this.lastname, this.username, this.email, year - birthYear, this.pass, this.confirm)
+        this.response = respond
+        alert(this.response)
         if (this.response === 'User Registered') {
           router.push({ name: 'Login' })
         }
