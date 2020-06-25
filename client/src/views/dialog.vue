@@ -47,7 +47,7 @@
     </layout>
 </template>
 <script>
-import GeneralService from '../GeneralService'
+import GeneralService from '../services/GeneralService'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)

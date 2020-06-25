@@ -56,7 +56,7 @@
 
 </template>
 <script>
-import LoginService from '../../LoginService'
+import LoginService from '../../services/LoginService'
 import router from '../../router'
 import VueSession from 'vue-session'
 import Vue from 'vue'

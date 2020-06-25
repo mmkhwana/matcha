@@ -102,7 +102,7 @@
   </v-card>
 </template>
 <script>
-import PreferenceService from '../PreferenceService'
+import PreferenceService from '../services/PreferenceService'
 
 export default {
   name: 'Preference',

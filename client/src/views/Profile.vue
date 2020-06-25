@@ -11,12 +11,13 @@
     <v-row
     align="center"
     justify="center"
+    class="d-flex flex-row mb-6"
     >
     <v-col
     v-for="n in pictures"
     :key="n"
-    class="d-flex child-flex"
-    cols="2"
+    class="d-flex flex-column mb-6"
+    cols="4"
     >
     <v-card>
     <v-img
@@ -108,9 +109,9 @@
     </v-card>
 </template>
 <script>
-import UserProfileService from '../UserProfileService'
-import Table from '../tables'
-import Constant from '../constants'
+import UserProfileService from '../services/UserProfileService'
+import Table from '../services/tables'
+import Constant from '../services/constants'
 
 export default {
   name: 'Edit',
