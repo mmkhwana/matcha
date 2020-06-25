@@ -9,51 +9,75 @@ const sql = require('./sql');
 const bcrypt = require('bcrypt');
 
 //User
-// router.get('/', async(req, res) => {
-//     const posts = await loadUsersCollection();
-//     res.send(await posts.find({}).toArray());
-// });
 
 router.post('/register_user', async(req, res) => 
 {
-    console.log("it's here now");
+    let password = '';
     if (req.body.confirm === req.body.pass)
     {
-        let password = bcrypt.hashSync(req.body.pass, 10);
-        console.log("password hashed");
-        values = [
-            req.body.firstname,
-            req.body.lastname,
+        password = bcrypt.hashSync(req.body.pass, 8)
+        let values = [
             req.body.username,
             req.body.email,
+            req.body.firstname,
+            req.body.lastname,
             password,
             req.body.date
         ];
-        Connection.con.getConnection((err, connect) => 
+        Connection.con.getConnection((error, connect) => 
         {
-            if (err)
+            if (error)
                 return;
-            connect.query(sql.insert.user.fields, values, (err, results) => 
+            connect.query(sql.insert.user.fields, values, (error, results, fields) => 
             {
                 connect.release();
-                if (err)
+                if (error)
                 {
                     res.status(200).send(results);
                     return;
                 }
-                res.status(200).send("User Registered");
+                res.send("User Registered");
             });
         });
     }
     else
     {
-        res.status(200).send("Password do not match!");
+        res.send("Password do not match!");
     }
 });
 
-router.get('/login', async(req, res) => {
-    const posts = await loadUsersCollection();
-    res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
+router.post('/login', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return ;
+        let values = [
+            req.body.email,
+            req.body.email
+        ];
+        connect.query(sql.select.user.login, values, (error, results) =>
+        {
+            connect.release();
+            if (error)
+            {
+                res.status(200).send(results);
+                return;
+            }
+            console.log(results[0]);
+            bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
+            {
+                console.log(results[0].user_password);
+                console.log(response);
+                if (response)
+                    res.status(200).send(results);
+                else
+                {
+                    res.status(200).send(response);
+                }
+            });
+        });
+    });
 });
 
 const store = multer.diskStorage({
@@ -76,7 +100,7 @@ router.post('/upload', upload.single('file'), async(req, res) =>
             'profile',
             req.body.userid
         ];
-        Connection.con.getConnection((error, connect) => 
+        Connection.con.getConnection((error, connect) =>
         {
             if (error)
                 return;
@@ -103,25 +127,6 @@ router.get('/uploads', (req, res) => {
   //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
     res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file));
 });
-
-// router.post('/', async(req, res) => {
-//     const posts = await loadUsersCollection();
-//     if (req.body.confirm === req.body.pass)
-//     {
-//         var password = req.body.pass;
-//         await posts.insertOne({
-//             name: req.body.username,
-//             email: req.body.email,
-//             birth: req.body.date,
-//             pass: password
-//         });
-//         res.status(200).send("User Registered");
-//     }
-//     else
-//     {
-//         res.status(200).send("Password do not match!");
-//     }
-// });
 
 router.post('/insert_language', async(req, res) => 
 {
