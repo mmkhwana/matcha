@@ -125,7 +125,7 @@ router.get('/uploads/:name', (req, res) => {
 router.get('/uploads', async (req, res) => {
   //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
   let images = []
-  const path = __dirname + "\\uploads";
+  const path = __dirname + "/uploads";
   const folder = await fs.promises.opendir(path);
   for await (const image_path of folder) 
   {
