@@ -6,7 +6,7 @@ const fs = require('fs');
 const Connection = require('./dbconnection');
 const router = express.Router();
 const sql = require('./sql');
-const bcrypt = require('bcrypt');
+//const bcrypt = require('bcrypt');
 
 //User
 // router.get('/', async(req, res) => {
@@ -19,14 +19,14 @@ router.post('/register_user', async(req, res) =>
     console.log("it's here now");
     if (req.body.confirm === req.body.pass)
     {
-        let password = bcrypt.hashSync(req.body.pass, 10);
+        //let password = bcrypt.hashSync(req.body.pass, 10);
         console.log("password hashed");
         values = [
             req.body.firstname,
             req.body.lastname,
             req.body.username,
             req.body.email,
-            password,
+            req.body.pass,
             req.body.date
         ];
         Connection.con.getConnection((err, connect) => 
@@ -101,7 +101,7 @@ router.get('/uploads/:name', (req, res) => {
 
 router.get('/uploads', (req, res) => {
   //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
-    res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file));
+    res.status(201).send((fs.readFile(__dirname + "\\uploads")).filter(file => file));
 });
 
 // router.post('/', async(req, res) => {
