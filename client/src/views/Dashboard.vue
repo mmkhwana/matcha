@@ -1,13 +1,17 @@
 <template>
   <v-card
-    height="100%"
+    class="mx-auto scrolly"
+    height="100vh"
     width="100%"
   >
     <v-app-bar
         color="deep-purple lighten-3"
         dark
         width="100%"
+        fixed
+        prominent
     >
+    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
          <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -23,23 +27,29 @@
             <v-icon>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
-    <v-row>
-    <v-col cols="2">
+
     <v-navigation-drawer
       v-model="drawer"
-      permanent
+      temporary
+      absolute
+      class="nav-items-padding"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="../assets/home.jpg"></v-img>
+          <v-img src="http://localhost:5000/api/posts/uploads/WIN_20200328_11_59_04_Pro.jpg"></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title >Khanyisa Mbukutshe</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
-
-      <v-list dense>
+      <v-list
+      nav
+      dense
+      >
+      <v-list-item-group
+       v-model="check"
+      >
         <v-list-item
           v-for="item in items"
           :key="item.title"
@@ -49,15 +59,17 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content>
-              <v-list-item-title v-on:click="changeTitles(item.title)">{{ item.title }}</v-list-item-title>
+          <v-list-item-content v-on:click="changeTitles(item.title)">
+              <v-list-item-title >{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+      </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    </v-col>
-    <v-col cols="10" sm="9">
+    <v-row>
+    <v-col cols="12">
     <v-card-text
+    class="content-padding"
     >
      <template>
        <keep-alive>
@@ -69,7 +81,8 @@
     </v-row>
   </v-card>
 </template>
-
+<style src="../assets/css/dashboard.css" lang="css">
+</style>
 <script>
 import dashboard from '../scripts/dashboard_component'
 export default dashboard

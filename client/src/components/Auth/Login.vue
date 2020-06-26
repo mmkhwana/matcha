@@ -1,13 +1,14 @@
 <template>
+<v-container>
 <v-parallax
   src="../../assets/home.jpg"
-  height= "900"
+  height= "1000"
 >
 <v-row
-  align="center"
+  class="signup"
   justify="center"
 >
-  <v-flex xs2 sm8 md4 >
+  <v-flex xs12 sm8 md4 >
     <h1 class="display-3 mb-4">Welcome to Matcha</h1>
     <h4 class="subheading font-weight-thin display-1">Meet Your Match!</h4>
      <v-btn v-on:click="register" rounded color="deep-purple lighten-3" dark lg >Want to register?</v-btn>
@@ -20,7 +21,7 @@
   >
   <p>{{ user.email }} Khanyisa Mbukutshe</p>
   </div>
-  <v-flex xs2 sm8 md4 >
+  <v-flex xs8 sm8 md4 >
       <v-form>
           <v-card>
               <v-card-text>
@@ -53,8 +54,10 @@
   </v-flex>
 </v-row>
 </v-parallax>
-
+</v-container>
 </template>
+<style src="../../assets/css/signup.css" lang="css">
+</style>
 <script>
 import login from '../../scripts/login_component'
 export default login

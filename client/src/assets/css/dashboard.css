@@ -1,0 +1,13 @@
+.content-padding
+{
+    padding-top: 150px;
+}
+.nav-items-padding
+{
+    padding: 10px;
+}
+.scrolly
+{
+    overflow-y: scroll;
+    overflow-x: hidden;
+}

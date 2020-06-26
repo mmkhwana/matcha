@@ -27,7 +27,14 @@ export default {
         { title: 'Chat', icon: 'mdi-chat' },
         { title: 'Settings', icon: 'mdi-settings' },
         { title: 'Log Out', icon: 'mdi-logout' }],
-      titles: 'Profile'
+      titles: 'Profile',
+      drawer: false,
+      check: null
+    }
+  },
+  watch: {
+    check () {
+      this.drawer = false
     }
   },
   beforeCreate () {

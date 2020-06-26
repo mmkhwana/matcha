@@ -149,7 +149,7 @@
 </v-card>
 </v-container>
 </template>
-<style scoped>
+<style src="../assets/css/signup.css" lang="css">
 </style>
 <script>
 import signup from '../scripts/signup_component.js'

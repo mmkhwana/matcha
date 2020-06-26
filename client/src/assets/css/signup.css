@@ -1,8 +1,10 @@
-.parrallax{
+.parrallax
+{
     align-content: center;
     text-align: center;
-  }
-  .v__row
-  {
-    top: 200px;
-  }
+}
+.signup
+{
+    height: auto;
+    padding-top: 100px;
+}

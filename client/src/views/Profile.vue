@@ -59,7 +59,7 @@
     class="d-flex child-flex"
     cols="4"
     >
-    <v-col cols="3">
+    <v-col cols="6" xs12 smd8 md4>
     <v-card-text>{{ n.name }}:</v-card-text>
     </v-col>
     <v-col cols="6">
