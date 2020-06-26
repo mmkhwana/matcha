@@ -57,6 +57,7 @@
 </template>
 <script>
 import LoginService from '../../services/LoginService'
+import Table from '../../services/tables'
 import router from '../../router'
 import VueSession from 'vue-session'
 import Vue from 'vue'
@@ -74,7 +75,7 @@ export default {
       pass: ''
     }
   },
-  async created () {
+  beforeCreate () {
     if (this.$session.exists()) {
       router.push({ name: 'Dashboard' })
     }
@@ -82,11 +83,11 @@ export default {
   methods: {
     async login () {
       try {
-        this.users = await LoginService.userLogin(this.username, this.pass)
-        if (this.users.email === this.username && this.users.pass === this.pass) {
+        const users = (await LoginService.userLogin(this.username, this.pass))[0]
+        if (users[Table.User.userName]) {
           this.$session.start()
-          this.$session.set('email', this.users.email)
-          this.$session.set('id', this.users._id)
+          this.$session.set('email', users[Table.User.userName])
+          this.$session.set('id', users[Table.User.userId])
           //  Vue.http.headers.common['Authorization'] = 'Bearer ' + this.users.email
           router.push({ name: 'Dashboard' })
         } else {

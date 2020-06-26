@@ -9,51 +9,74 @@ const sql = require('./sql');
 //const bcrypt = require('bcrypt');
 
 //User
-// router.get('/', async(req, res) => {
-//     const posts = await loadUsersCollection();
-//     res.send(await posts.find({}).toArray());
-// });
 
 router.post('/register_user', async(req, res) => 
 {
-    console.log("it's here now");
+    let password = '';
     if (req.body.confirm === req.body.pass)
     {
-        //let password = bcrypt.hashSync(req.body.pass, 10);
-        console.log("password hashed");
-        values = [
-            req.body.firstname,
-            req.body.lastname,
+        password = bcrypt.hashSync(req.body.pass, 8)
+        let values = [
             req.body.username,
             req.body.email,
-            req.body.pass,
+            req.body.firstname,
+            req.body.lastname,
+            password,
             req.body.date
         ];
-        Connection.con.getConnection((err, connect) => 
+        Connection.con.getConnection((error, connect) => 
         {
-            if (err)
+            if (error)
                 return;
-            connect.query(sql.insert.user.fields, values, (err, results) => 
+            connect.query(sql.insert.user.fields, values, (error, results, fields) => 
             {
                 connect.release();
-                if (err)
+                if (error)
                 {
                     res.status(200).send(results);
                     return;
                 }
-                res.status(200).send("User Registered");
+                res.send("User Registered");
             });
         });
     }
     else
     {
-        res.status(200).send("Password do not match!");
+        res.send("Password do not match!");
     }
 });
 
-router.get('/login', async(req, res) => {
-    const posts = await loadUsersCollection();
-    res.send(await posts.find({email: req.query.email, pass: req.query.pass}).toArray());
+router.post('/login_user', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return ;
+        let values = [
+            req.body.email,
+            req.body.email
+        ];
+        connect.query(sql.select.user.login, values, (error, results) =>
+        {
+            connect.release();
+            if (error)
+            {
+                res.status(200).send(results);
+                return;
+            }
+            bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
+            {
+                if(error)
+                    return;
+                if (response)
+                    res.status(200).send(results);
+                else
+                {
+                    res.status(200).send(response);
+                }
+            });
+        });
+    });
 });
 
 const store = multer.diskStorage({
@@ -76,7 +99,7 @@ router.post('/upload', upload.single('file'), async(req, res) =>
             'profile',
             req.body.userid
         ];
-        Connection.con.getConnection((error, connect) => 
+        Connection.con.getConnection((error, connect) =>
         {
             if (error)
                 return;
@@ -99,29 +122,17 @@ router.get('/uploads/:name', (req, res) => {
     res.sendFile(path.join(__dirname, "./uploads/" + req.params.name));
 });
 
-router.get('/uploads', (req, res) => {
+router.get('/uploads', async (req, res) => {
   //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
-    res.status(201).send((fs.readFile(__dirname + "\\uploads")).filter(file => file));
+  let images = []
+  const path = __dirname + "\\uploads";
+  const folder = await fs.promises.opendir(path);
+  for await (const image_path of folder) 
+  {
+    images.push(image_path.name);
+  }
+  res.status(201).send(images);
 });
-
-// router.post('/', async(req, res) => {
-//     const posts = await loadUsersCollection();
-//     if (req.body.confirm === req.body.pass)
-//     {
-//         var password = req.body.pass;
-//         await posts.insertOne({
-//             name: req.body.username,
-//             email: req.body.email,
-//             birth: req.body.date,
-//             pass: password
-//         });
-//         res.status(200).send("User Registered");
-//     }
-//     else
-//     {
-//         res.status(200).send("Password do not match!");
-//     }
-// });
 
 router.post('/insert_language', async(req, res) => 
 {
@@ -131,7 +142,8 @@ router.post('/insert_language', async(req, res) =>
             return;
         let values = [];
         let arr = req.body.langName;
-        arr.forEach(lang => {
+        arr.forEach(lang => 
+        {
             values.push([lang, req.body.userId]);
         });
         connect.query(sql.insert.language.fields, [values], (error, results) => 
@@ -156,7 +168,8 @@ router.post('/insert_interest', async(req, res) =>
             return;
         let params = [];
         let arr = req.body.interestName;
-        arr.forEach(element => {
+        arr.forEach(element => 
+        {
             params.push([element, req.body.userId]);
         });
         connect.query(sql.insert.interest.fields, [params], (error, results) => 
@@ -179,10 +192,6 @@ router.get('/get_interest:userid', async(req, res) =>
     {
         if (error)
             return;
-        // let sql = `
-        // SELECT interest_name
-        // FROM Matcha_User_Interests
-        // WHERE user_id = ?`;
         let params = [req.params.userid];
         connect.query(sql.select.interest.all, params, (error, results) =>
         {
@@ -203,12 +212,8 @@ router.get('/get_language:userid', async(req, res) =>
     {
         if (error)
             return;
-        let sql = `
-        SELECT lang_name
-        FROM Matcha_User_Languages
-        WHERE user_id = ?`;
         let params = [req.params.userid];
-        connect.query(sql, params, (error, results) => 
+        connect.query(sql.select.language.all, params, (error, results) => 
         {
             connect.release();
             if (error)
