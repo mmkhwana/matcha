@@ -1,13 +1,14 @@
 <template>
+<v-container>
 <v-parallax
   dark
   src="../assets/home.jpg"
-  height="900"
+  height= "1000"
+  class="parrallax"
 >
 <v-row
-  align="center"
+  class="signup"
   justify="center"
-  absolute
 >
   <v-flex xs12 sm8 md4 >
     <h1 class="display-3 mb-4">Welcome to Matcha</h1>
@@ -112,13 +113,16 @@
           </v-card>
   </v-flex>
 </v-row>
-<v-row padless>
+
+</v-parallax>
+<v-card height="auto">
   <v-footer
     dark
-    padless
+    :padless="true"
     absolute
   >
     <v-card
+      width="100%"
       flat
       tile
       class="deep-purple lighten-3 white--text text-center"
@@ -133,108 +137,21 @@
           <v-icon size="24px">{{ icon }}</v-icon>
         </v-btn>
       </v-card-text>
-
       <v-card-text class="white--text pt-0">
  Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
       </v-card-text>
-
       <v-divider></v-divider>
-
       <v-card-text class="white--text">
         {{ new Date().getFullYear() }} — <strong>Matcha</strong>
       </v-card-text>
     </v-card>
   </v-footer>
-</v-row>
-</v-parallax>
+</v-card>
+</v-container>
 </template>
+<style scoped>
+</style>
 <script>
-// @ is an alias to /src
-import SignupService from '../services/SignupService'
-import router from '../router'
-import VueSession from 'vue-session'
-import Vue from 'vue'
-Vue.use(VueSession)
-var options = {
-  persist: true
-}
-Vue.use(VueSession, options)
-export default {
-  name: 'home',
-  data () {
-    return {
-      posts: [],
-      error: '',
-      firstname: '',
-      lastname: '',
-      username: '',
-      email: '',
-      pass: '',
-      confirm: '',
-      date: '',
-      response: '',
-      icons: [
-        'mdi-facebook',
-        'mdi-twitter',
-        'mdi-linkedin',
-        'mdi-instagram'
-      ]
-    }
-  },
-  beforeCreate () {
-    try {
-      if (this.$session.exists()) {
-        router.push({ name: 'Dashboard' })
-      }
-    //  this.posts = await SignupService.getUsers()
-    } catch (error) {
-      this.error = error.message
-    }
-  },
-  methods: {
-    async insertUser () {
-      this.error = ''
-      this.checkForm()
-      if (!this.error.length) {
-        let year = new Date().getFullYear()
-        let birthYear = new Date(this.date).getFullYear()
-        var respond = await SignupService.registerUser(this.firstname, this.lastname, this.username, this.email, year - birthYear, this.pass, this.confirm)
-        this.response = respond
-        alert(this.response)
-        if (this.response === 'User Registered') {
-          router.push({ name: 'Login' })
-        }
-      }
-    },
-    Loginbtn () {
-      router.push({ name: 'Login' })
-    },
-    checkForm: function () {
-      if (!this.username) {
-        this.error = 'Name required.'
-      }
-      if (!this.pass) {
-        this.error = 'Password required.'
-      } else if (!this.validPassword(this.pass)) {
-        this.error = 'Min. 8 characters with at least one capital letter, a number and a special character.'
-      }
-      if (!this.confirm) {
-        this.error = 'Confirm Password required.'
-      }
-      if (!this.email) {
-        this.error = 'Email required.'
-      } else if (!this.validEmail(this.email)) {
-        this.error = 'Valid email required.'
-      }
-    },
-    validEmail: function (email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      return re.test(email)
-    },
-    validPassword: function (pass) {
-      var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
-      return pattern.test(pass)
-    }
-  }
-}
+import signup from '../scripts/signup_component.js'
+export default signup
 </script>

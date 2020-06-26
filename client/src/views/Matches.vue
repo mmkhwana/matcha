@@ -47,3 +47,7 @@
           </v-row>
         </v-container>
 </template>
+<script>
+import matches from '../scripts/matches_component'
+export default matches
+</script>

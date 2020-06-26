@@ -34,13 +34,6 @@
   </v-card>
 </template>
 <script>
-export default {
-  default () {
-    return {
-      settings: [
-        { title: 'Name', value: 'Khanyisa' }
-      ]
-    }
-  }
-}
+import settings from '../scripts/settings _component'
+export default settings
 </script>
