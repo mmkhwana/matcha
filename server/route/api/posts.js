@@ -122,9 +122,16 @@ router.get('/uploads/:name', (req, res) => {
     res.sendFile(path.join(__dirname, "./uploads/" + req.params.name));
 });
 
-router.get('/uploads', (req, res) => {
+router.get('/uploads', async (req, res) => {
   //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
-    res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file));
+  let images = []
+  const path = __dirname + "\\uploads";
+  const folder = await fs.promises.opendir(path);
+  for await (const image_path of folder) 
+  {
+    images.push(image_path.name);
+  }
+  res.status(201).send(images);
 });
 
 router.post('/insert_language', async(req, res) => 
