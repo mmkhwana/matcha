@@ -8,7 +8,6 @@
         color="deep-purple lighten-3"
         dark
         width="100%"
-        fixed
         prominent
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -30,6 +29,7 @@
 
     <v-navigation-drawer
       v-model="drawer"
+      height="100vh"
       temporary
       absolute
       class="nav-items-padding"
