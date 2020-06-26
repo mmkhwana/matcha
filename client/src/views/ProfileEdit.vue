@@ -31,7 +31,7 @@
               v-for="n in pictures"
               :key="n"
               class="d-xs-inline-flex"
-              cols="3"
+              cols="2"
             >
               <v-card>
                 <v-img

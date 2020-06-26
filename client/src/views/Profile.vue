@@ -17,7 +17,7 @@
     v-for="n in pictures"
     :key="n"
     class="d-flex flex-column mb-6"
-    cols="4"
+    cols="2"
     >
     <v-card>
     <v-img
