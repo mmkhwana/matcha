@@ -131,8 +131,6 @@ export default {
     }
   },
   async mounted () {
-    const pics = await UserProfileService.readImages()
-    this.pictures = pics.data
     const res = (await UserProfileService.getUserDetails(1))[0]
     let output = await UserProfileService.getInterest(1)
     let lang = await UserProfileService.getLanguage(1)
@@ -148,6 +146,9 @@ export default {
     output.forEach(interest => {
       this.interests.push(interest[Table.Interests.name])
     })
+    const pics = await UserProfileService.readImages()
+    alert(JSON.stringify(pics.data))
+    this.pictures = pics.data
   },
   methods:
   {
