@@ -36,6 +36,11 @@ router.post('/register_user', async(req, res) =>
                     res.status(200).send(results);
                     return;
                 }
+                let directory = __dirname + '/uploads/'+req.body.username;
+                if (!fs.existsSync(directory))
+                {
+                    fs.mkdirSync(directory,{ recursive: true });
+                }
                 res.send("User Registered");
             });
         });
@@ -79,53 +84,68 @@ router.post('/login_user', async(req, res) =>
     });
 });
 
-const store = multer.diskStorage({
-    filename: (req, file, cb) => { cb(null, file.originalname)},  
-    destination: function (res, file, cb){ cb(null, 'server/route/api/uploads')}
-});
-
-const upload = multer({storage: store});
-
-router.post('/upload', upload.single('file'), async(req, res) => 
-{ 
-    if (!req.file){
-        return res.send({success: false});
-    }
-    else 
+router.post('/upload', async(req, res) => 
+{
+    console.log(req.body)
+    console.log(req.params)
+    console.log(req.query)
+    let dest = 'server/route/api/uploads/tmp';
+    let store = multer.diskStorage({
+        destination: dest,
+        filename: (req, file, cb) => { cb(null, file.originalname)}
+    });
+    
+    let upload = multer({storage: store}).single('file');
+    upload(req, res, (error) => 
     {
-        let file_path = 'http://localhost:5000/api/posts/uploads/' + req.file.originalname;
-        let values = [
-            file_path,
-            'profile',
-            req.body.userid
-        ];
-        Connection.con.getConnection((error, connect) =>
+        if (!req.file){
+            return res.send({success: false});
+        }
+        else 
         {
-            if (error)
-                return;
-            connect.query(sql.insert.image.fields, values, (error, results) => 
+            let file_path = 'http://localhost:5000/api/posts/uploads/'+ req.body.username + '/' + req.file.originalname;
+            const existPath = path.join(__dirname + '/uploads/tmp', req.file.originalname)
+            const destPath = path.join(__dirname, "uploads/"+ req.body.username, req.file.originalname)
+            try 
             {
-                connect.release();
+                fs.renameSync(existPath, destPath)
+            } 
+            catch(err)
+            {
+                console.log(err);
+            }
+            let values = [
+                file_path,
+                'profile',
+                req.body.userid
+            ];
+            Connection.con.getConnection((error, connect) =>
+            {
                 if (error)
-                {
-                    res.send({success: false});
                     return;
-                }
-                res.send({success: true});
+                connect.query(sql.insert.image.fields, values, (error, results) => 
+                {
+                    connect.release();
+                    if (error)
+                    {
+                        res.send({success: false});
+                        return;
+                    }
+                    res.send({success: true});
+                });
+                
             });
-            
-        });
-    }
+        }
+    });
 });
 
-router.get('/uploads/:name', (req, res) => {
-    res.sendFile(path.join(__dirname, "./uploads/" + req.params.name));
+router.get('/uploads/:username/:name', (req, res) => {
+    res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
 });
 
-router.get('/uploads', async (req, res) => {
-  //  res.status(201).send((fs.readdirSync(__dirname + "\\uploads")).filter(file => file.endsWith('.jpg')));
+router.get('/uploads:username', async (req, res) => {
   let images = []
-  const path = __dirname + "/uploads";
+  const path = __dirname + "/uploads/" + req.params.username;
   const folder = await fs.promises.opendir(path);
   for await (const image_path of folder) 
   {
