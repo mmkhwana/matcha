@@ -9,7 +9,7 @@
         <v-card-title class="headline">Choose Photo</v-card-title>
       <v-card-text>
                 <v-img
-                  :src="img"
+                  v-bind:src="img"
                   width="450px"
                   height="350px"
                   ref="photo"

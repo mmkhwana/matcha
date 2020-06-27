@@ -29,7 +29,9 @@ export default {
         { title: 'Log Out', icon: 'mdi-logout' }],
       titles: 'Profile',
       drawer: false,
-      check: null
+      check: null,
+      username: this.$session.get('username'),
+      fullname: this.$session.get('firstname') + ' ' + this.$session.get('lastname')
     }
   },
   watch: {

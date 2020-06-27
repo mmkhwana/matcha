@@ -1,4 +1,3 @@
-import axios from 'axios'
 import General from './GeneralService'
 import Constant from './constants'
 
@@ -35,16 +34,12 @@ class UserProfileService {
     return General.GetExecution(Constant.GetUserDetails, userid)
   }
 
-  static readImages () {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await axios.get(Constant.URL + '/uploads')
-        resolve(res)
-        reject(res)
-      } catch (error) {
-        console.log(error)
-      }
-    })
+  static readImages (username) {
+    return General.getReturnArrayExecution(Constant.Uploads, username)
+  }
+
+  static uploadImage (imageData) {
+    return General.PostUploadImageExecution(Constant.Upload, imageData)
   }
 }
 

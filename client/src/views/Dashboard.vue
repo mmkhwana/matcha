@@ -29,17 +29,16 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      height="100vh"
       temporary
       absolute
       class="nav-items-padding"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="http://localhost:5000/api/posts/uploads/WIN_20200328_11_59_04_Pro.jpg"></v-img>
+          <v-img :src="`http://localhost:5000/api/posts/uploads/${username}/WIN_20200328_11_59_04_Pro.jpg`"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title >Khanyisa Mbukutshe</v-list-item-title>
+        <v-list-item-title >{{ fullname }}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>

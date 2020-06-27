@@ -28,8 +28,10 @@ export default {
         const users = (await LoginService.userLogin(this.username, this.pass))[0]
         if (users[Table.User.userName]) {
           this.$session.start()
-          this.$session.set('email', users[Table.User.userName])
-          this.$session.set('id', users[Table.User.userId])
+          this.$session.set('firstname', users[Table.User.firstName])
+          this.$session.set('lastname', users[Table.User.lastName])
+          this.$session.set('username', users[Table.User.userName])
+          this.$session.set('userid', users[Table.User.userId])
           //  Vue.http.headers.common['Authorization'] = 'Bearer ' + this.users.email
           router.push({ name: 'Dashboard' })
         } else {

@@ -4,8 +4,8 @@
   >
      <v-container id="dropdown-example-2">
        <v-row>
-        <v-col cols="2"
-          class="d-xs-flex"
+        <v-col cols="6"
+          class="text-left"
           color="deep-purple lighten-3"
           dark
           >
@@ -18,7 +18,7 @@
               </template>
               </v-container>
             </v-col>
-          <v-col cols="10" class="text-right">
+          <v-col cols="6" class="text-right">
             <v-btn rounded outlined color="success">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
@@ -35,8 +35,8 @@
             >
               <v-card>
                 <v-img
-                  :src='`http://localhost:5000/api/posts/uploads/${n}`'
-                  :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
+                  :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
+                  :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   class="fill-height white--text align-end grey lighten-2"
@@ -65,29 +65,93 @@
           <v-card flat>
             <v-card-text>
                <v-container>
-      <v-row>
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-text-field
-            v-model="firstname"
-            label="First name"
-            required
-          ></v-text-field>
-        </v-col>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="firstname"
+                        label="First name"
+                        required
+                      ></v-text-field>
+                    </v-col>
 
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-text-field
-            v-model="lastname"
-            label="Last name"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="lastname"
+                        label="Last name"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="address"
+                      label="Address*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="postcode"
+                      label="Post Code"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="city"
+                      label="City*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="country"
+                      label="Country*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="state"
+                      label="State/Province*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                  </v-col>
+                </v-row>
                </v-container>
             </v-card-text>
               <v-card-title>Biography</v-card-title>

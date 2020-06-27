@@ -3,6 +3,9 @@ import Table from '../services/tables'
 import Constant from '../services/constants'
 import Interests from '../jsons/interests'
 import Languages from '../jsons/languages'
+import VueSession from 'vue-session'
+import Vue from 'vue'
+Vue.use(VueSession)
 
 export default {
   name: 'Profile Edit',
@@ -18,6 +21,11 @@ export default {
       toLanguages: [],
       firstname: '',
       lastname: '',
+      address: '39 Rissik Street',
+      postcode: '2001',
+      city: 'Johannesburg',
+      country: 'South Africa',
+      state: 'Gauteng',
       biography: '',
       items: [
         { name: Constant.relationship, value: '' },
@@ -31,7 +39,8 @@ export default {
       dialog: false,
       loading: false,
       modal: false,
-      dialogBox: false
+      dialogBox: false,
+      username: ''
     }
   },
   props: {
@@ -44,11 +53,10 @@ export default {
     })
     this.defaultInterests = Interests
     this.defaultLanguages = Languages
-    const pics = await UserProfileService.readImages()
-    this.pictures = pics.data
-    const res = (await UserProfileService.getUserDetails(1))[0]
-    let output = await UserProfileService.getInterest(1)
-    let lang = await UserProfileService.getLanguage(1)
+    this.username = this.$session.get('username')
+    const res = (await UserProfileService.getUserDetails(this.$session.get('userid')))[0]
+    let output = await UserProfileService.getInterest(this.$session.get('userid'))
+    let lang = await UserProfileService.getLanguage(this.$session.get('userid'))
     this.firstname = res[Table.User.firstName]
     this.lastname = res[Table.User.lastName]
     this.biography = res[Table.User.biography]
@@ -63,6 +71,8 @@ export default {
     output.forEach(interest => {
       this.interests.push(interest[Table.Interests.name])
     })
+    const pics = await UserProfileService.readImages(this.username)
+    this.pictures = pics.data
   },
   methods: {
     async updateProfile () {
@@ -107,8 +117,12 @@ export default {
       this.$set(this.profileObj, key, value)
     },
     upload () {
-      this.$root.$emit('Upload')
-      this.$destroy()
+      if (this.pictures.length < 5) {
+        this.$root.$emit('Upload')
+        this.$destroy()
+      } else {
+        alert('The maximum of five pictures has been reached!')
+      }
     }
   }
 }

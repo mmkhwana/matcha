@@ -1,5 +1,7 @@
 export default {
   URL: 'http://localhost:5000/api/posts/',
+  Uploads: 'uploads',
+  Upload: 'upload',
   InsertLanguage: 'insert_language',
   InsertInterest: 'insert_interest',
   GetUserLanguage: 'get_language',

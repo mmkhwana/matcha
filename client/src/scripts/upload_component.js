@@ -1,4 +1,4 @@
-import GeneralService from '../services/GeneralService'
+import UserProfileService from '../services/UserProfileService'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -7,11 +7,13 @@ export default {
   default () {
     return {
       file: null,
-      img: '../assets/logo.png'
+      img: ''
     }
   },
-  mounted: () => {
-    this.$refs.photo.src = '../assets/logo.png'
+  computed: {
+    getImage () {
+      return this.img
+    }
   },
   methods: {
     changed (e) {
@@ -29,9 +31,10 @@ export default {
     async save () {
       alert(this.$refs.photo.src)
       var fileform = new FormData()
+      fileform.append('userid', this.$session.get('userid'))
       fileform.append('file', this.file, this.file.name)
-      fileform.append('userid', 1)
-      var res = await GeneralService.UploadPhoto(fileform)
+      fileform.append('username', this.$session.get('username'))
+      var res = await UserProfileService.uploadImage(fileform)
       alert(res.success)
       this.$root.$emit('Edit')
       this.$destroy()

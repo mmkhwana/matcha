@@ -21,8 +21,8 @@
     >
     <v-card>
     <v-img
-    :src='`http://localhost:5000/api/posts/uploads/${n}`'
-    :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
+    :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
+    :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
     aspect-ratio='1.5'
     gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
     class='white--text align-end grey lighten-2'
@@ -50,7 +50,75 @@
     >
     <v-col cols="12">
     <v-card flat>
-    <v-card-title>Personal Info.</v-card-title>
+                  <v-card-text>
+               <v-container>
+                  <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="address"
+                      label="Street Address*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="postcode"
+                      label="Post Code"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="city"
+                      label="City*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="country"
+                      label="Country*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="state"
+                      label="State/Province*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                  </v-col>
+                </v-row>
+               </v-container>
+            </v-card-text>
+    <v-card-title>Biography.</v-card-title>
     <v-card-subtitle>{{ biography }}</v-card-subtitle>
     <v-card-text>
     <v-row
