@@ -23,8 +23,8 @@ class SignupService {
     )
   }
 
-  static registerUser (firstname, lastname, username, email, date, pass, confirm) {
-    return GeneralService.PostExecution(Constant.RegisterUser, { firstname, lastname, username, email, date, pass, confirm })
+  static registerUser (gender, firstname, lastname, username, email, date, pass, confirm) {
+    return GeneralService.PostExecution(Constant.RegisterUser, { gender, firstname, lastname, username, email, date, pass, confirm })
   }
 
   static deleteUser (id) {

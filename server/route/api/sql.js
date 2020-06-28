@@ -3,7 +3,8 @@ module.exports = {
     {
         user:
         {
-            details: `SELECT * FROM Matcha_Users WHERE user_id = ?`
+            details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
+            login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`
         },
         interest :
         {
@@ -45,7 +46,7 @@ module.exports = {
     {
         user:
         {
-            fields: `INSERT INTO Matcha_Users (user_first_name, user_last_name, user_name, user_email, user_password, user_age) VALUES ?`
+            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?)`
         },
         interest:
         {

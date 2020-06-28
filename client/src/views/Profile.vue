@@ -17,12 +17,12 @@
     v-for="n in pictures"
     :key="n"
     class="d-flex flex-column mb-6"
-    cols="4"
+    cols="2"
     >
     <v-card>
     <v-img
-    :src='`http://localhost:5000/api/posts/uploads/${n}`'
-    :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
+    :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
+    :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
     aspect-ratio='1.5'
     gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
     class='white--text align-end grey lighten-2'
@@ -50,7 +50,75 @@
     >
     <v-col cols="12">
     <v-card flat>
-    <v-card-title>Personal Info.</v-card-title>
+                  <v-card-text>
+               <v-container>
+                  <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="address"
+                      label="Street Address*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="postcode"
+                      label="Post Code"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="city"
+                      label="City*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="country"
+                      label="Country*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="state"
+                      label="State/Province*"
+                      :disabled="true"
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                  </v-col>
+                </v-row>
+               </v-container>
+            </v-card-text>
+    <v-card-title>Biography.</v-card-title>
     <v-card-subtitle>{{ biography }}</v-card-subtitle>
     <v-card-text>
     <v-row
@@ -59,7 +127,7 @@
     class="d-flex child-flex"
     cols="4"
     >
-    <v-col cols="3">
+    <v-col cols="6" xs12 smd8 md4>
     <v-card-text>{{ n.name }}:</v-card-text>
     </v-col>
     <v-col cols="6">
@@ -109,51 +177,6 @@
     </v-card>
 </template>
 <script>
-import UserProfileService from '../services/UserProfileService'
-import Table from '../services/tables'
-import Constant from '../services/constants'
-
-export default {
-  name: 'Edit',
-  data: () => {
-    return {
-      pictures: [],
-      biography: '',
-      languages: [],
-      interests: [],
-      personality: [
-        { name: Constant.relationship, value: '' },
-        { name: Constant.height, value: '' },
-        { name: Constant.age, value: '' },
-        { name: Constant.race, value: '' },
-        { name: Constant.hair, value: '' }
-      ]
-    }
-  },
-  async mounted () {
-    const pics = await UserProfileService.readImages()
-    this.pictures = pics.data
-    const res = (await UserProfileService.getUserDetails(1))[0]
-    let output = await UserProfileService.getInterest(1)
-    let lang = await UserProfileService.getLanguage(1)
-    this.biography = res[Table.User.biography]
-    this.personality[0].value = res[Table.User.status]
-    this.personality[1].value = res[Table.User.height] + 'm'
-    this.personality[2].value = res[Table.User.age] + 'yrs'
-    this.personality[3].value = res[Table.User.race]
-    this.personality[4].value = res[Table.User.hair]
-    lang.forEach(lang => {
-      this.languages.push(lang[Table.Languages.name])
-    })
-    output.forEach(interest => {
-      this.interests.push(interest[Table.Interests.name])
-    })
-  },
-  methods:
-  {
-    edit () {
-      this.$root.$emit('Edit')
-    }
-  }
-}
+import profile from '../scripts/profile_component'
+export default profile
 </script>

@@ -7,66 +7,42 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue')
+    component: () => import('../views/Home.vue')
   },
   {
     path: '/welcome',
     name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Login" */ '../components/Auth/Login.vue')
+    component: () => import('../views/Login.vue')
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: () => import('../views/About.vue')
   },
   {
     path: '/Dashboard',
     name: 'Dashboard',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Dashboard" */ '../views/Dashboard.vue')
+    component: () => import('../views/Dashboard.vue')
   },
   {
     path: '/matches',
     name: 'Matches',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Matches" */ '../views/Matches.vue')
+    component: () => import('../views/Matches.vue')
   },
   {
     path: '/preference',
     name: 'Preference',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Preference" */ '../views/Preference.vue')
+    component: () => import('../views/Preference.vue')
   },
   {
     path: '/settings',
     name: 'Settings',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Settings" */ '../views/Settings.vue')
+    component: () => import('../views/Settings.vue')
   },
   {
     path: '/chat',
     name: 'Chat',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "Chat" */ '../views/Chat.vue')
+    component: () => import('../views/Chat.vue')
   }
 ]
 

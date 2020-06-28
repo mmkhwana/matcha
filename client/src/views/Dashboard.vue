@@ -1,13 +1,16 @@
 <template>
   <v-card
-    height="100%"
+    class="mx-auto scrolly"
+    height="100vh"
     width="100%"
   >
     <v-app-bar
         color="deep-purple lighten-3"
         dark
         width="100%"
+        prominent
     >
+    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
          <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -23,23 +26,29 @@
             <v-icon>mdi-logout</v-icon>
         </v-btn>
     </v-app-bar>
-    <v-row>
-    <v-col cols="2">
+
     <v-navigation-drawer
       v-model="drawer"
-      permanent
+      temporary
+      absolute
+      class="nav-items-padding"
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="../assets/home.jpg"></v-img>
+          <v-img :src="`http://localhost:5000/api/posts/uploads/${username}/WIN_20200328_11_59_04_Pro.jpg`"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title >Khanyisa Mbukutshe</v-list-item-title>
+        <v-list-item-title >{{ fullname }}</v-list-item-title>
       </v-list-item>
 
       <v-divider></v-divider>
-
-      <v-list dense>
+      <v-list
+      nav
+      dense
+      >
+      <v-list-item-group
+       v-model="check"
+      >
         <v-list-item
           v-for="item in items"
           :key="item.title"
@@ -49,15 +58,17 @@
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content>
-              <v-list-item-title v-on:click="changeTitles(item.title)">{{ item.title }}</v-list-item-title>
+          <v-list-item-content v-on:click="changeTitles(item.title)">
+              <v-list-item-title >{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+      </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    </v-col>
-    <v-col cols="10" sm="9">
+    <v-row>
+    <v-col cols="12">
     <v-card-text
+    class="content-padding"
     >
      <template>
        <keep-alive>
@@ -69,89 +80,9 @@
     </v-row>
   </v-card>
 </template>
-
+<style src="../assets/css/dashboard.css" lang="css">
+</style>
 <script>
-// @ is an alias to /src
-import Matches from '../views/Matches'
-import Preference from '../views/Preference'
-import Profile from '../views/Profile'
-import Edit from '../views/ProfileEdit'
-import router from '../router'
-import VueSession from 'vue-session'
-import Settings from '../views/Settings'
-import Chat from '../views/Chat'
-import Upload from '../views/dialog'
-import Vue from 'vue'
-Vue.use(VueSession)
-Vue.component('Preference', Preference)
-Vue.component('Matches', Matches)
-Vue.component('Profile', Profile)
-Vue.component('Settings', Settings)
-Vue.component('Chat', Chat)
-Vue.component('Edit', Edit)
-Vue.component('Upload Photo', Upload)
-export default {
-  name: 'Dashboard',
-  data () {
-    return {
-      dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'],
-      items: [{ title: 'Profile', icon: 'mdi-account' },
-        { title: 'Preference', icon: 'mdi-settings' },
-        { title: 'Matches', icon: 'mdi-account-group' },
-        { title: 'Chat', icon: 'mdi-chat' },
-        { title: 'Settings', icon: 'mdi-settings' },
-        { title: 'Log Out', icon: 'mdi-logout' }],
-      titles: 'Profile'
-    }
-  },
-  computed: {
-    changeComponents () {
-      if (this.titles === 'Preference') {
-        return 'Preference'
-      } else if (this.titles === 'Matches') {
-        return 'Matches'
-      } else if (this.titles === 'Settings') {
-        return 'Settings'
-      } else if (this.titles === 'Chat') {
-        return 'Chat'
-      } else if (this.titles === 'Profile Edit') {
-        return 'Edit'
-      } else {
-        return 'Profile'
-      }
-    }
-  },
-  mounted () {
-    this.$root.$on('Edit', () => {
-      this.titles = 'Edit'
-    })
-    this.$root.$on('Upload', () => {
-      this.titles = 'Upload Photo'
-    })
-  },
-  methods: {
-    async changeTitles (titleName) {
-      if (titleName === 'Log Out') {
-        if (this.$session.exists()) {
-          this.$session.clear()
-          this.$session.destroy()
-          router.push({ name: 'Login' })
-        }
-      } else {
-        this.titles = titleName
-      }
-    },
-    logout () {
-    //  this.$session.start()
-      if (this.$session.exists()) {
-        this.$session.clear()
-        this.$session.destroy()
-        router.push({ name: 'home' })
-      }
-    },
-    getRef () {
-      return (this.$refs.title).innerHTML
-    }
-  }
-}
+import dashboard from '../scripts/dashboard_component'
+export default dashboard
 </script>
