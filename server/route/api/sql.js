@@ -27,7 +27,12 @@ module.exports = {
              user_height = ?, 
              user_age = ?, 
              user_race = ?, 
-             user_hair = ? 
+             user_hair = ?,
+             user_street_address = ?,
+             user_post_code = ?,
+             user_city = ?,
+             user_country = ?,
+             user_state = ?
             WHERE user_id = ?`
         }
     },
