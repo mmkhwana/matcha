@@ -22,6 +22,7 @@ router.post('/register_user', async(req, res) =>
             req.body.firstname,
             req.body.lastname,
             password,
+            req.body.gender,
             req.body.date
         ];
         Connection.con.getConnection((error, connect) => 

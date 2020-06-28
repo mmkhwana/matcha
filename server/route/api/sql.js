@@ -46,7 +46,7 @@ module.exports = {
     {
         user:
         {
-            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_age) VALUES (?,?,?,?,?,?)`
+            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?)`
         },
         interest:
         {

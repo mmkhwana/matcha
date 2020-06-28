@@ -9,12 +9,19 @@ var options = {
 }
 Vue.use(VueSession, options)
 export default {
-  name: 'Login',
-  default () {
+  name: 'login',
+  data () {
     return {
+      icons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram'
+      ],
       users: [],
       username: '',
-      pass: ''
+      pass: '',
+      error: ''
     }
   },
   beforeCreate () {
@@ -24,25 +31,37 @@ export default {
   },
   methods: {
     async login () {
-      try {
-        const users = (await LoginService.userLogin(this.username, this.pass))[0]
-        if (users[Table.User.userName]) {
-          this.$session.start()
-          this.$session.set('firstname', users[Table.User.firstName])
-          this.$session.set('lastname', users[Table.User.lastName])
-          this.$session.set('username', users[Table.User.userName])
-          this.$session.set('userid', users[Table.User.userId])
-          //  Vue.http.headers.common['Authorization'] = 'Bearer ' + this.users.email
-          router.push({ name: 'Dashboard' })
-        } else {
-          alert('Incorrect Credentials. Please try Again.')
+      this.error = ''
+      this.checkForm()
+      if (!this.error.length) {
+        try {
+          const users = (await LoginService.userLogin(this.username, this.pass))[0]
+          if (users[Table.User.userName]) {
+            this.$session.start()
+            this.$session.set('firstname', users[Table.User.firstName])
+            this.$session.set('lastname', users[Table.User.lastName])
+            this.$session.set('username', users[Table.User.userName])
+            this.$session.set('userid', users[Table.User.userId])
+            router.push({ name: 'Dashboard' })
+          } else {
+            this.error = 'Incorrect Credentials. Please try Again.'
+          }
+        } catch (error) {
+          this.error = 'Incorrect Credentials. Please try Again.'
         }
-      } catch (error) {
-        alert(error.message)
       }
     },
     register () {
       router.push({ name: 'home' })
+    },
+    checkForm: function () {
+      if (!this.username && !this.pass) {
+        this.error = 'username and password required.'
+      } else if (!this.username) {
+        this.error = 'username required.'
+      } else if (!this.pass) {
+        this.error = 'password required.'
+      }
     }
   }
 }

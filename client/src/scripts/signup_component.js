@@ -26,7 +26,9 @@ export default {
         'mdi-twitter',
         'mdi-linkedin',
         'mdi-instagram'
-      ]
+      ],
+      gender_type: [{ text: 'Female' }, { text: 'Male' }, { text: 'Lesbian' }, { text: 'Gay' }],
+      gender: ''
     }
   },
   beforeCreate () {
@@ -45,11 +47,12 @@ export default {
       if (!this.error.length) {
         let year = new Date().getFullYear()
         let birthYear = new Date(this.date).getFullYear()
-        var respond = await SignupService.registerUser(this.firstname, this.lastname, this.username, this.email, year - birthYear, this.pass, this.confirm)
+        var respond = await SignupService.registerUser(this.gender, this.firstname, this.lastname, this.username, this.email, year - birthYear, this.pass, this.confirm)
         this.response = respond
-        alert(this.response)
         if (this.response === 'User Registered') {
           router.push({ name: 'Login' })
+        } else {
+          this.error = this.response
         }
       }
     },
@@ -57,6 +60,9 @@ export default {
       router.push({ name: 'Login' })
     },
     checkForm: function () {
+      if (!this.gender) {
+        this.error = 'Gender required.'
+      }
       if (!this.username) {
         this.error = 'Name required.'
       }

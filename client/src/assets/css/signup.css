@@ -6,5 +6,16 @@
 .signup
 {
     height: auto;
-    padding-top: 100px;
+    padding-top: 50px;
+}
+.dotted-line.v-text-field>.v-input__control>.v-input__slot:before {
+    border-style: dotted;
+}
+.alert{
+    color: #fff;
+    background: #f56042;
+    border-radius: 10px;
+    padding: 2px;
+    border: 1px dotted;
+    text-align: center;
 }

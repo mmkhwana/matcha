@@ -17,19 +17,23 @@
   </v-flex>
   <v-flex xs8 sm8 md4 >
       <v-card>
-          <v-card-text >{{ response }}</v-card-text>
               <v-card-text>
-                <v-alert-box>
+                <div v-if="error" class="alert">
                   <p>{{ error }}</p>
-                </v-alert-box>
+                </div>
                   <v-form  >
-                      <!-- <v-alert
-                          :value="true"
-                          color="error"
-                          icon="warning"
+                  <v-row>
+                    <v-container >
+                      <v-overflow-btn
+                      v-model="gender"
+                      :items="gender_type"
+                      label="Select Gender"
+                      required
                       >
-                      This user already exist, try a different set of data.
-                      </v-alert> -->
+                      <v-div></v-div>
+                      </v-overflow-btn>
+                    </v-container>
+                  </v-row>
                   <v-row>
                   <v-col
                     cols="12"
@@ -39,6 +43,7 @@
                       v-model="firstname"
                       label="First name"
                       required
+                      class="dotted-line"
                     ></v-text-field>
                   </v-col>
 
@@ -50,6 +55,7 @@
                       v-model="lastname"
                       label="Last name"
                       required
+                      class="dotted-line"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -59,6 +65,7 @@
                           label="Username"
                           type="text"
                           v-model="username"
+                          class="dotted-line"
                       >
                       </v-text-field>
                       <v-text-field
@@ -66,11 +73,11 @@
                           label="Email"
                           type="text"
                           v-model="email"
+                          class="dotted-line"
                       >
                       </v-text-field>
                       <v-dialog
                               ref="dialog"
-                              v-model="modal"
                               :return-value.sync="date"
                               persistent
                               width="290px"
@@ -81,11 +88,11 @@
                                   label="Date of Birth"
                                   readonly
                                   v-on="on"
+                                  class="dotted-line"
                                 ></v-text-field>
                               </template>
                               <v-date-picker v-model="date" type="month" scrollable>
                                 <v-spacer></v-spacer>
-                                <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
                                 <v-btn text color="primary" @click="$refs.dialog.save(date)">OK</v-btn>
                               </v-date-picker>
                             </v-dialog>
@@ -95,6 +102,7 @@
                           label="Password"
                           type="password"
                           v-model="pass"
+                          class="dotted-line"
                       >
                       </v-text-field>
                       <v-text-field
@@ -103,6 +111,7 @@
                           label="Confirm Password"
                           type="password"
                           v-model="confirm"
+                          class="dotted-line"
                       >
                       </v-text-field>
                       <v-card-actions>
