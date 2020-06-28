@@ -61,6 +61,7 @@
                       v-model="address"
                       label="Street Address*"
                       :disabled="true"
+                      prepend-icon="mdi-map-marker"
                     ></v-text-field>
                   </v-col>
 

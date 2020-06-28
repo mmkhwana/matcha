@@ -61,10 +61,15 @@ export default {
     this.lastname = res[Table.User.lastName]
     this.biography = res[Table.User.biography]
     this.items[0].value = res[Table.User.status]
-    this.items[1].value = res[Table.User.height] + 'm'
-    this.items[2].value = res[Table.User.age] + 'yrs'
+    this.items[1].value = res[Table.User.height]
+    this.items[2].value = res[Table.User.age]
     this.items[3].value = res[Table.User.race]
     this.items[4].value = res[Table.User.hair]
+    this.address = res[Table.User.street]
+    this.postcode = res[Table.User.postcode]
+    this.city = res[Table.User.city]
+    this.country = res[Table.User.country]
+    this.state = res[Table.User.state]
     lang.forEach(lang => {
       this.languages.push(lang[Table.Languages.name])
     })
@@ -80,9 +85,9 @@ export default {
       try {
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
           this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
-          this.items[4].value, 1, this.languages, this.interests)
-        await UserProfileService.insertInterest(this.interests, 1)
-        await UserProfileService.insertLanguage(this.languages, 1)
+          this.items[4].value, this.$session.get('userid'), this.languages, this.interests)
+        await UserProfileService.insertInterest(this.interests, this.$session.get('userid'))
+        await UserProfileService.insertLanguage(this.languages, this.$session.get('userid'))
         this.success = results
         this.dialog = false
       } catch (error) {

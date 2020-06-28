@@ -9,6 +9,7 @@
         dark
         width="100%"
         prominent
+        elevation="12"
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
          <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>

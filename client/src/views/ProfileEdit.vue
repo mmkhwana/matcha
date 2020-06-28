@@ -25,12 +25,14 @@
           </v-col>
       </v-row>
        <v-row
-       justify="space-around"
+          align="center"
+          justify="center"
+          class="d-flex flex-row mb-6"
        >
             <v-col
               v-for="n in pictures"
               :key="n"
-              class="d-xs-inline-flex"
+              class="d-flex flex-column mb-6"
               cols="2"
             >
               <v-card>
@@ -39,7 +41,7 @@
                   :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="fill-height white--text align-end grey lighten-2"
+                  class="white--text align-end grey lighten-2"
                 >
                 <template v-slot:placeholder>
                   <v-row
@@ -96,6 +98,7 @@
                     <v-text-field
                       v-model="address"
                       label="Address*"
+                      prepend-icon="mdi-map-marker"
                       required
                     ></v-text-field>
                   </v-col>
@@ -107,6 +110,7 @@
                     <v-text-field
                       v-model="postcode"
                       label="Post Code"
+                      type="number"
                       required
                     ></v-text-field>
                   </v-col>
@@ -176,9 +180,25 @@
                       <v-card-text>:</v-card-text>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field
-                      v-model="item.value"
-                      ></v-text-field>
+                      <div v-if="item.name === 'Height'">
+                        <v-text-field
+                          v-model="item.value"
+                          type="number"
+                          hint="height(m)"
+                        ></v-text-field>
+                      </div>
+                      <div v-else-if="item.name === 'Age'">
+                        <v-text-field
+                          v-model="item.value"
+                          type="number"
+                          hint="age(yrs)"
+                        ></v-text-field>
+                      </div>
+                      <div v-else>
+                        <v-text-field
+                          v-model="item.value"
+                        ></v-text-field>
+                      </div>
                     </v-col>
                 </v-row>
               </v-card-text>

@@ -30,6 +30,7 @@
                             type="text"
                             required
                             v-model="username"
+                            prepend-icon="mdi-account"
                             class="dotted-line"
                         >
                         </v-text-field>
@@ -41,6 +42,7 @@
                             type="password"
                             required
                             v-model="pass"
+                            prepend-icon="mdi-lock"
                             class="dotted-line"
                         >
                         </v-text-field>

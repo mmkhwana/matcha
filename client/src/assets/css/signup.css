@@ -11,6 +11,9 @@
 .dotted-line.v-text-field>.v-input__control>.v-input__slot:before {
     border-style: dotted;
 }
+.dotted-outline.v-text-outlined-field>.v-input__control>.v-input__slot:before {
+    border-style: dotted;
+}
 .alert{
     color: #fff;
     background: #f56042;

@@ -23,7 +23,7 @@
                 </div>
                   <v-form  >
                   <v-row>
-                    <v-container >
+                    <v-container elevation="6">
                       <v-overflow-btn
                       v-model="gender"
                       :items="gender_type"
@@ -65,6 +65,7 @@
                           label="Username"
                           type="text"
                           v-model="username"
+                          prepend-icon="mdi-account"
                           class="dotted-line"
                       >
                       </v-text-field>
@@ -73,6 +74,7 @@
                           label="Email"
                           type="text"
                           v-model="email"
+                          prepend-icon="mdi-email"
                           class="dotted-line"
                       >
                       </v-text-field>
@@ -84,6 +86,7 @@
                             >
                               <template v-slot:activator="{ on }">
                                 <v-text-field
+                                  prepend-icon=" mdi-calendar-month"
                                   v-model="date"
                                   label="Date of Birth"
                                   readonly
@@ -97,7 +100,7 @@
                               </v-date-picker>
                             </v-dialog>
                       <v-text-field
-                          icon="lock"
+                          prepend-icon="mdi-lock"
                           name="user_pwd"
                           label="Password"
                           type="password"
@@ -106,7 +109,7 @@
                       >
                       </v-text-field>
                       <v-text-field
-                          icon="lock"
+                          prepend-icon="mdi-lock"
                           name="user_confpwd"
                           label="Confirm Password"
                           type="password"

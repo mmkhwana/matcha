@@ -87,9 +87,6 @@ router.post('/login_user', async(req, res) =>
 
 router.post('/upload', async(req, res) => 
 {
-    console.log(req.body)
-    console.log(req.params)
-    console.log(req.query)
     let dest = 'server/route/api/uploads/tmp';
     let store = multer.diskStorage({
         destination: dest,
