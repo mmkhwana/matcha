@@ -28,7 +28,8 @@ export default {
         'mdi-instagram'
       ],
       gender_type: [{ text: 'Female' }, { text: 'Male' }, { text: 'Lesbian' }, { text: 'Gay' }],
-      gender: ''
+      gender: '',
+      age: 0
     }
   },
   beforeCreate () {
@@ -47,12 +48,17 @@ export default {
       if (!this.error.length) {
         let year = new Date().getFullYear()
         let birthYear = new Date(this.date).getFullYear()
-        var respond = await SignupService.registerUser(this.gender, this.firstname, this.lastname, this.username, this.email, year - birthYear, this.pass, this.confirm)
-        this.response = respond
-        if (this.response === 'User Registered') {
-          router.push({ name: 'Login' })
+        this.age = year - birthYear
+        if (this.age < 18) {
+          this.error = 'Hey kid this is adult world. Come back once you reach puberty age.'
         } else {
-          this.error = this.response
+          var respond = await SignupService.registerUser(this.gender, this.firstname, this.lastname, this.username, this.email, this.age, this.pass, this.confirm)
+          this.response = respond
+          if (this.response === 'User Registered') {
+            router.push({ name: 'Login' })
+          } else {
+            this.error = this.response
+          }
         }
       }
     },
@@ -60,6 +66,9 @@ export default {
       router.push({ name: 'Login' })
     },
     checkForm: function () {
+      if (!this.date) {
+        this.error = 'birth year and month required.'
+      }
       if (!this.gender) {
         this.error = 'Gender required.'
       }

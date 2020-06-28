@@ -106,7 +106,7 @@
                   >
                     <v-text-field
                       v-model="state"
-                      label="State/Province*"
+                      label="State/Province/Region*"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>

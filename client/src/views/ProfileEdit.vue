@@ -96,7 +96,7 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="address"
+                      v-model="street"
                       label="Address*"
                       prepend-icon="mdi-map-marker"
                       required
@@ -131,11 +131,13 @@
                     cols="12"
                     md="4"
                   >
-                    <v-text-field
+                    <v-autocomplete
                       v-model="country"
+                      :items="countries"
                       label="Country*"
+                      placeholder="Select..."
                       required
-                    ></v-text-field>
+                    ></v-autocomplete>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -145,7 +147,7 @@
                   >
                     <v-text-field
                       v-model="state"
-                      label="State/Province*"
+                      label="State/Province/Region*"
                       required
                     ></v-text-field>
                   </v-col>

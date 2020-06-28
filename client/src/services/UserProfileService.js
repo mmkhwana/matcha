@@ -2,8 +2,8 @@ import General from './GeneralService'
 import Constant from './constants'
 
 class UserProfileService {
-  static updateProfile (firstname, lastname, biography, relation, height, age, race, hair, userid, languages, interests) {
-    return General.PostExecution(Constant.UpdateUserProfile, { firstname, lastname, biography, relation, height, age, race, hair, userid, languages, interests })
+  static updateProfile (firstname, lastname, biography, relation, height, age, race, hair, street, postcode, city, country, state, userid, languages, interests) {
+    return General.PostExecution(Constant.UpdateUserProfile, { firstname, lastname, biography, relation, height, age, race, hair, street, postcode, city, country, state, userid, languages, interests })
   }
 
   static insertLanguage (langName, userId) {

@@ -3,6 +3,7 @@ import Table from '../services/tables'
 import Constant from '../services/constants'
 import Interests from '../jsons/interests'
 import Languages from '../jsons/languages'
+import Countries from '../jsons/countries'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -21,11 +22,11 @@ export default {
       toLanguages: [],
       firstname: '',
       lastname: '',
-      address: '39 Rissik Street',
-      postcode: '2001',
-      city: 'Johannesburg',
-      country: 'South Africa',
-      state: 'Gauteng',
+      street: '',
+      postcode: '',
+      city: '',
+      country: '',
+      state: '',
       biography: '',
       items: [
         { name: Constant.relationship, value: '' },
@@ -40,7 +41,8 @@ export default {
       loading: false,
       modal: false,
       dialogBox: false,
-      username: ''
+      username: '',
+      countries: []
     }
   },
   props: {
@@ -50,6 +52,9 @@ export default {
   async mounted () {
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
+    })
+    Countries.forEach(country => {
+      this.countries.push(country.name)
     })
     this.defaultInterests = Interests
     this.defaultLanguages = Languages
@@ -65,7 +70,7 @@ export default {
     this.items[2].value = res[Table.User.age]
     this.items[3].value = res[Table.User.race]
     this.items[4].value = res[Table.User.hair]
-    this.address = res[Table.User.street]
+    this.street = res[Table.User.street]
     this.postcode = res[Table.User.postcode]
     this.city = res[Table.User.city]
     this.country = res[Table.User.country]
@@ -81,11 +86,11 @@ export default {
   },
   methods: {
     async updateProfile () {
-      this.dialog = true
       try {
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
           this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
-          this.items[4].value, this.$session.get('userid'), this.languages, this.interests)
+          this.items[4].value, this.street, this.postcode, this.city, this.country, this.state,
+          this.$session.get('userid'), this.languages, this.interests)
         await UserProfileService.insertInterest(this.interests, this.$session.get('userid'))
         await UserProfileService.insertLanguage(this.languages, this.$session.get('userid'))
         this.success = results
