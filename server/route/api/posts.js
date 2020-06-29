@@ -7,12 +7,24 @@ const Connection = require('./dbconnection');
 const router = express.Router();
 const sql = require('./sql');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+
+
+//for sending an email
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'unathinkomo16@gmail.com',
+        pass: '0786324448'
+    }
+  });
 
 //User
-
 router.post('/register_user', async(req, res) => 
 {
+    
     let password = '';
+    let email = '';
     if (req.body.confirm === req.body.pass)
     {
         password = bcrypt.hashSync(req.body.pass, 8)
@@ -27,24 +39,63 @@ router.post('/register_user', async(req, res) =>
         ];
         Connection.con.getConnection((error, connect) => 
         {
+            console.log(error);
             if (error)
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
-            {
-                connect.release();
+            { 
+              //  connect.release();
                 if (error)
                 {
                     res.status(200).send(results);
                     return;
                 }
+                console.log("hihihi")
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail.com',
+                    auth: {
+                       user: 'unathinkomo16@gmail.com',
+                       pass: '0786324448'
+                  }
+                });
+                var message = {
+                    from: "unathinkomo16@gmail.com",
+                    to: res.body.email,
+                    subject: "Regestration verification",
+                    text: "Plaintext version of the message",
+                    html: "<a>verification link</a>"
+                  };
+          
+                  var mailOptions = {
+                      from: 'unathinkomo16@gmail.com',
+                      to: res.body.email,
+                      subject: 'Regestration verification',
+                      html : `<a>verification link</a>`,
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                  if (error) {
+                      console.log(error);
+                  } else {
+                      console.log('Email sent: ' + info.response);
+                  }
+                  });
+
                 let directory = __dirname + '/uploads/'+req.body.username;
                 if (!fs.existsSync(directory))
                 {
                     fs.mkdirSync(directory,{ recursive: true });
                 }
-                res.send("User Registered");
-            });
+            //       transporter.sendMail(mailOptions, function(error, info){
+            //         if (error) {
+            //           console.log(error);
+            //         } else {
+            //           console.log('Email sent: ' + info.response);
+            //         }
+            //     res.send("User Registered");
+            // });
         });
+    });
     }
     else
     {
