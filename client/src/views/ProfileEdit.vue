@@ -4,8 +4,8 @@
   >
      <v-container id="dropdown-example-2">
        <v-row>
-        <v-col cols="2"
-          class="d-xs-flex"
+        <v-col cols="6"
+          class="text-left"
           color="deep-purple lighten-3"
           dark
           >
@@ -18,28 +18,30 @@
               </template>
               </v-container>
             </v-col>
-          <v-col cols="10" class="text-right">
+          <v-col cols="6" class="text-right">
             <v-btn rounded outlined color="success">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
           </v-col>
       </v-row>
        <v-row
-       justify="space-around"
+          align="center"
+          justify="center"
+          class="d-flex flex-row mb-6"
        >
             <v-col
               v-for="n in pictures"
               :key="n"
-              class="d-xs-inline-flex"
-              cols="3"
+              class="d-flex flex-column mb-6"
+              cols="2"
             >
               <v-card>
                 <v-img
-                  :src='`http://localhost:5000/api/posts/uploads/${n}`'
-                  :lazy-src='`http://localhost:5000/api/posts/uploads/${n}`'
+                  :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
+                  :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="fill-height white--text align-end grey lighten-2"
+                  class="white--text align-end grey lighten-2"
                 >
                 <template v-slot:placeholder>
                   <v-row
@@ -65,29 +67,97 @@
           <v-card flat>
             <v-card-text>
                <v-container>
-      <v-row>
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-text-field
-            v-model="firstname"
-            label="First name"
-            required
-          ></v-text-field>
-        </v-col>
+                  <v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="firstname"
+                        label="First name"
+                        required
+                      ></v-text-field>
+                    </v-col>
 
-        <v-col
-          cols="12"
-          md="4"
-        >
-          <v-text-field
-            v-model="lastname"
-            label="Last name"
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
+                    <v-col
+                      cols="12"
+                      md="4"
+                    >
+                      <v-text-field
+                        v-model="lastname"
+                        label="Last name"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="street"
+                      label="Address*"
+                      prepend-icon="mdi-map-marker"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="postcode"
+                      label="Post Code"
+                      type="number"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="city"
+                      label="City*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-autocomplete
+                      v-model="country"
+                      :items="countries"
+                      label="Country*"
+                      placeholder="Select..."
+                      required
+                    ></v-autocomplete>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                    <v-text-field
+                      v-model="state"
+                      label="State/Province/Region*"
+                      required
+                    ></v-text-field>
+                  </v-col>
+
+                  <v-col
+                    cols="12"
+                    md="4"
+                  >
+                  </v-col>
+                </v-row>
                </v-container>
             </v-card-text>
               <v-card-title>Biography</v-card-title>
@@ -112,9 +182,25 @@
                       <v-card-text>:</v-card-text>
                     </v-col>
                     <v-col cols="6">
-                      <v-text-field
-                      v-model="item.value"
-                      ></v-text-field>
+                      <div v-if="item.name === 'Height'">
+                        <v-text-field
+                          v-model="item.value"
+                          type="number"
+                          hint="height(m)"
+                        ></v-text-field>
+                      </div>
+                      <div v-else-if="item.name === 'Age'">
+                        <v-text-field
+                          v-model="item.value"
+                          type="number"
+                          hint="age(yrs)"
+                        ></v-text-field>
+                      </div>
+                      <div v-else>
+                        <v-text-field
+                          v-model="item.value"
+                        ></v-text-field>
+                      </div>
                     </v-col>
                 </v-row>
               </v-card-text>
@@ -310,118 +396,6 @@
  }
 </style>
 <script>
-import UserProfileService from '../services/UserProfileService'
-import Table from '../services/tables'
-import Constant from '../services/constants'
-import Interests from '../jsons/interests'
-import Languages from '../jsons/languages'
-
-export default {
-  name: 'Profile Edit',
-  data () {
-    return {
-      pictures: [],
-      selection: [],
-      languages: [],
-      interests: [],
-      defaultInterests: [],
-      defaultLanguages: [],
-      toInterest: [],
-      toLanguages: [],
-      firstname: '',
-      lastname: '',
-      biography: '',
-      items: [
-        { name: Constant.relationship, value: '' },
-        { name: Constant.height, value: '' },
-        { name: Constant.age, value: '' },
-        { name: Constant.race, value: '' },
-        { name: Constant.hair, value: '' }
-      ],
-      profileObj: [],
-      success: '',
-      dialog: false,
-      loading: false,
-      modal: false,
-      dialogBox: false
-    }
-  },
-  props: {
-    lang: { type: String },
-    interest: { type: String }
-  },
-  async mounted () {
-    this.$root.$on('Edit', () => {
-      this.titles = 'Edit'
-    })
-    this.defaultInterests = Interests
-    this.defaultLanguages = Languages
-    const pics = await UserProfileService.readImages()
-    this.pictures = pics.data
-    const res = (await UserProfileService.getUserDetails(1))[0]
-    let output = await UserProfileService.getInterest(1)
-    let lang = await UserProfileService.getLanguage(1)
-    this.firstname = res[Table.User.firstName]
-    this.lastname = res[Table.User.lastName]
-    this.biography = res[Table.User.biography]
-    this.items[0].value = res[Table.User.status]
-    this.items[1].value = res[Table.User.height] + 'm'
-    this.items[2].value = res[Table.User.age] + 'yrs'
-    this.items[3].value = res[Table.User.race]
-    this.items[4].value = res[Table.User.hair]
-    lang.forEach(lang => {
-      this.languages.push(lang[Table.Languages.name])
-    })
-    output.forEach(interest => {
-      this.interests.push(interest[Table.Interests.name])
-    })
-  },
-  methods: {
-    async updateProfile () {
-      this.dialog = true
-      try {
-        let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
-          this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
-          this.items[4].value, 1, this.languages, this.interests)
-        await UserProfileService.insertInterest(this.interests, 1)
-        await UserProfileService.insertLanguage(this.languages, 1)
-        this.success = results
-        this.dialog = false
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    close (index) {
-      this.languages.splice(index, 1)
-    },
-    removeInterest (index) {
-      this.interests.splice(index, 1)
-    },
-    addLanguage () {
-      let res = this.languages.filter(lang => lang === this.lang)
-      if (this.lang && (res !== this.lang)) {
-        this.languages.push(this.lang)
-        this.lang = ''
-      }
-    },
-    addInterest () {
-      let res = this.interests.filter(interest => interest === this.interest)
-      if (this.interest && (res !== this.interest)) {
-        this.interests.push(this.interest)
-        this.interest = ''
-      }
-    },
-    getSelectedItem () {
-      this.dialogBox = false
-      alert(JSON.stringify(this.toInterest))
-    },
-    addOject (key, value) {
-      this.$set(this.profileObj, key, value)
-    },
-    upload () {
-      this.$root.$emit('Upload')
-      this.$destroy()
-    }
-  }
-}
+import edit from '../scripts/profile_edit_component'
+export default edit
 </script>

@@ -20,6 +20,24 @@ class GeneralService {
     )
   }
 
+  static PostUploadImageExecution (router, imageData) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.post(Constant.URL + router, imageData)
+        const data = res.data
+        resolve(
+          data
+        )
+        reject(
+          data
+        )
+      } catch (error) {
+        alert(error.message)
+      }
+    }
+    )
+  }
+
   static PostExecution (router, params) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -38,6 +56,18 @@ class GeneralService {
         const res = await axios.get(Constant.URL + router + param)
         resolve(res.data)
         reject(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
+  static getReturnArrayExecution (router, param) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(Constant.URL + router + param)
+        resolve(res)
+        reject(res)
       } catch (error) {
         console.log(error)
       }
