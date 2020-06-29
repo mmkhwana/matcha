@@ -1,0 +1,20 @@
+export default [
+  'Afrikaans',
+  'Arabic',
+  'Chinese',
+  'Croatian',
+  'Czech',
+  'Danish',
+  'Dutch',
+  'English',
+  'French',
+  'Hindi',
+  'Italian',
+  'isiNdebele',
+  'Sesotho',
+  'SiSwati',
+  'Xitsonga',
+  'Tshivenḓa',
+  'isiXhosa',
+  'isiZulu'
+]

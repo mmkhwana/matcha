@@ -1,12 +1,11 @@
 <template>
-        <v-card>
         <v-container fluid>
           <v-row>
             <v-col
               v-for="n in 9"
               :key="n"
               class="d-flex child-flex"
-              cols="4"
+              cols="2"
             >
               <v-card>
                 <v-img
@@ -47,5 +46,8 @@
             </v-col>
           </v-row>
         </v-container>
-        </v-card>
 </template>
+<script>
+import matches from '../scripts/matches_component'
+export default matches
+</script>
