@@ -9,7 +9,7 @@
             :key="message.index"
           >
           <div class="username">{{ message.username }}</div>
-          <!-- <div class="message-text"> {{ message.msg }}</div> -->
+          <div class="message-text"> {{ message.msg }}</div>
         </div>
       </div>
     <form class="input-container"
@@ -43,7 +43,8 @@ export default {
       // if (!this.msg) {
       //   alert('Please enter message')
       // }
-      this.$emit('sendMessage', this.msg)
+      // this.$emit('sendMessage', this.msg)
+      console.log(this.msg)
       this.msg = ''
     }
   }
@@ -105,5 +106,9 @@ input {
   box-sizing: border-box;
   background-color:white;
   border: 1px solid black;
+}
+.message-text {
+  height: 35px;
+  background-color:orangered;
 }
 </style>

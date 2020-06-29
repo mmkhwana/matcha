@@ -106,8 +106,6 @@ export default {
         return 'Matches'
       } else if (this.titles === 'Settings') {
         return 'Settings'
-      } else if (this.titles === 'Chat') {
-        return 'Chat'
       } else if (this.titles === 'Profile Edit') {
         return 'Edit'
       } else {

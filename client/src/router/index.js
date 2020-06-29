@@ -5,6 +5,14 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/chat',
+    name: 'chat',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () => import(/* webpackChunkName: "Home" */ '../views/Chat.vue')
+  },
+  {
     path: '/',
     name: 'home',
     // route level code-splitting
