@@ -71,11 +71,11 @@ module.exports = {
         },
         preferences:
         {
-            fields: `INSERT INTO Matcha_User_preferences (preferred_gender, preferred_location, preferred_user_rating, user_id) VALUES ?`
+            fields: `INSERT INTO Matcha_User_preferences (preferred_gender, pref_age, preferred_location, preferred_user_rating, user_id, pref_lang) VALUES (?,?,?,?,?,?)`
         },
         Pref_interest:
         {
-            fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES ?`
+            fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
         }
     }
 }

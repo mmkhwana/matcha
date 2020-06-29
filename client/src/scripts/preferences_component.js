@@ -1,4 +1,7 @@
 import PreferenceService from '../services/PreferenceService'
+import VueSession from 'vue-session'
+import Vue from 'vue'
+Vue.use(VueSession)
 
 export default {
   name: 'Preference',
@@ -19,7 +22,7 @@ export default {
   },
   methods: {
     async sendData () {
-      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, this.location, this.interests, 1)
+      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, 'Katlehong', 'drinking', this.$session.get('userid'))
       alert(result.data)
     }
   },
