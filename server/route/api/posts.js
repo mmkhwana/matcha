@@ -7,12 +7,14 @@ const Connection = require('./dbconnection');
 const router = express.Router();
 const sql = require('./sql');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 //User
-
 router.post('/register_user', async(req, res) => 
 {
+    
     let password = '';
+    let email = '';
     if (req.body.confirm === req.body.pass)
     {
         password = bcrypt.hashSync(req.body.pass, 8)
@@ -27,24 +29,49 @@ router.post('/register_user', async(req, res) =>
         ];
         Connection.con.getConnection((error, connect) => 
         {
+            console.log(error);
             if (error)
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
-            {
+            { 
                 connect.release();
                 if (error)
                 {
                     res.status(200).send(results);
                     return;
                 }
+                console.log("hihihi")
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail.com',
+                    auth: {
+                       user: 'unathinkomo16@gmail.com',
+                       pass: '0786324448'
+                  }
+                });
+          
+                  var mailOptions = {
+                      from: 'unathinkomo16@gmail.com',
+                      to: req.body.email,
+                      subject: 'Regestration verification',
+                      html : `<a>verification link</a>`,
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                  if (error) {
+                      console.log(error);
+                  } else {
+                      console.log('Email sent: ' + info.response);
+                  }
+                  });
+
                 let directory = __dirname + '/uploads/'+req.body.username;
                 if (!fs.existsSync(directory))
                 {
                     fs.mkdirSync(directory,{ recursive: true });
                 }
-                res.send("User Registered");
-            });
+            res.send("User Registered");
         });
+    });
     }
     else
     {
@@ -70,17 +97,27 @@ router.post('/login_user', async(req, res) =>
                 res.status(200).send(results);
                 return;
             }
-            bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
+            if (results[0])
             {
-                if(error)
-                    return;
-                if (response)
-                    res.status(200).send(results);
-                else
+                bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
                 {
-                    res.status(200).send(response);
-                }
-            });
+                    if(error)
+                    {
+                        res.status(200).send(error);
+                        return;
+                    }
+                    if (response)
+                        res.status(200).send(results);
+                    else
+                    {
+                        res.status(200).send(response);
+                    }
+                });
+            }
+            else
+            {
+                res.status(200).send(["notfound"]);
+            }
         });
     });
 });
@@ -114,7 +151,7 @@ router.post('/upload', async(req, res) =>
             }
             let values = [
                 file_path,
-                'profile',
+                'none',
                 req.body.userid
             ];
             Connection.con.getConnection((error, connect) =>
@@ -137,19 +174,47 @@ router.post('/upload', async(req, res) =>
     });
 });
 
-router.get('/uploads/:username/:name', (req, res) => {
+router.get('/uploads/:username/:name', (req, res) => 
+{
     res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
 });
 
-router.get('/uploads:username', async (req, res) => {
+router.post('/uploads', async (req, res) => 
+{
   let images = []
-  const path = __dirname + "/uploads/" + req.params.username;
-  const folder = await fs.promises.opendir(path);
-  for await (const image_path of folder) 
+  Connection.con.getConnection((err, connect) => 
   {
-    images.push(image_path.name);
-  }
-  res.status(201).send(images);
+      if (err)
+        return;
+    connect.query(sql.select.image.all, req.body.userid, (error, results) => 
+    {
+        connect.release();
+        if (error)
+            return;
+        if (results[0])
+        {
+            images = results;
+        }
+        res.status(201).send(images);
+    });
+  });
+});
+
+router.post('/set_profile_pic', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        let params = [ 'profile', req.body.newId, 'none', req.body.oldId ];
+        connect.query(sql.update.image.fields, params, (error, results) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.post('/insert_language', async(req, res) => 
@@ -158,23 +223,65 @@ router.post('/insert_language', async(req, res) =>
     {
         if (error)
             return;
-        let values = [];
-        let arr = req.body.langName;
-        arr.forEach(lang => 
+        connect.beginTransaction((err) => 
         {
-            values.push([lang, req.body.userId]);
-        });
-        connect.query(sql.insert.language.fields, [values], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.langName;
+            arr.forEach(lang => 
+            {
+                let values = [
+                    lang, 
+                    req.body.userId
+                ];
+                connect.query(sql.select.language.check, values, (error, results) => 
+                {
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    }
+                    if (!results[0])
+                    {
+                        let values = [
+                            lang, 
+                            req.body.userId
+                        ];
+                        connect.query(sql.insert.language.fields, values, (error, results) => 
+                        {
+                            if (err)
+                            {
+                                connect.rollback(() =>
+                                {
+                                    res.status(200).send(err);
+                                    return;
+                                });
+                            }
+                        });
+                    }
+                });
+                connect.commit((err) =>
+                {
+                    if (err)
+                    {
+                        connect.rollback(() =>
+                        {
+                            res.status(200).send(err)
+                            return;
+                        })
+                    }
+                });
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -184,23 +291,66 @@ router.post('/insert_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [];
-        let arr = req.body.interestName;
-        arr.forEach(element => 
+        connect.beginTransaction((err) => 
         {
-            params.push([element, req.body.userId]);
-        });
-        connect.query(sql.insert.interest.fields, [params], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.interestName;
+            arr.forEach(element => 
+            {
+                let params = [
+                    element,
+                    req.body.userId
+                ];
+                connect.query(sql.select.interest.check, params, (error, results) => 
+                { 
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    } 
+                    else 
+                        if (!results[0]) 
+                        {
+                            let param = [
+                                element,
+                                req.body.userId
+                            ];
+                            connect.query(sql.insert.interest.fields, param, (error, results) => 
+                            {
+                                if (error)
+                                {
+                                    connect.rollback(() => 
+                                    {
+                                        res.status(200).send(error);
+                                        return;
+                                    });
+                                }
+                            });
+                        }
+                });
+            });
+            connect.commit((err) => 
+            {
+                if (err)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.status(200).send(err);
+                        return;
+                    })
+                }
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -271,8 +421,8 @@ router.post('/remove_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [req.body.interestId, req.body.userId];
-        connect.query(sql.delete.interest.row, params, (error, results) => 
+        let params = [req.body.interestName, req.body.userId];
+        connect.query(sql.delete.interest.row, params, (error, results, fields) => 
         {
             connect.release();
             if (error)
@@ -284,6 +434,39 @@ router.post('/remove_interest', async(req, res) =>
         });
     })
 
+});
+
+router.post('/remove_image', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) => 
+    {
+        if (err)
+            return;
+        let imageLink = 'http://localhost:5000/api/posts/uploads/' + req.body.username + '/'+ req.body.picname;
+        let imagePath = __dirname + '/uploads/' + req.body.username + '/'+ req.body.picname;
+        let params = [
+            imageLink,
+            req.body.userId
+        ];
+        connect.query(sql.delete.image.row, params, (error, results) => 
+        {
+            connect.release();
+            if (error)
+                return;
+            if (fs.existsSync(imagePath))
+            {
+                try 
+                {
+                    fs.unlinkSync(imagePath);
+                } 
+                catch (error) 
+                {
+                    console.log(error);
+                }
+            }
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.get('/details:userid', async(req, res) => 
@@ -344,54 +527,4 @@ router.post('/update_profile', async(req, res) =>
     })
     res.status(200).send("Profile Updated Successfully");
 });
-
-router.post('/set_preferences', async (req, res) => 
-{
-    Connection.con.getConnection((error, connect) => 
-    {
-        if(error)
-        {
-            console.log(error);
-            return;
-        }
-        if(error)
-            return;
-        let params = [
-            req.body.gender,
-            req.body.age,
-            req.body.location,
-            req.body.rating,
-            req.body.userId,
-            req.body.language
-        ]
-        connect.query(sql.insert.preferences.fields, params, (error, results, fields) => 
-        {
-            if (error)
-            {
-                res.status(200).send(error);
-                return;
-            }
-            let parameters = [
-                req.body.interests,
-                req.body.userId,
-                results['insertId']
-            ]
-            connect.query(sql.insert.Pref_interest.fields, parameters, (error, results, fields) => 
-            {
-                console.log(error);
-                connect.release();
-                if (error)
-                {
-                    res.status(200).send(error);
-                    return;
-                }
-                res.status(200).send(results);
-            });
-
-           
-        });
-       
-    })
-});
-
 module.exports = router;

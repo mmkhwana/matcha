@@ -26,16 +26,12 @@ class UserProfileService {
     return General.PostExecution(Constant.RemoveLanguage, { langId, userId })
   }
 
-  static removeInterest (interestId, userId) {
-    return General.PostExecution(Constant.RemoveInterest, { interestId, userId })
+  static removeInterest (interestName, userId) {
+    return General.PostExecution(Constant.RemoveInterest, { interestName, userId })
   }
 
   static getUserDetails (userid) {
     return General.GetExecution(Constant.GetUserDetails, userid)
-  }
-
-  static readImages (username) {
-    return General.getReturnArrayExecution(Constant.Uploads, username)
   }
 
   static uploadImage (imageData) {

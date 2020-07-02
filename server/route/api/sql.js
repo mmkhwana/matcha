@@ -8,15 +8,18 @@ module.exports = {
         },
         interest :
         {
-            all: `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`
+            all: `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`,
+            check: `SELECT interest_name FROM Matcha_User_Interests WHERE (interest_name = ? AND user_id = ?)`
         },
         language:
         {
-            all: `SELECT lang_name FROM Matcha_User_Languages WHERE user_id = ?`
+            all: `SELECT lang_name FROM Matcha_User_Languages WHERE user_id = ?`,
+            check: `SELECT lang_name FROM Matcha_User_Languages WHERE (lang_name = ? AND user_id = ?)`
         },
-        preference :
+        image:
         {
-            details: `SELECT * FROM Matcha_User_preferences WHERE user_id = ?`,
+            all: `SELECT * FROM Matcha_Images WHERE user_id = ? ORDER BY image_role DESC`,
+            profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`
         }
     },
     update:
@@ -38,17 +41,25 @@ module.exports = {
              user_country = ?,
              user_state = ?
             WHERE user_id = ?`
+        },
+        image:
+        {
+            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
         }
     },
     delete: 
     {
         interest:
         {
-            row: `DELETE FROM Matcha_User_Interest WHERE interest_id = ? AND user_id = ?`
+            row: `DELETE FROM Matcha_User_Interests WHERE interest_name = ? AND user_id = ?`
         },
         language:
         {
-            row: `DELETE FROM Matcha_User_Languages WHERE lang_id = ? AND user_id = ?`
+            row: `DELETE FROM Matcha_User_Languages WHERE lang_name = ? AND user_id = ?`
+        },
+        image:
+        {
+            row: `DELETE FROM Matcha_Images WHERE image_link = ? AND user_id = ?`
         }
     },
     insert: 
@@ -59,11 +70,11 @@ module.exports = {
         },
         interest:
         {
-            fields: `INSERT INTO Matcha_User_Interests (interest_name, user_id) VALUES ?`
+            fields: `INSERT INTO Matcha_User_Interests (interest_name, user_id) VALUES (?,?)`
         },
         language:
         {
-            fields: `INSERT INTO Matcha_User_Languages (lang_name, user_id) VALUES ?`
+            fields: `INSERT INTO Matcha_User_Languages (lang_name, user_id) VALUES (?,?)`
         },
         image:
         {

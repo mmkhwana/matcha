@@ -36,7 +36,7 @@
     >
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img :src="`http://localhost:5000/api/posts/uploads/${username}/WIN_20200328_11_59_04_Pro.jpg`"></v-img>
+          <v-img :src= profile></v-img>
         </v-list-item-avatar>
 
         <v-list-item-title >{{ fullname }}</v-list-item-title>
