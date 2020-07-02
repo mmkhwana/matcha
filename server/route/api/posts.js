@@ -9,16 +9,6 @@ const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
-
-//for sending an email
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'unathinkomo16@gmail.com',
-        pass: '0786324448'
-    }
-  });
-
 //User
 router.post('/register_user', async(req, res) => 
 {
@@ -44,7 +34,7 @@ router.post('/register_user', async(req, res) =>
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
             { 
-              //  connect.release();
+                connect.release();
                 if (error)
                 {
                     res.status(200).send(results);
@@ -58,17 +48,10 @@ router.post('/register_user', async(req, res) =>
                        pass: '0786324448'
                   }
                 });
-                var message = {
-                    from: "unathinkomo16@gmail.com",
-                    to: res.body.email,
-                    subject: "Regestration verification",
-                    text: "Plaintext version of the message",
-                    html: "<a>verification link</a>"
-                  };
           
                   var mailOptions = {
                       from: 'unathinkomo16@gmail.com',
-                      to: res.body.email,
+                      to: req.body.email,
                       subject: 'Regestration verification',
                       html : `<a>verification link</a>`,
                   };
@@ -86,14 +69,7 @@ router.post('/register_user', async(req, res) =>
                 {
                     fs.mkdirSync(directory,{ recursive: true });
                 }
-            //       transporter.sendMail(mailOptions, function(error, info){
-            //         if (error) {
-            //           console.log(error);
-            //         } else {
-            //           console.log('Email sent: ' + info.response);
-            //         }
-            //     res.send("User Registered");
-            // });
+            res.send("User Registered");
         });
     });
     }
@@ -121,17 +97,27 @@ router.post('/login_user', async(req, res) =>
                 res.status(200).send(results);
                 return;
             }
-            bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
+            if (results[0])
             {
-                if(error)
-                    return;
-                if (response)
-                    res.status(200).send(results);
-                else
+                bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
                 {
-                    res.status(200).send(response);
-                }
-            });
+                    if(error)
+                    {
+                        res.status(200).send(error);
+                        return;
+                    }
+                    if (response)
+                        res.status(200).send(results);
+                    else
+                    {
+                        res.status(200).send(response);
+                    }
+                });
+            }
+            else
+            {
+                res.status(200).send(["notfound"]);
+            }
         });
     });
 });
@@ -195,11 +181,8 @@ router.get('/uploads/:username/:name', (req, res) => {
 router.get('/uploads:username', async (req, res) => {
   let images = []
   const path = __dirname + "/uploads/" + req.params.username;
-  const folder = await fs.promises.opendir(path);
-  for await (const image_path of folder) 
-  {
-    images.push(image_path.name);
-  }
+  const folder = await fs.promises.readdir(path);
+  images = folder;
   res.status(201).send(images);
 });
 
@@ -209,23 +192,65 @@ router.post('/insert_language', async(req, res) =>
     {
         if (error)
             return;
-        let values = [];
-        let arr = req.body.langName;
-        arr.forEach(lang => 
+        connect.beginTransaction((err) => 
         {
-            values.push([lang, req.body.userId]);
-        });
-        connect.query(sql.insert.language.fields, [values], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.langName;
+            arr.forEach(lang => 
+            {
+                let values = [
+                    lang, 
+                    req.body.userId
+                ];
+                connect.query(sql.select.language.check, values, (error, results) => 
+                {
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    }
+                    if (!results[0])
+                    {
+                        let values = [
+                            lang, 
+                            req.body.userId
+                        ];
+                        connect.query(sql.insert.language.fields, values, (error, results) => 
+                        {
+                            if (err)
+                            {
+                                connect.rollback(() =>
+                                {
+                                    res.status(200).send(err);
+                                    return;
+                                });
+                            }
+                        });
+                    }
+                });
+                connect.commit((err) =>
+                {
+                    if (err)
+                    {
+                        connect.rollback(() =>
+                        {
+                            res.status(200).send(err)
+                            return;
+                        })
+                    }
+                });
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -235,23 +260,66 @@ router.post('/insert_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [];
-        let arr = req.body.interestName;
-        arr.forEach(element => 
+        connect.beginTransaction((err) => 
         {
-            params.push([element, req.body.userId]);
-        });
-        connect.query(sql.insert.interest.fields, [params], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.interestName;
+            arr.forEach(element => 
+            {
+                let params = [
+                    element,
+                    req.body.userId
+                ];
+                connect.query(sql.select.interest.check, params, (error, results) => 
+                { 
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    } 
+                    else 
+                        if (!results[0]) 
+                        {
+                            let param = [
+                                element,
+                                req.body.userId
+                            ];
+                            connect.query(sql.insert.interest.fields, param, (error, results) => 
+                            {
+                                if (error)
+                                {
+                                    connect.rollback(() => 
+                                    {
+                                        res.status(200).send(error);
+                                        return;
+                                    });
+                                }
+                            });
+                        }
+                });
+            });
+            connect.commit((err) => 
+            {
+                if (err)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.status(200).send(err);
+                        return;
+                    })
+                }
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -322,8 +390,8 @@ router.post('/remove_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [req.body.interestId, req.body.userId];
-        connect.query(sql.delete.interest.row, params, (error, results) => 
+        let params = [req.body.interestName, req.body.userId];
+        connect.query(sql.delete.interest.row, params, (error, results, fields) => 
         {
             connect.release();
             if (error)
@@ -335,6 +403,39 @@ router.post('/remove_interest', async(req, res) =>
         });
     })
 
+});
+
+router.post('/remove_image', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) => 
+    {
+        if (err)
+            return;
+        let imageLink = 'http://localhost:5000/api/posts/uploads/' + req.body.username + '/'+ req.body.picname;
+        let imagePath = __dirname + '/uploads/' + req.body.username + '/'+ req.body.picname;
+        let params = [
+            imageLink,
+            req.body.userId
+        ];
+        connect.query(sql.delete.image.row, params, (error, results) => 
+        {
+            connect.release();
+            if (error)
+                return;
+            if (fs.existsSync(imagePath))
+            {
+                try 
+                {
+                    fs.unlinkSync(imagePath);
+                } 
+                catch (error) 
+                {
+                    console.log(error);
+                }
+            }
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.get('/details:userid', async(req, res) => 
@@ -394,84 +495,4 @@ router.post('/update_profile', async(req, res) =>
     })
     res.status(200).send("Profile Updated Successfully");
 });
-
-router.delete('/:id', async(req, res) => {
-    const posts = await loadUsersCollection();
-    await posts.deleteOne ({_id: new mongodb.ObjectID(req.params.id)}); 
-    res.status(200).send();
-});
-
-async function loadUsersCollection() {
-   /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
-        useUnifiedTopology: true, useNewUrlParser: true
-    });
-    return client.db('Matcha').collection('Users');*/
-
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true, useUnifiedTopology: true
-    });
-
-    return client.db('Matcha').collection('Users');
-    
-}
-
-async function loadUsersImages() {
-    /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
-         useUnifiedTopology: true, useNewUrlParser: true
-     });
-     return client.db('Matcha').collection('Users');*/
- 
-     const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-         useNewUrlParser: true, useUnifiedTopology: true
-     });
- 
-     return client.db('Matcha').collection('Images');
-     
- }
-
-//interets
-
-router.post('/interests', async(req, res) => {
-    const posts = await loadInterestsCollection();
-    await posts.insertOne({
-        interest: req.body.interest,
-        text: req.body.text,
-        user_id: req.params.id,
-        createdAt: new Date()
-    });
-    res.status(201).send();
-});
-
-async function loadInterestsCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true
-    });
-
-    return client.db('Matcha').collection('interests');
-    
-}
-
-//Preferences
-
-router.post('/preference', async(req, res) => {
-    const posts = await loadpreferencesCollection();
-    await posts.insert ({
-        age: req.body.age,
-        rating: req.body.rating,
-        gender: req.body.gender,
-        language: req.body.language,
-        location: req.body.location,
-        interests: req.body.interests,
-        user_id: req.params.id
-    });
-    res.status(201).send('done');
-});
-
-async function loadpreferencesCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true
-    });
-
-    return client.db('Matcha').collection('preferences');
-}
 module.exports = router;

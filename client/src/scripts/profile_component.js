@@ -1,4 +1,5 @@
 import UserProfileService from '../services/UserProfileService'
+import gallery from '../components/gallery'
 import Table from '../services/tables'
 import Constant from '../services/constants'
 import VueSession from 'vue-session'
@@ -6,7 +7,10 @@ import Vue from 'vue'
 Vue.use(VueSession)
 
 export default {
-  name: 'Edit',
+  name: 'profile',
+  components: {
+    gallery
+  },
   data: () => {
     return {
       pictures: [],
@@ -21,11 +25,11 @@ export default {
         { name: Constant.hair, value: '' }
       ],
       username: '',
-      address: '39 Rissik Street',
-      postcode: '2001',
-      city: 'Johannesburg',
-      country: 'South Africa',
-      state: 'Gauteng'
+      street: '',
+      postcode: '',
+      city: '',
+      country: '',
+      state: ''
     }
   },
   async mounted () {
@@ -33,9 +37,18 @@ export default {
     const res = (await UserProfileService.getUserDetails(this.$session.get('userid')))[0]
     let output = await UserProfileService.getInterest(this.$session.get('userid'))
     let lang = await UserProfileService.getLanguage(this.$session.get('userid'))
+    this.street = res[Table.User.street]
+    this.postcode = res[Table.User.postcode]
+    this.city = res[Table.User.city]
+    this.country = res[Table.User.country]
+    this.state = res[Table.User.state]
     this.biography = res[Table.User.biography]
     this.personality[0].value = res[Table.User.status]
-    this.personality[1].value = res[Table.User.height] + 'm'
+    if (res[Table.User.height]) {
+      this.personality[1].value = res[Table.User.height] + 'm'
+    } else {
+      this.personality[1].value = ''
+    }
     this.personality[2].value = res[Table.User.age] + 'yrs'
     this.personality[3].value = res[Table.User.race]
     this.personality[4].value = res[Table.User.hair]
@@ -45,8 +58,6 @@ export default {
     output.forEach(interest => {
       this.interests.push(interest[Table.Interests.name])
     })
-    const pics = await UserProfileService.readImages(this.username)
-    this.pictures = pics.data
   },
   methods:
   {

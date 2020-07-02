@@ -10,6 +10,8 @@ export default {
   UpdateUserProfile: 'update_profile',
   RemoveLanguage: 'remove_language',
   RemoveInterest: 'remove_interest',
+  RemoveImage: 'remove_image',
+  SetProfilePic: 'set_profile_pic',
   RegisterUser: 'register_user',
   LoginUser: 'login_user',
   relationship: 'Relationship',
