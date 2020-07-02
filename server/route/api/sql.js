@@ -75,7 +75,8 @@ module.exports = {
         },
         Pref_interest:
         {
-            fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
+            fields: `INSERT INTO Preferred
+            _interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
         }
     }
 }
