@@ -43,7 +43,4 @@ export default {
     userId: 'user_id',
     prefence_id : 'preferrence_id',
   }
-
-
-
 }

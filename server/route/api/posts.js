@@ -151,6 +151,7 @@ router.post('/upload', async(req, res) =>
             }
             let values = [
                 file_path,
+                req.file.originalname,
                 'none',
                 req.body.userid
             ];
@@ -526,5 +527,59 @@ router.post('/update_profile', async(req, res) =>
         });
     })
     res.status(200).send("Profile Updated Successfully");
+});
+
+router.post('/set_preferences', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return;
+        connect.beginTransaction((error) => {
+            let params = [
+                req.body.gender,
+                req.body.age,
+                req.body.location,
+                req.body.rating,
+                req.body.userId,
+                req.body.language,
+            ];
+            connect.query(sql.insert.preferences.fields, params, (error, results, fields) =>
+            {
+                if (error)
+                {
+                    connect.rollback((error) => {
+                        res.status(200).send(error);
+                         return; 
+                    });
+                }
+                let param = [
+                    req.body.interests,
+                    req.body.userId,
+                    results.insertId
+                ]
+                connect.query(sql.insert.Pref_interest.fields, param, (error, results) => {
+                    if (error)
+                    {
+                        connect.rollback((error) => {
+                            res.status(200).send(error);
+                             return; 
+                        });
+                    }
+                });
+            });
+        });
+        connect.commit((error) => {
+            if (error)
+            {
+                connect.rollback((error) =>{
+                    res.send(error);
+                    return;
+                });
+            }
+            connect.release();
+            res.send("Ohk")
+        });
+    });
 });
 module.exports = router;

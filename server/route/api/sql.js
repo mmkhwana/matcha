@@ -78,7 +78,7 @@ module.exports = {
         },
         image:
         {
-            fields: `INSERT INTO Matcha_Images (image_link, image_role, user_id) VALUES (?, ?, ?)`
+            fields: `INSERT INTO Matcha_Images (image_link, image_name, image_role,user_id) VALUES (?, ?, ?, ?)`
         },
         preferences:
         {
@@ -86,8 +86,7 @@ module.exports = {
         },
         Pref_interest:
         {
-            fields: `INSERT INTO Preferred
-            _interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
+            fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
         }
     }
 }
