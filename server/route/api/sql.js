@@ -44,7 +44,8 @@ module.exports = {
         },
         image:
         {
-            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
+            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`,
+            field: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
         }
     },
     delete: 
@@ -78,7 +79,7 @@ module.exports = {
         },
         image:
         {
-            fields: `INSERT INTO Matcha_Images (image_link, image_role, user_id) VALUES (?, ?, ?)`
+            fields: `INSERT INTO Matcha_Images (image_link, image_name, image_role, user_id) VALUES (?, ?, ?, ?)`
         }
     }
 }

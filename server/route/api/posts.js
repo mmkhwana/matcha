@@ -131,16 +131,17 @@ router.post('/upload', async(req, res) =>
     });
     
     let upload = multer({storage: store}).single('file');
-    upload(req, res, (error) => 
+    upload(req, res, async(error) => 
     {
         if (!req.file){
             return res.send({success: false});
         }
         else 
         {
-            let file_path = 'http://localhost:5000/api/posts/uploads/'+ req.body.username + '/' + req.file.originalname;
-            const existPath = path.join(__dirname + '/uploads/tmp', req.file.originalname)
-            const destPath = path.join(__dirname, "uploads/"+ req.body.username, req.file.originalname)
+            let name = req.file.originalname;
+            let file_path = 'http://localhost:5000/api/posts/uploads/'+ req.body.username + '/' + name;
+            const existPath = path.join(__dirname + '/uploads/tmp', name)
+            const destPath = path.join(__dirname, "uploads/"+ req.body.username, name)
             try 
             {
                 fs.renameSync(existPath, destPath)
@@ -149,9 +150,20 @@ router.post('/upload', async(req, res) =>
             {
                 console.log(err);
             }
+            let images = [];
+            let role = 'profile';
+            let pathfiles = __dirname + "/uploads/" + req.body.username;
+            let files = await fs.promises.opendir(pathfiles);
+            for await (const img of files)
+            {
+                images.push(img.name);
+            }
+            if (images.length > 1)
+                role = 'none'
             let values = [
                 file_path,
-                'none',
+                name,
+                role,
                 req.body.userid
             ];
             Connection.con.getConnection((error, connect) =>
@@ -208,6 +220,23 @@ router.post('/set_profile_pic', async(req, res) =>
             return;
         let params = [ 'profile', req.body.newId, 'none', req.body.oldId ];
         connect.query(sql.update.image.fields, params, (error, results) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.status(200).send(results);
+        });
+    });
+});
+
+router.post('/set_profile', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        let params = [ 'profile', req.body.imageId ];
+        connect.query(sql.update.image.field, params, (error, results) =>
         {
             connect.release();
             if (error)
