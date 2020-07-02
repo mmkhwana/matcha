@@ -151,7 +151,7 @@ router.post('/upload', async(req, res) =>
             }
             let values = [
                 file_path,
-                'profile',
+                'none',
                 req.body.userid
             ];
             Connection.con.getConnection((error, connect) =>
@@ -174,16 +174,47 @@ router.post('/upload', async(req, res) =>
     });
 });
 
-router.get('/uploads/:username/:name', (req, res) => {
+router.get('/uploads/:username/:name', (req, res) => 
+{
     res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
 });
 
-router.get('/uploads:username', async (req, res) => {
+router.post('/uploads', async (req, res) => 
+{
   let images = []
-  const path = __dirname + "/uploads/" + req.params.username;
-  const folder = await fs.promises.readdir(path);
-  images = folder;
-  res.status(201).send(images);
+  Connection.con.getConnection((err, connect) => 
+  {
+      if (err)
+        return;
+    connect.query(sql.select.image.all, req.body.userid, (error, results) => 
+    {
+        connect.release();
+        if (error)
+            return;
+        if (results[0])
+        {
+            images = results;
+        }
+        res.status(201).send(images);
+    });
+  });
+});
+
+router.post('/set_profile_pic', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        let params = [ 'profile', req.body.newId, 'none', req.body.oldId ];
+        connect.query(sql.update.image.fields, params, (error, results) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.post('/insert_language', async(req, res) => 

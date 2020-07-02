@@ -65,7 +65,7 @@ class GeneralService {
   static getReturnArrayExecution (router, param) {
     return new Promise(async (resolve, reject) => {
       try {
-        const res = await axios.get(Constant.URL + router + param)
+        const res = await axios.post(Constant.URL + router, param)
         resolve(res)
         reject(res)
       } catch (error) {

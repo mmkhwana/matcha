@@ -18,8 +18,8 @@
 <v-hover v-slot:default="{ hover }">
     <v-card :class="{ 'on-hover': hover }">
     <v-img
-    :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
-    :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
+    :src='`http://localhost:5000/api/posts/uploads/${username}/${n.name}`'
+    :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n.name}`'
     aspect-ratio='1.0'
     min-width="150px"
     gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
@@ -39,7 +39,7 @@
         :key="index"
         :class="index === 2 ? { 'show-dele-btns': hover } : index === 0 ? { 'show-set-btns': hover } : { 'show-btns': hover }"
         color="transparent"
-        v-on:click="index=== 2 ? removePicture (n, position) : index === 0 ? setProfile (n) : previewImage(n)"
+        v-on:click="index=== 2 ? removePicture (n.name, position) : index === 0 ? setProfile (n.name, position) : previewImage(n.name)"
         icon
         >
         <v-icon

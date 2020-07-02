@@ -29,7 +29,6 @@ export default {
       this.$destroy()
     },
     async save () {
-      alert(this.$refs.photo.src)
       var fileform = new FormData()
       fileform.append('userid', this.$session.get('userid'))
       fileform.append('file', this.file, this.file.name)

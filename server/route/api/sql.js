@@ -18,7 +18,7 @@ module.exports = {
         },
         image:
         {
-            all: `SELECT * FROM Matcha_Images WHERE user_id = ?`,
+            all: `SELECT * FROM Matcha_Images WHERE user_id = ? ORDER BY image_role DESC`,
             profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`
         }
     },
@@ -44,7 +44,7 @@ module.exports = {
         },
         image:
         {
-            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
+            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
         }
     },
     delete: 
