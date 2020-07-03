@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Constant from './constants'
+// import { constants } from 'os'
 
 class GeneralService {
   static UploadPhoto (image) {
@@ -41,6 +42,9 @@ class GeneralService {
   static PostExecution (router, params) {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log(Constant.URL)
+        console.log(router)
+        console.log(params)
         const res = await axios.post(Constant.URL + router, params)
         resolve(res.data)
         reject(res.data)

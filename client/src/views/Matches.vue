@@ -48,6 +48,31 @@
         </v-container>
 </template>
 <script>
-import matches from '../scripts/matches_component'
-export default matches
+// import matches from '../scripts/matches_component'
+import axios from 'Axios'
+
+//export default 
+// {
+//   data: { 
+//     return( {
+//     res: ''
+//       })
+//     },
+      
+//   mounted() 
+//   {
+//      this.res =  axios.post("http://localhost:5000/api/posts/matches")
+//   }
+// }
+export default
+{
+  data: {
+    results: []
+  },
+  mounted() {
+    axios.get("http://localhost:5000/api/posts/matches")
+    .then(response => {this.results = response.data.results})
+  }
+};
+
 </script>
