@@ -1,19 +1,16 @@
 <template id="chat">
   <v-row align="center">
     <div class="chat-window">
-      <div class="messages">
-        <!-- the {{message.mg }} is suppose to load the messege here in the div from the div class message-text
-        when you press send but it doesnt and it escape to the dashboard after pressing send -->
+      <container class="messages" >{{ msg }}
           <div class="message"
             v-for="message in messages"
             :key="message.index"
           >
-          <div class="username">{{ message.username }}</div>
-          <div class="message-text"> {{ message.msg }}</div>
+          <!-- <div class="username" >{{ message.username }}</div> -->
+          <!-- <div class="message-text" > {{ this.msg }}</div> -->
         </div>
-      </div>
-    <form class="input-container"
-      v-on:submit="sendMessage"
+      </container>
+    <form class="input-container" v-on:submit.prevent="sendMessage"
     >
       <input
         type="text"
@@ -43,12 +40,13 @@ export default {
       // if (!this.msg) {
       //   alert('Please enter message')
       // }
-      // this.$emit('sendMessage', this.msg)
+      this.$emit('sendMessage', this.msg)
       console.log(this.msg)
       this.msg = ''
     }
   }
 }
+
 </script>
 <style>
 /* #chat {
@@ -66,7 +64,7 @@ export default {
   width: 100%;
   max-width: 768px;
   margin: 0 auto;
-  background-color:lightslategrey;
+  background-color:red;
   box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.15);
 }
 /* .chat-window {
@@ -78,7 +76,10 @@ export default {
   box-shadow: 1px 1px 6px 0px rgba(0, 0, 0, 0.15);
 } */
 .messages {
-  flex: 1
+  flex: 1;
+  height: 20vh;
+  width: 100%;
+  background-color: whitesmoke;
 }
 .message {
   /* display: flex; */

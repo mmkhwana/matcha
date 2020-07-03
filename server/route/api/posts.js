@@ -144,11 +144,8 @@ router.get('/uploads/:username/:name', (req, res) => {
 router.get('/uploads:username', async (req, res) => {
   let images = []
   const path = __dirname + "/uploads/" + req.params.username;
-  const folder = await fs.promises.opendir(path);
-  for await (const image_path of folder) 
-  {
-    images.push(image_path.name);
-  }
+  const folder = await fs.promises.readdir(path);
+  images = folder;
   res.status(201).send(images);
 });
 
