@@ -1,13 +1,13 @@
 <template id="chat">
   <v-row align="center">
     <div class="chat-window">
-      <container class="messages" >{{ msg }}
+      <container class="messages" >
           <div class="message"
-            v-for="message in messages"
+            v-for="message in value"
             :key="message.index"
           >
-          <!-- <div class="username" >{{ message.username }}</div> -->
-          <!-- <div class="message-text" > {{ this.msg }}</div> -->
+          <div class="username" >{{ message.username }}</div>
+          <div class="message-text" > {{ message.msg }}</div>
         </div>
       </container>
     <form class="input-container" v-on:submit.prevent="sendMessage"
@@ -29,7 +29,7 @@
 </template>
 <script>
 export default {
-  props: ['messages'],
+  props: ['value', 'messages'],
   data () {
     return {
       msg: ''
@@ -49,14 +49,14 @@ export default {
 
 </script>
 <style scoped>
-/* #chat {
+#chat {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100%;
   max-width: 768px;
   margin: 0 auto;
-} */
+}
 .chat-window {
  display: flex;
   flex-direction: column;

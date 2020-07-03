@@ -1,7 +1,6 @@
 <template>
   <v-container>
     <v-card
-      height="400"
     >
       <v-row>
       <v-col cols="3">
@@ -43,13 +42,14 @@
       </v-col>
       <v-col cols="10" sm="8">
       <v-card-text>
-            <template>
+            <!-- <template>
               <keep-alive>
                 <component :is="Users">
-                  <!-- <OnlineUser v-bind:messages="messages" v-on:sendMessage="this.sendMessage"/> -->
+                  <OnlineUser v-bind:messages="messages" v-on:sendMessage="this.sendMessage"/
                 </component>
               </keep-alive>
-            </template>
+            </template> -->
+            <OnlineUser :value="messages" @sendMessage="updateMessage"/>
       </v-card-text>
        </v-col>
       </v-row>
@@ -64,6 +64,9 @@ import Vue from 'vue'
 Vue.component('Online User', OnlineUser)
 export default {
   name: 'Chat',
+  components: {
+    OnlineUser
+  },
   data () {
     return {
       items: [{ 'Users': 'Username' }],
@@ -75,8 +78,12 @@ export default {
     }
   },
   methods: {
-    chattingUser () {
-      this.$root.$emit('OnlineUser')
+    updateMessage (message) {
+      this.messages.push(message)
+      this.socket.emit('msg', message)
+    },
+    getMessages () {
+      return 'value'
     },
     JoinServer: function () {
       this.socket.on('LoggedIn', data => {
