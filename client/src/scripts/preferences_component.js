@@ -26,7 +26,6 @@ export default {
   mounted: {
     results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
       .then(result => result.json()).then(result => {
-        alert(JSON.stringify(result))
       }, error => {
         alert(error.message)
       })
