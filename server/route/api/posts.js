@@ -188,12 +188,16 @@ router.post('/upload', async(req, res) =>
 
 router.get('/uploads/:username/:name', (req, res) => 
 {
-    res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
+    let file = __dirname + '/uploads/'+req.params.username +"/" + req.params.name;
+    if (fs.existsSync(file))
+    {
+        res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
+    }
 });
 
 router.post('/uploads', async (req, res) => 
 {
-  let images = []
+  let images = [];
   Connection.con.getConnection((err, connect) => 
   {
       if (err)
