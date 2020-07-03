@@ -10,11 +10,17 @@ export default {
   UpdateUserProfile: 'update_profile',
   RemoveLanguage: 'remove_language',
   RemoveInterest: 'remove_interest',
+  RemoveImage: 'remove_image',
+  SetProfilePic: 'set_profile_pic',
+  SetProfile: 'set_profile',
   RegisterUser: 'register_user',
   LoginUser: 'login_user',
   relationship: 'Relationship',
   height: 'Height',
   age: 'Age',
   race: 'Race',
-  hair: 'Hair'
+  hair: 'Hair',
+  Profile: 'profile',
+  NotProfile: 'none',
+  ImageList: 'imagesList'
 }

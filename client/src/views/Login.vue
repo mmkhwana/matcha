@@ -97,7 +97,7 @@
 </v-card>
 </v-container>
 </template>
-<style src="../assets/css/signup.css" lang="css">
+<style scoped src="../assets/css/signup.css" lang="css">
 </style>
 <script>
 import login from '../scripts/login_component'

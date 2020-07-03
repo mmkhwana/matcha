@@ -7,6 +7,7 @@ import VueSession from 'vue-session'
 import Settings from '../views/Settings'
 import Chat from '../views/Chat'
 import Upload from '../views/dialog'
+import EventBus from '../services/event_bus'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
@@ -30,6 +31,7 @@ export default {
       titles: 'Profile',
       drawer: false,
       check: null,
+      profile: '',
       username: this.$session.get('username'),
       fullname: this.$session.get('firstname') + ' ' + this.$session.get('lastname')
     }
@@ -67,6 +69,9 @@ export default {
     })
     this.$root.$on('Upload', () => {
       this.titles = 'Upload Photo'
+    })
+    EventBus.$on('profile', (picname) => {
+      this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`
     })
   },
   methods: {

@@ -7,12 +7,14 @@ const Connection = require('./dbconnection');
 const router = express.Router();
 const sql = require('./sql');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 //User
-
 router.post('/register_user', async(req, res) => 
 {
+    
     let password = '';
+    let email = '';
     if (req.body.confirm === req.body.pass)
     {
         password = bcrypt.hashSync(req.body.pass, 8)
@@ -27,24 +29,49 @@ router.post('/register_user', async(req, res) =>
         ];
         Connection.con.getConnection((error, connect) => 
         {
+            console.log(error);
             if (error)
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
-            {
+            { 
                 connect.release();
                 if (error)
                 {
                     res.status(200).send(results);
                     return;
                 }
+                console.log("hihihi")
+                let transporter = nodemailer.createTransport({
+                    service: 'gmail.com',
+                    auth: {
+                       user: 'unathinkomo16@gmail.com',
+                       pass: '0786324448'
+                  }
+                });
+          
+                  var mailOptions = {
+                      from: 'unathinkomo16@gmail.com',
+                      to: req.body.email,
+                      subject: 'Regestration verification',
+                      html : `<a>verification link</a>`,
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                  if (error) {
+                      console.log(error);
+                  } else {
+                      console.log('Email sent: ' + info.response);
+                  }
+                  });
+
                 let directory = __dirname + '/uploads/'+req.body.username;
                 if (!fs.existsSync(directory))
                 {
                     fs.mkdirSync(directory,{ recursive: true });
                 }
-                res.send("User Registered");
-            });
+            res.send("User Registered");
         });
+    });
     }
     else
     {
@@ -70,17 +97,27 @@ router.post('/login_user', async(req, res) =>
                 res.status(200).send(results);
                 return;
             }
-            bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
+            if (results[0])
             {
-                if(error)
-                    return;
-                if (response)
-                    res.status(200).send(results);
-                else
+                bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => 
                 {
-                    res.status(200).send(response);
-                }
-            });
+                    if(error)
+                    {
+                        res.status(200).send(error);
+                        return;
+                    }
+                    if (response)
+                        res.status(200).send(results);
+                    else
+                    {
+                        res.status(200).send(response);
+                    }
+                });
+            }
+            else
+            {
+                res.status(200).send(["notfound"]);
+            }
         });
     });
 });
@@ -94,16 +131,17 @@ router.post('/upload', async(req, res) =>
     });
     
     let upload = multer({storage: store}).single('file');
-    upload(req, res, (error) => 
+    upload(req, res, async(error) => 
     {
         if (!req.file){
             return res.send({success: false});
         }
         else 
         {
-            let file_path = 'http://localhost:5000/api/posts/uploads/'+ req.body.username + '/' + req.file.originalname;
-            const existPath = path.join(__dirname + '/uploads/tmp', req.file.originalname)
-            const destPath = path.join(__dirname, "uploads/"+ req.body.username, req.file.originalname)
+            let name = req.file.originalname;
+            let file_path = 'http://localhost:5000/api/posts/uploads/'+ req.body.username + '/' + name;
+            const existPath = path.join(__dirname + '/uploads/tmp', name)
+            const destPath = path.join(__dirname, "uploads/"+ req.body.username, name)
             try 
             {
                 fs.renameSync(existPath, destPath)
@@ -112,9 +150,20 @@ router.post('/upload', async(req, res) =>
             {
                 console.log(err);
             }
+            let images = [];
+            let role = 'profile';
+            let pathfiles = __dirname + "/uploads/" + req.body.username;
+            let files = await fs.promises.opendir(pathfiles);
+            for await (const img of files)
+            {
+                images.push(img.name);
+            }
+            if (images.length > 1)
+                role = 'none'
             let values = [
                 file_path,
-                'profile',
+                name,
+                role,
                 req.body.userid
             ];
             Connection.con.getConnection((error, connect) =>
@@ -137,16 +186,68 @@ router.post('/upload', async(req, res) =>
     });
 });
 
-router.get('/uploads/:username/:name', (req, res) => {
-    res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
+router.get('/uploads/:username/:name', (req, res) => 
+{
+    let file = __dirname + '/uploads/'+req.params.username +"/" + req.params.name;
+    if (fs.existsSync(file))
+    {
+        res.sendFile(path.join(__dirname, "./uploads/"+ req.params.username +"/" + req.params.name));
+    }
 });
 
-router.get('/uploads:username', async (req, res) => {
-  let images = []
-  const path = __dirname + "/uploads/" + req.params.username;
-  const folder = await fs.promises.readdir(path);
-  images = folder;
-  res.status(201).send(images);
+router.post('/uploads', async (req, res) => 
+{
+  let images = [];
+  Connection.con.getConnection((err, connect) => 
+  {
+      if (err)
+        return;
+    connect.query(sql.select.image.all, req.body.userid, (error, results) => 
+    {
+        connect.release();
+        if (error)
+            return;
+        if (results[0])
+        {
+            images = results;
+        }
+        res.status(201).send(images);
+    });
+  });
+});
+
+router.post('/set_profile_pic', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        let params = [ 'profile', req.body.newId, 'none', req.body.oldId ];
+        connect.query(sql.update.image.fields, params, (error, results) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.status(200).send(results);
+        });
+    });
+});
+
+router.post('/set_profile', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        let params = [ 'profile', req.body.imageId ];
+        connect.query(sql.update.image.field, params, (error, results) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.post('/insert_language', async(req, res) => 
@@ -155,23 +256,65 @@ router.post('/insert_language', async(req, res) =>
     {
         if (error)
             return;
-        let values = [];
-        let arr = req.body.langName;
-        arr.forEach(lang => 
+        connect.beginTransaction((err) => 
         {
-            values.push([lang, req.body.userId]);
-        });
-        connect.query(sql.insert.language.fields, [values], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.langName;
+            arr.forEach(lang => 
+            {
+                let values = [
+                    lang, 
+                    req.body.userId
+                ];
+                connect.query(sql.select.language.check, values, (error, results) => 
+                {
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    }
+                    if (!results[0])
+                    {
+                        let values = [
+                            lang, 
+                            req.body.userId
+                        ];
+                        connect.query(sql.insert.language.fields, values, (error, results) => 
+                        {
+                            if (err)
+                            {
+                                connect.rollback(() =>
+                                {
+                                    res.status(200).send(err);
+                                    return;
+                                });
+                            }
+                        });
+                    }
+                });
+                connect.commit((err) =>
+                {
+                    if (err)
+                    {
+                        connect.rollback(() =>
+                        {
+                            res.status(200).send(err)
+                            return;
+                        })
+                    }
+                });
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -181,23 +324,66 @@ router.post('/insert_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [];
-        let arr = req.body.interestName;
-        arr.forEach(element => 
+        connect.beginTransaction((err) => 
         {
-            params.push([element, req.body.userId]);
-        });
-        connect.query(sql.insert.interest.fields, [params], (error, results) => 
-        {
-            connect.release();
-            if (error)
+            if (err)
             {
-                res.status(200).send(error);
+                res.status(200).send(err);
                 return;
             }
-            res.status(200).send(results)
+            let arr = req.body.interestName;
+            arr.forEach(element => 
+            {
+                let params = [
+                    element,
+                    req.body.userId
+                ];
+                connect.query(sql.select.interest.check, params, (error, results) => 
+                { 
+                    if (error)
+                    {
+                        connect.rollback(() => 
+                        {
+                            res.status(200).send(error);
+                            return;
+                        });
+                    } 
+                    else 
+                        if (!results[0]) 
+                        {
+                            let param = [
+                                element,
+                                req.body.userId
+                            ];
+                            connect.query(sql.insert.interest.fields, param, (error, results) => 
+                            {
+                                if (error)
+                                {
+                                    connect.rollback(() => 
+                                    {
+                                        res.status(200).send(error);
+                                        return;
+                                    });
+                                }
+                            });
+                        }
+                });
+            });
+            connect.commit((err) => 
+            {
+                if (err)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.status(200).send(err);
+                        return;
+                    })
+                }
+            });
         });
-    })
+        res.status(200).send({data:"okay"});
+        connect.release();
+    });
 
 });
 
@@ -268,8 +454,8 @@ router.post('/remove_interest', async(req, res) =>
     {
         if (error)
             return;
-        let params = [req.body.interestId, req.body.userId];
-        connect.query(sql.delete.interest.row, params, (error, results) => 
+        let params = [req.body.interestName, req.body.userId];
+        connect.query(sql.delete.interest.row, params, (error, results, fields) => 
         {
             connect.release();
             if (error)
@@ -281,6 +467,39 @@ router.post('/remove_interest', async(req, res) =>
         });
     })
 
+});
+
+router.post('/remove_image', async(req, res) => 
+{
+    Connection.con.getConnection((err, connect) => 
+    {
+        if (err)
+            return;
+        let imageLink = 'http://localhost:5000/api/posts/uploads/' + req.body.username + '/'+ req.body.picname;
+        let imagePath = __dirname + '/uploads/' + req.body.username + '/'+ req.body.picname;
+        let params = [
+            imageLink,
+            req.body.userId
+        ];
+        connect.query(sql.delete.image.row, params, (error, results) => 
+        {
+            connect.release();
+            if (error)
+                return;
+            if (fs.existsSync(imagePath))
+            {
+                try 
+                {
+                    fs.unlinkSync(imagePath);
+                } 
+                catch (error) 
+                {
+                    console.log(error);
+                }
+            }
+            res.status(200).send(results);
+        });
+    });
 });
 
 router.get('/details:userid', async(req, res) => 
@@ -340,84 +559,4 @@ router.post('/update_profile', async(req, res) =>
     })
     res.status(200).send("Profile Updated Successfully");
 });
-
-router.delete('/:id', async(req, res) => {
-    const posts = await loadUsersCollection();
-    await posts.deleteOne ({_id: new mongodb.ObjectID(req.params.id)}); 
-    res.status(200).send();
-});
-
-async function loadUsersCollection() {
-   /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
-        useUnifiedTopology: true, useNewUrlParser: true
-    });
-    return client.db('Matcha').collection('Users');*/
-
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true, useUnifiedTopology: true
-    });
-
-    return client.db('Matcha').collection('Users');
-    
-}
-
-async function loadUsersImages() {
-    /* const client = await mongodb.MongoClient.connect('mongodb+srv://pntsunts:19930813@cluster0-fkexu.mongodb.net/test?retryWrites=true&w=majority', {
-         useUnifiedTopology: true, useNewUrlParser: true
-     });
-     return client.db('Matcha').collection('Users');*/
- 
-     const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-         useNewUrlParser: true, useUnifiedTopology: true
-     });
- 
-     return client.db('Matcha').collection('Images');
-     
- }
-
-//interets
-
-router.post('/interests', async(req, res) => {
-    const posts = await loadInterestsCollection();
-    await posts.insertOne({
-        interest: req.body.interest,
-        text: req.body.text,
-        user_id: req.params.id,
-        createdAt: new Date()
-    });
-    res.status(201).send();
-});
-
-async function loadInterestsCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true
-    });
-
-    return client.db('Matcha').collection('interests');
-    
-}
-
-//Preferences
-
-router.post('/preference', async(req, res) => {
-    const posts = await loadpreferencesCollection();
-    await posts.insert ({
-        age: req.body.age,
-        rating: req.body.rating,
-        gender: req.body.gender,
-        language: req.body.language,
-        location: req.body.location,
-        interests: req.body.interests,
-        user_id: req.params.id
-    });
-    res.status(201).send('done');
-});
-
-async function loadpreferencesCollection() {
-    const client = await mongodb.MongoClient.connect('mongodb+srv://Peter:Tamarillo@12@cluster0-hqef0.mongodb.net/test?retryWrites=true&w=majority', {
-        useNewUrlParser: true
-    });
-
-    return client.db('Matcha').collection('preferences');
-}
 module.exports = router;
