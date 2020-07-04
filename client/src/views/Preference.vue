@@ -58,14 +58,21 @@
     </v-container>
     <v-container id="dropdown-example-2">
       <v-card-title>Location</v-card-title>
-        <v-overflow-btn
+        <v-autocomplete
         class="my-2"
         v-model="location"
         :items="results"
         label="Location preference"
         overflow
         target="#dropdown-example-2"
-        ></v-overflow-btn>
+        ref="auto"
+        ></v-autocomplete>
+      <input ref="input" />
+      <div id="location-window">
+        <img src="" width="16" height="16" id="place-icon">
+        <span id="place-name"  class="title"></span><br>
+        <span id="place-address"></span>
+      </div>
     </v-container>
 
     <v-divider class="mx-4"></v-divider>

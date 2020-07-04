@@ -1,12 +1,34 @@
-.parrallax
+.v-parallax
 {
     align-content: center;
     text-align: center;
+    overflow: hidden;
+    width: 100%;
+    padding: 0;
+} 
+.parent-container
+{
+    padding: 0;
+    height: auto;
+    width: 100%;
 }
 .signup
 {
     height: auto;
     padding-top: 50px;
+}
+.text-color
+{
+    color: #ff05cb;
+}
+.btn-position
+{
+    width: 100%;
+    text-align: center;
+}
+.btn-align
+{
+    margin: 0 auto;
 }
 .dotted-line.v-text-field>.v-input__control>.v-input__slot:before {
     border-style: dotted;
@@ -22,3 +44,12 @@
     border: 1px dotted;
     text-align: center;
 }
+
+@media screen and (max-width: 940px)
+{
+    .footer
+    {
+        margin-top: 180px;
+    }
+}
+

@@ -1,19 +1,20 @@
 <template>
-<v-container>
+<div class="parent-container">
 <v-parallax
   dark
-  src="../assets/home.jpg"
-  height= "1000"
-  class="parrallax"
+  src="../assets/first.jpg"
+  height="1100"
+  class="parallax"
+  breakpoint="(min-width: 80px)"
 >
 <v-row
   class="signup"
   justify="center"
 >
   <v-flex xs12 sm8 md4 >
-    <h1 class="display-3 mb-4">Welcome to Matcha</h1>
-    <h4 class="subheading font-weight-thin display-1">Want to find your perfect date today?</h4>
-    <v-btn v-on:click="Loginbtn" rounded color="deep-purple lighten-3" dark lg >Log in</v-btn>
+    <h1 class="text-color display-3 mb-4">Welcome to Matcha</h1>
+    <h4 class="text-color subheading font-weight-thin display-2">Want to find your perfect date today?</h4>
+    <v-btn v-on:click="Loginbtn" rounded color="pink accent-4" dark lg >Log in</v-btn>
   </v-flex>
   <v-flex xs8 sm8 md4 >
       <v-card>
@@ -117,17 +118,17 @@
                           class="dotted-line"
                       >
                       </v-text-field>
-                      <v-card-actions>
-                          <v-btn rounded color="deep-purple lighten-3" dark v-on:click="insertUser">Register</v-btn>
-                      </v-card-actions>
                   </v-form>
+                    <v-card-actions align="center" justify="center" class="btn-position">
+                      <v-btn class="btn-align" rounded dark v-on:click="insertUser">Register</v-btn>
+                    </v-card-actions>
               </v-card-text>
           </v-card>
   </v-flex>
 </v-row>
 
 </v-parallax>
-<v-card height="auto">
+<v-card height="auto" class="footer">
   <v-footer
     dark
     :padless="true"
@@ -137,7 +138,7 @@
       width="100%"
       flat
       tile
-      class="deep-purple lighten-3 white--text text-center"
+      class="lighten-3 white--text text-center"
     >
       <v-card-text>
         <v-btn
@@ -150,7 +151,7 @@
         </v-btn>
       </v-card-text>
       <v-card-text class="white--text pt-0">
- Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+This site is built to allow two potential lovers to meet. No bullshit.
       </v-card-text>
       <v-divider></v-divider>
       <v-card-text class="white--text">
@@ -159,7 +160,7 @@
     </v-card>
   </v-footer>
 </v-card>
-</v-container>
+</div>
 </template>
 <style src="../assets/css/signup.css" lang="css">
 </style>
