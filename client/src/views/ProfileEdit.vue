@@ -98,13 +98,17 @@
                     cols="12"
                     md="4"
                   >
+                  <v-container id="country-container">
                     <v-autocomplete
                       v-model="country"
                       :items="countries"
                       label="Country*"
                       placeholder="Select..."
                       required
+                      overflow
+                      target="#country-container"
                     ></v-autocomplete>
+                  </v-container>
                   </v-col>
                 </v-row>
                 <v-row>

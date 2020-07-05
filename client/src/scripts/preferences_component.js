@@ -1,4 +1,5 @@
 import PreferenceService from '../services/PreferenceService'
+import locations from '../services/MapLocationService'
 
 export default {
   name: 'Preference',
@@ -23,11 +24,30 @@ export default {
       alert(result.data)
     }
   },
-  mounted: {
-    results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
-      .then(result => result.json()).then(result => {
-      }, error => {
-        alert(error.message)
+  async mounted () {
+    try {
+      const google = await locations()
+      const location = new google.maps.places.Autocomplete(this.$refs['input'])
+      const info = new google.maps.InfoWindow()
+      const infoContent = document.getElementById('location-window')
+      info.setContent(infoContent)
+      location.addListener('place_changed', () => {
+        info.close()
+        let place = location.getPlace()
+        let address = ''
+        if (place.address_components) {
+          address = [
+            (place.address_components[0] && place.address_components[0].short_name),
+            (place.address_components[1] && place.address_components[0].short_name),
+            (place.address_components[2] && place.address_components[2].short_name)
+          ].join(' ')
+        }
+        infoContent.children['place-icon'].src = place.icon
+        infoContent.children['place-name'].textContent = place.name
+        infoContent.children['place-address'].textContent = address
       })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

@@ -42,7 +42,6 @@ export default {
       // }
       this.$emit('sendMessage', this.msg)
       console.log(this.msg)
-      this.msg = ''
     }
   }
 }
@@ -79,6 +78,7 @@ export default {
   flex: 1;
   height: 20vh;
   width: 100%;
+  overflow: scroll;
   background-color: whitesmoke;
 }
 .message {
@@ -110,6 +110,5 @@ input {
 }
 .message-text {
   height: 35px;
-  background-color:orangered;
 }
 </style>
