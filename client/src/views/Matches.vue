@@ -1,34 +1,11 @@
 <template>
-        <v-container fluid>
+<v-container fluid>
+        <div id="users" class="columns">
           <v-row>
-            <v-col
-              v-for="n in 9"
-              :key="n"
-              class="d-flex child-flex"
-              cols="2"
-            >
-              <v-card>
-                <v-img
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-                  aspect-ratio="1.5"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
-                >
-                  <template v-slot:placeholder>
-                    <v-row
-                      class="fill-height ma-0"
-                      align="center"
-                      justify="center"
-                    >
-                      <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                    </v-row>
-                  </template>
-                  <v-card-title class="title">Khanyisa Mbukutshe</v-card-title>
-                   <v-card-subtitle>Happy Man</v-card-subtitle>
-                </v-img>
-                 <v-card-actions>
-        <v-rating
+          <v-col
+             v-for="posts in posts" :key="posts.user_id" class="d-flex child-flex"
+              cols="2">
+              <v-rating
           :value="2.5"
           dense
           half-increments
@@ -37,42 +14,50 @@
           background-color="purple lighten-3"
           color="purple"
         ></v-rating>
-              <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>mdi-chat</v-icon>
+              <v-card
+                   aspect-ratio="1.5"
+                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                  class="white--text align-end grey lighten-2">
+                  {{ posts.user_first_name}}
+                  {{ posts.user_last_name}}
+                  {{ posts.user_gender}}
+                  {{ posts.user_age}}
+                  <v-btn icon>
+                <v-icon>mdi-thumb-up-outline</v-icon>
               </v-btn>
-                 </v-card-actions>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+              <v-btn icon>
+                <v-icon>mdi-thumb-down</v-icon>
+              </v-btn>
+             </v-card>
+             </v-col>
+             </v-row>
+             </div>
+              </v-container>
 </template>
 <script>
-// import matches from '../scripts/matches_component'
-import axios from 'Axios'
+import axios from 'axios'
+import config from '../services/config'
 
-//export default 
-// {
-//   data: { 
-//     return( {
-//     res: ''
-//       })
-//     },
-      
-//   mounted() 
-//   {
-//      this.res =  axios.post("http://localhost:5000/api/posts/matches")
-//   }
-// }
-export default
-{
-  data: {
-    results: []
+export default {
+  name: 'users',
+
+  data () {
+    return {
+      posts: []
+    }
   },
-  mounted() {
-    axios.get("http://localhost:5000/api/posts/matches")
-    .then(response => {this.results = response.data.results})
-  }
-};
 
+  methods: {
+    async loadPosts () {
+      let response = await axios.get(`${config.apiUrl}`)
+      this.posts = response.data
+    }
+  },
+  mounted () {
+    this.loadPosts()
+  }
+}
 </script>
+<style scoped>
+
+</style>

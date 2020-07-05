@@ -9,6 +9,22 @@ const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
+router.get('/matches', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+        {
+        if (error) console.log(error);
+        var sql = "SELECT * FROM Matcha_Users WHERE 1";
+        
+    connect.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log(result);
+          res.send(result)
+          //res.render('Matches.vue')
+        });
+      });
+})
+
 //User
 router.post('/register_user', async(req, res) => 
 {
@@ -40,6 +56,13 @@ router.post('/register_user', async(req, res) =>
                     res.status(200).send(results);
                     return;
                 }
+                Connection.con.connect(function(err) {
+                    if(err) throw err;
+                    Connection.con.query("SELECT * `FROM Matcha_Users` WHERE 1", function(err, result, fields){
+                        if (err) throw err;
+                        console.log(result);
+                    })
+                })
                 console.log("hihihi")
                 let transporter = nodemailer.createTransport({
                     service: 'gmail.com',
@@ -280,7 +303,7 @@ router.post('/insert_language', async(req, res) =>
                 });
             });
         });
-        res.status(200).send({data:"okay"});
+        res.status(200).send({data:"Okay"});
         connect.release();
     });
 
