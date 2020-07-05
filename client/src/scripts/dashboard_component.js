@@ -8,6 +8,7 @@ import Settings from '../views/Settings'
 import Chat from '../views/Chat'
 import Upload from '../views/dialog'
 import EventBus from '../services/event_bus'
+import Alert from '../components/alert'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
@@ -19,6 +20,9 @@ Vue.component('Edit', Edit)
 Vue.component('Upload Photo', Upload)
 export default {
   name: 'Dashboard',
+  components: {
+    Alert
+  },
   data () {
     return {
       dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'],

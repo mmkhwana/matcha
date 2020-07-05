@@ -21,7 +21,8 @@ export default {
       users: [],
       username: '',
       pass: '',
-      error: ''
+      error: '',
+      progress: false
     }
   },
   beforeCreate () {
@@ -34,6 +35,7 @@ export default {
       this.error = ''
       this.checkForm()
       if (!this.error.length) {
+        this.progress = true
         try {
           const users = (await LoginService.userLogin(this.username, this.pass))[0]
           if (users === 'notfound') {
@@ -46,8 +48,10 @@ export default {
             this.$session.set('userid', users[Table.User.userId])
             router.push({ name: 'Dashboard' })
           }
+          this.progress = false
         } catch (error) {
-          this.error = error
+          this.error = 'Incorrect username or password.'
+          this.progress = false
         }
       }
     },

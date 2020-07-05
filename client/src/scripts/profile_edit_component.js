@@ -1,4 +1,5 @@
 import UserProfileService from '../services/UserProfileService'
+import EventBus from '../services/event_bus'
 import gallery from '../components/gallery'
 import Table from '../services/tables'
 import Constant from '../services/constants'
@@ -20,6 +21,7 @@ export default {
       selection: [],
       languages: [],
       interests: [],
+      progress: false,
       defaultInterests: [],
       defaultLanguages: [],
       toInterest: [],
@@ -91,6 +93,7 @@ export default {
   methods: {
     async updateProfile () {
       try {
+        this.progress = true
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
           this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
           this.items[4].value, this.street, this.postcode, this.city, this.country, this.state,
@@ -98,7 +101,10 @@ export default {
         await UserProfileService.insertInterest(this.interests, this.$session.get('userid'))
         await UserProfileService.insertLanguage(this.languages, this.$session.get('userid'))
         this.success = results
-        this.dialog = false
+        if (results) {
+          this.progress = false
+          EventBus.$emit('sendText', 'Profile Updated Successfully.')
+        }
       } catch (error) {
         console.log(error)
       }

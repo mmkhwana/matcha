@@ -1,5 +1,7 @@
 import PreferenceService from '../services/PreferenceService'
 import locations from '../services/MapLocationService'
+import Interests from '../jsons/interests'
+import EventBus from '../services/event_bus'
 
 export default {
   name: 'Preference',
@@ -15,16 +17,29 @@ export default {
       languages: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
       gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }],
       results: [],
-      city: ''
+      city: '',
+      interests: [],
+      defaultInterests: []
     }
   },
   methods: {
     async sendData () {
-      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, this.location, this.interests, 1)
-      alert(result.data)
+      alert(JSON.stringify(this.interests))
+      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, 'Tabankulu', this.interests, this.$session.get('userid'))
+      EventBus.$emit('sendText', result.data)
+    },
+    remove (index) {
+      this.interests.splice(index, 1)
+    },
+    addInterest (item) {
+      const res = this.interests.filter(inter => inter === item)
+      if (!res.includes(item)) {
+        this.interests.push(item)
+      }
     }
   },
   async mounted () {
+    this.defaultInterests = Interests
     try {
       const google = await locations()
       const location = new google.maps.places.Autocomplete(this.$refs['input'])

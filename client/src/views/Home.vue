@@ -120,7 +120,9 @@
                       </v-text-field>
                   </v-form>
                     <v-card-actions align="center" justify="center" class="btn-position">
-                      <v-btn class="btn-align" rounded dark v-on:click="insertUser">Register</v-btn>
+                      <v-btn class="btn-align" rounded dark v-on:click="insertUser" v-if="!progress">Register</v-btn>
+                      <v-progress-circular class="btn-align" indeterminate color="green" v-else>
+                      </v-progress-circular>
                     </v-card-actions>
               </v-card-text>
           </v-card>

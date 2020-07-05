@@ -38,9 +38,12 @@
           <v-btn
             rounded outlined color="success"
             @click="save"
+            v-if="!progress"
           >
             save
           </v-btn>
+          <v-progress-circular indeterminate color="green" v-else>
+          </v-progress-circular>
         </v-card-actions>
       </v-card>
     </v-card>

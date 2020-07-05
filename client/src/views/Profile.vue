@@ -40,6 +40,7 @@
                     <v-text-field
                       v-model="postcode"
                       label="Post Code"
+                      prepend-icon="mdi-numeric-4-box-multiple-outline"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -52,6 +53,7 @@
                     <v-text-field
                       v-model="city"
                       label="City*"
+                      prepend-icon="mdi-city"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -63,6 +65,7 @@
                     <v-text-field
                       v-model="country"
                       label="Country*"
+                      prepend-icon="mdi-flag-checkered"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -75,6 +78,7 @@
                     <v-text-field
                       v-model="state"
                       label="State/Province/Region*"
+                      prepend-icon="mdi-home-map-marker"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>

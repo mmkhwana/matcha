@@ -559,4 +559,140 @@ router.post('/update_profile', async(req, res) =>
     })
     res.status(200).send("Profile Updated Successfully");
 });
+
+router.post('/set_preferences', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return;
+        connect.beginTransaction((error) =>
+        {
+            let params = [
+                req.body.gender,
+                req.body.age,
+                req.body.location,
+                req.body.rating,
+                req.body.userId,
+                req.body.language,
+            ];
+            connect.query(sql.select.preferences.all, req.body.userId, (error, results) =>
+            {
+                if (error)
+                {
+                    connect.rollback(() =>
+                    {
+                        res.send(error);
+                    });
+                    return;
+                }
+                if (!results[0])
+                {
+                    connect.query(sql.insert.preferences.fields, params, (error, results, fields) =>
+                    {
+                        if (error)
+                        {
+                            connect.rollback((error) =>
+                            {
+                                res.status(200).send(error);
+                                 return; 
+                            });
+                        }
+                        let pref_arr = req.body.Interests
+                        pref_arr.forEach(interest =>
+                        {
+                            let params = [
+                                interest,
+                                req.body.userId
+                            ];
+                            let param = [
+                                interest,
+                                req.body.userId,
+                                results.insertId
+                            ];
+                            connect.query(sql.select.Pref_interest.check, params, (error, results) =>
+                            {
+                                if (error)
+                                {
+                                    connect.rollback(() =>
+                                    {
+                                        res.send(error);
+                                    });
+                                    return;
+                                }
+                                if (!results[0])
+                                {
+                                    connect.query(sql.insert.Pref_interest.fields, param, (error, results) => 
+                                    {
+                                        if (error)
+                                        {
+                                            connect.rollback(() =>
+                                            {
+                                                res.send(err)
+                                            });
+                                            return;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+                }
+
+            });
+
+        });
+        connect.commit((error) => 
+        {
+            if (error)
+            {
+                connect.rollback(() =>
+                {
+                    res.send(error);
+                    return;
+                });
+            }
+        });
+        connect.release();
+        res.send("Saved successfully.")
+    });
+});
+
+router.post('/remove_preference', async(req, res) =>
+{
+    Connection.con.getConnection((err, connect) =>
+    {
+        if (err)
+            return;
+        connect.beginTransaction((err) =>
+        {
+            if (err)
+            {
+                res.send(err)
+                return;
+            }
+            let interests = req.body.Interests;
+            interests.forEach(interest =>
+            {
+                let params = [
+                    interest,
+                    req.body.userId
+                ];
+            });
+        });
+        connect.commit((err) =>
+        {
+            if (err)
+            {
+                connect.rollback(() =>
+                {
+                    res.send(err);
+                });
+                return;
+            }
+        });
+        connect.release();
+    });
+    res.status(200).send('ok'); 
+});
 module.exports = router;

@@ -12,7 +12,7 @@
     v-for="(n, position) in pictures"
     :key="position"
     cols="2"
-    sm="5"
+    sm="3"
     class="images-flex"
 >
 <v-hover v-slot:default="{ hover }">

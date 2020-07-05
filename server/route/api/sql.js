@@ -20,6 +20,15 @@ module.exports = {
         {
             all: `SELECT * FROM Matcha_Images WHERE user_id = ? ORDER BY image_role DESC`,
             profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`
+        },
+        preferences:
+        {
+            all: `SELECT * FROM Matcha_User_preferences WHERE user_id = ?`
+        },
+        Pref_interest:
+        {
+            all: `SELECT * FROM Preferred_interest WHERE user_id = ?`,
+            check: `SELECT * FROM Preferred_interest WHERE pref_interest_name = ? AND user_id = ?`
         }
     },
     update:
@@ -80,6 +89,14 @@ module.exports = {
         image:
         {
             fields: `INSERT INTO Matcha_Images (image_link, image_name, image_role, user_id) VALUES (?, ?, ?, ?)`
+        },
+        preferences:
+        {
+            fields: `INSERT INTO Matcha_User_preferences (preferred_gender, pref_age, preferred_location, preferred_user_rating, user_id, pref_lang) VALUES (?,?,?,?,?,?)`
+        },
+        Pref_interest:
+        {
+            fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
         }
     }
 }

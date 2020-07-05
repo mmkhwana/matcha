@@ -29,7 +29,8 @@ export default {
       ],
       gender_type: [{ text: 'Female' }, { text: 'Male' }, { text: 'Lesbian' }, { text: 'Gay' }],
       gender: '',
-      age: 0
+      age: 0,
+      progress: false
     }
   },
   beforeCreate () {
@@ -46,6 +47,7 @@ export default {
       this.error = ''
       this.checkForm()
       if (!this.error.length) {
+        this.progress = true
         let year = new Date().getFullYear()
         let birthYear = new Date(this.date).getFullYear()
         this.age = year - birthYear
@@ -55,9 +57,10 @@ export default {
           var respond = await SignupService.registerUser(this.gender, this.firstname, this.lastname, this.username, this.email, this.age, this.pass, this.confirm)
           this.response = respond
           if (this.response === 'User Registered') {
+            this.progress = false
             router.push({ name: 'Login' })
           } else {
-            this.error = this.response
+            this.error = 'Not registered. Please try again or check the internet connection!'
           }
         }
       }
