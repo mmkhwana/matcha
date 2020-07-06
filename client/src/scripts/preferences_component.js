@@ -1,4 +1,7 @@
 import PreferenceService from '../services/PreferenceService'
+import locations from '../services/MapLocationService'
+import Interests from '../jsons/interests'
+import EventBus from '../services/event_bus'
 
 export default {
   name: 'Preference',
@@ -14,23 +17,52 @@ export default {
       languages: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
       gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }],
       results: [],
-      city: ''
+      city: '',
+      interests: [],
+      defaultInterests: []
     }
   },
   methods: {
     async sendData () {
-      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, this.location, this.interests, 1)
-      alert(result.data)
+      alert(JSON.stringify(this.interests))
+      let result = await PreferenceService.sendData(this.item, this.rating, this.gender, this.language, 'Tabankulu', this.interests, this.$session.get('userid'))
+      EventBus.$emit('sendText', result.data)
+    },
+    remove (index) {
+      this.interests.splice(index, 1)
+    },
+    addInterest (item) {
+      const res = this.interests.filter(inter => inter === item)
+      if (!res.includes(item)) {
+        this.interests.push(item)
+      }
     }
   },
-  watch: {
-    results: fetch('https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=AIzaSyBlt9Sp7yGY_zrXiZx5NDQJS6lb17r4jco')
-      .then(result => result.json()).then(result => {
-        result.forEach(element => {
-          this.results.push(element.address.country)
-        })
-      }, error => {
-        alert(error.message)
+  async mounted () {
+    this.defaultInterests = Interests
+    try {
+      const google = await locations()
+      const location = new google.maps.places.Autocomplete(this.$refs['input'])
+      const info = new google.maps.InfoWindow()
+      const infoContent = document.getElementById('location-window')
+      info.setContent(infoContent)
+      location.addListener('place_changed', () => {
+        info.close()
+        let place = location.getPlace()
+        let address = ''
+        if (place.address_components) {
+          address = [
+            (place.address_components[0] && place.address_components[0].short_name),
+            (place.address_components[1] && place.address_components[0].short_name),
+            (place.address_components[2] && place.address_components[2].short_name)
+          ].join(' ')
+        }
+        infoContent.children['place-icon'].src = place.icon
+        infoContent.children['place-name'].textContent = place.name
+        infoContent.children['place-address'].textContent = address
       })
+    } catch (error) {
+      console.log(error)
+    }
   }
 }

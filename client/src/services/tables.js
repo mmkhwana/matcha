@@ -29,6 +29,7 @@ export default {
   },
   Images: {
     id: 'image_id',
+    name: 'image_name',
     link: 'image_link',
     role: 'image_role',
     userId: 'user_id'

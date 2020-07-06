@@ -1,4 +1,6 @@
 import UserProfileService from '../services/UserProfileService'
+import EventBus from '../services/event_bus'
+import gallery from '../components/gallery'
 import Table from '../services/tables'
 import Constant from '../services/constants'
 import Interests from '../jsons/interests'
@@ -10,12 +12,16 @@ Vue.use(VueSession)
 
 export default {
   name: 'Profile Edit',
+  components: {
+    gallery
+  },
   data () {
     return {
       pictures: [],
       selection: [],
       languages: [],
       interests: [],
+      progress: false,
       defaultInterests: [],
       defaultLanguages: [],
       toInterest: [],
@@ -42,7 +48,9 @@ export default {
       modal: false,
       dialogBox: false,
       username: '',
-      countries: []
+      countries: [],
+      race: ['Black', 'Mix Race', 'White', 'Indian', 'Chineese'],
+      relations: ['Single', 'In a Relationship', 'Engaged', 'Married', 'Seperated', 'Divorced', 'Widowed', 'Complicated']
     }
   },
   props: {
@@ -81,12 +89,11 @@ export default {
     output.forEach(interest => {
       this.interests.push(interest[Table.Interests.name])
     })
-    const pics = await UserProfileService.readImages(this.username)
-    this.pictures = pics.data
   },
   methods: {
     async updateProfile () {
       try {
+        this.progress = true
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
           this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
           this.items[4].value, this.street, this.postcode, this.city, this.country, this.state,
@@ -94,27 +101,41 @@ export default {
         await UserProfileService.insertInterest(this.interests, this.$session.get('userid'))
         await UserProfileService.insertLanguage(this.languages, this.$session.get('userid'))
         this.success = results
-        this.dialog = false
+        if (results) {
+          this.progress = false
+          EventBus.$emit('sendText', 'Profile Updated Successfully.')
+        }
       } catch (error) {
         console.log(error)
       }
     },
-    close (index) {
-      this.languages.splice(index, 1)
+    async removeLanguage (index, item) {
+      try {
+        this.languages.splice(index, 1)
+        await UserProfileService.removeLanguage(item, this.$session.get('userid'))
+      } catch (error) {
+        console.log(error)
+      }
     },
-    removeInterest (index) {
-      this.interests.splice(index, 1)
+    async removeInterest (index, item) {
+      try {
+        this.interests.splice(index, 1)
+        alert(item)
+        await UserProfileService.removeInterest(item, this.$session.get('userid'))
+      } catch (error) {
+        console.log(error)
+      }
     },
     addLanguage () {
-      let res = this.languages.filter(lang => lang === this.lang)
-      if (this.lang && (res !== this.lang)) {
+      const res = this.languages.filter(lan => lan === this.lang)
+      if (this.lang && !res.includes(this.lang)) {
         this.languages.push(this.lang)
         this.lang = ''
       }
     },
     addInterest () {
-      let res = this.interests.filter(interest => interest === this.interest)
-      if (this.interest && (res !== this.interest)) {
+      const res = this.interests.filter(interest => interest === this.interest)
+      if (this.interest && !res.includes(this.interest)) {
         this.interests.push(this.interest)
         this.interest = ''
       }
@@ -126,7 +147,10 @@ export default {
     addOject (key, value) {
       this.$set(this.profileObj, key, value)
     },
-    upload () {
+    updatePictures (pictures) {
+      this.pictures = pictures
+    },
+    upload (pictures) {
       if (this.pictures.length < 5) {
         this.$root.$emit('Upload')
         this.$destroy()

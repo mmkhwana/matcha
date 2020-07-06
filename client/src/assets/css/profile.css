@@ -1,0 +1,62 @@
+.languages
+{
+  background: #fff;
+  padding: 0;
+  overflow: hidden;
+}
+.dialog-style
+{
+  width: 400px;
+}  
+.v-card.images-flex:not(.on-hover) 
+{
+    cursor: pointer;
+}
+
+.v-card.images-flex:hover
+{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.show-btns 
+{
+    color: rgba(255, 255, 255, 1) !important;
+}
+
+.show-dele-btns 
+{
+    color: red !important;
+}
+
+.show-set-btns 
+{
+    color: green !important;
+}
+
+.preview-image
+{
+    padding: 10px;
+    background-color: #fbf7ff;
+    border-radius: 15px;
+}
+
+@media only screen and (min-width: 900px)
+{
+    .images-flex
+    {
+        text-align: center;
+        display: inline-block;
+        flex-wrap: wrap;
+    }
+    .image-block
+    {
+        display: inline-block;
+        flex-wrap: wrap;
+    }
+    .image-width
+    {
+        min-width: 150px;
+        min-height: 150px;
+    }
+}

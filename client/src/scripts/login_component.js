@@ -21,7 +21,8 @@ export default {
       users: [],
       username: '',
       pass: '',
-      error: ''
+      error: '',
+      progress: false
     }
   },
   beforeCreate () {
@@ -34,20 +35,23 @@ export default {
       this.error = ''
       this.checkForm()
       if (!this.error.length) {
+        this.progress = true
         try {
           const users = (await LoginService.userLogin(this.username, this.pass))[0]
-          if (users[Table.User.userName]) {
+          if (users === 'notfound') {
+            this.error = 'user doesn\'t exists.'
+          } else if (users[Table.User.userName]) {
             this.$session.start()
             this.$session.set('firstname', users[Table.User.firstName])
             this.$session.set('lastname', users[Table.User.lastName])
             this.$session.set('username', users[Table.User.userName])
             this.$session.set('userid', users[Table.User.userId])
             router.push({ name: 'Dashboard' })
-          } else {
-            this.error = 'Incorrect Credentials. Please try Again.'
           }
+          this.progress = false
         } catch (error) {
-          this.error = 'Incorrect Credentials. Please try Again.'
+          this.error = 'Incorrect username or password.'
+          this.progress = false
         }
       }
     },

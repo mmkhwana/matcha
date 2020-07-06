@@ -8,41 +8,9 @@
             </v-btn>
         </v-col>
     </v-row>
-    <v-row
-    align="center"
-    justify="center"
-    class="d-flex flex-row mb-6"
-    >
-    <v-col
-    v-for="n in pictures"
-    :key="n"
-    class="d-flex flex-column mb-6"
-    cols="2"
-    >
-    <v-card>
-    <v-img
-    :src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
-    :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n}`'
-    aspect-ratio='1.5'
-    gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
-    class='white--text align-end grey lighten-2'
-    >
-      <template v-slot:placeholder>
-        <v-row
-        class="fill-height ma-0"
-        align="center"
-        justify="center"
-        >
-          <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-        </v-row>
-      </template>
-    </v-img>
-    </v-card>
-    </v-col>
-    </v-row>
+    <gallery/>
     </v-container>
     <v-divider class="mx-4"></v-divider>
-
     <v-card-text>
     <v-row
     align="center"
@@ -58,7 +26,7 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="address"
+                      v-model="street"
                       label="Street Address*"
                       :disabled="true"
                       prepend-icon="mdi-map-marker"
@@ -72,6 +40,7 @@
                     <v-text-field
                       v-model="postcode"
                       label="Post Code"
+                      prepend-icon="mdi-numeric-4-box-multiple-outline"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -84,6 +53,7 @@
                     <v-text-field
                       v-model="city"
                       label="City*"
+                      prepend-icon="mdi-city"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -95,6 +65,7 @@
                     <v-text-field
                       v-model="country"
                       label="Country*"
+                      prepend-icon="mdi-flag-checkered"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -107,6 +78,7 @@
                     <v-text-field
                       v-model="state"
                       label="State/Province/Region*"
+                      prepend-icon="mdi-home-map-marker"
                       :disabled="true"
                     ></v-text-field>
                   </v-col>
@@ -177,6 +149,8 @@
     </v-card-actions>
     </v-card>
 </template>
+<style scoped src="../assets/css/profile.css" lang="css">
+</style>
 <script>
 import profile from '../scripts/profile_component'
 export default profile

@@ -42,7 +42,7 @@
           color="purple"
         ></v-rating>
 
-        <div class="grey--text ml-3">({{rating}})</div>
+        <div class="grey--text ml-3">({{ rating }})</div>
       </v-row>
     </v-card-text>
     <v-container id="dropdown-example-2">
@@ -58,36 +58,62 @@
     </v-container>
     <v-container id="dropdown-example-2">
       <v-card-title>Location</v-card-title>
-        <v-overflow-btn
+        <v-autocomplete
         class="my-2"
         v-model="location"
         :items="results"
         label="Location preference"
         overflow
         target="#dropdown-example-2"
-        ></v-overflow-btn>
+        ref="auto"
+        ></v-autocomplete>
+      <input ref="input"/>
+      <div id="location-window">
+        <img src="" width="16" height="16" id="place-icon">
+        <span id="place-name"  class="title"></span><br>
+        <span id="place-address"></span>
+      </div>
     </v-container>
 
     <v-divider class="mx-4"></v-divider>
 
-    <v-card-title>Interest</v-card-title>
+    <v-row>
+      <v-col cols="10" class="text-left">
+        <v-card-title>Interest(s)</v-card-title>
+      </v-col>
+      <v-col cols="2" class="text-right">
+          <v-menu top left transittion="scroll-x-reverse-transition" max-height='300px'>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus-circle-outline</v-icon>
+              </v-btn>
+            </template>
 
+            <v-list
+              class="menu-interests"
+              v-for="(item, i) in defaultInterests"
+              :key="i"
+            >
+              <v-list-item
+                link
+                v-on:click="addInterest(item)"
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+      </v-col>
+    </v-row>
     <v-card-text>
-      <v-chip-group
-        active-class="deep-purple accent-4"
-        column
-        multiple
-      >
-        <v-chip filter outlined>Going out</v-chip>
-
-        <v-chip filter outlined>Drinking</v-chip>
-
-        <v-chip filter outlined>Smoking</v-chip>
-
-        <v-chip filter outlined>Tattoos</v-chip>
-
-        <v-chip filter outlined>Some Nice honeys</v-chip>
-      </v-chip-group>
+      <v-row>
+        <v-col
+          v-for="(name, i) in interests"
+          :key="i"
+          class="shrink"
+        >
+          <v-chip close filter outlined v-on:click:close="remove(i)">{{ name }}</v-chip>
+        </v-col>
+      </v-row>
     </v-card-text>
 
     <v-card-actions>
@@ -101,6 +127,8 @@
     </v-card-actions>
   </v-card>
 </template>
+<style scoped src='../assets/css/pref.css' lang='css'>
+</style>
 <script>
 import preferences from '../scripts/preferences_component'
 export default preferences
