@@ -11,7 +11,7 @@ import Vue from 'vue'
 Vue.use(VueSession)
 
 export default {
-  name: 'Profile Edit',
+  name: 'Edit',
   components: {
     gallery
   },

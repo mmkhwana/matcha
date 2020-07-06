@@ -7,6 +7,7 @@
         width="100%"
         prominent
         elevation="10"
+        shrink-on-scroll
         fixed
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>

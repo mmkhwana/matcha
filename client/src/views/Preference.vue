@@ -5,7 +5,7 @@
      <v-container id="dropdown-example-1">
        <v-card-title>Age</v-card-title>
         <v-overflow-btn
-        v-model="item"
+        v-model="age"
         :items="dropdown_icon"
         label=""
         target = "#dropdown-example-1"
@@ -111,7 +111,7 @@
           :key="i"
           class="shrink"
         >
-          <v-chip close filter outlined v-on:click:close="remove(i)">{{ name }}</v-chip>
+          <v-chip close filter outlined v-on:click:close="remove(i, name)">{{ name }}</v-chip>
         </v-col>
       </v-row>
     </v-card-text>
@@ -119,7 +119,7 @@
     <v-card-actions>
       <v-row>
         <v-col cols="12" class="text-right">
-          <v-btn rounded outlined color="success" v-on:click="sendData">
+          <v-btn rounded outlined color="success" v-on:click="prefId === -404 ? sendData() : updatePref()">
             <v-icon left>mdi-check</v-icon>save
           </v-btn>
         </v-col>
