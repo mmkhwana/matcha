@@ -32,6 +32,8 @@ export default {
     this.defaultInterests = Interests
     this.getPreferences()
     this.getPrefInterests()
+    var d = this.distance_for_two_people(-26.172134388860822, 27.880723951255362, -26.204661, 28.040053, 'K')
+    console.log(d)
   },
   methods: {
     async getPreferences () {
@@ -108,6 +110,24 @@ export default {
       if (!res.includes(item)) {
         this.interests.push(item)
       }
-    }
+    },
+    distance_for_two_people (lat1, lon1, lat2, lon2, unit) {
+      var radlat1 = Math.PI * lat1 / 180
+      var radlat2 = Math.PI * lat2 / 180
+      var theta = lon1 - lon2
+      var radtheta = Math.PI * theta / 180
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+      dist = Math.acos(dist)
+      dist = dist * 180 / Math.PI
+      dist = dist * 60 * 1.1515
+      if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error messege' }
+      return dist
+    },
+    result: fetch(navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var long = position.coords.longitude
+        var lat = position.coords.latitude
+        console.log(long, lat)
+      }))
   }
 }
