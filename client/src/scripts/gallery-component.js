@@ -1,4 +1,5 @@
 import GalleryService from '../services/GalleryService'
+import Constant from '../services/constants'
 import Table from '../services/tables'
 import EventBus from '../services/event_bus'
 import VueSession from 'vue-session'
@@ -26,8 +27,8 @@ export default {
     images.forEach(row => {
       this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })
     })
-    this.$emit('imagesList', this.pictures)
-    EventBus.$emit('profile', this.pictures[0].name)
+    this.$emit(Constant.ImageList, this.pictures)
+    EventBus.$emit(Constant.Profile, this.pictures[0].name)
   },
   methods: {
     removePicture (picname, index) {
@@ -40,11 +41,18 @@ export default {
     },
     setProfile (picname, index) {
       try {
-        EventBus.$emit('profile', picname)
-        let oldId = this.pictures.filter(images => images.role === 'profile')
-        oldId[0].role = 'none'
-        this.pictures[index].role = 'profile'
-        GalleryService.setProfilePic(oldId[0].id, this.pictures[index].id, this.userid)
+        EventBus.$emit(Constant.Profile, picname)
+        let results = this.pictures.filter(images => images.role === Constant.Profile)
+        if (!results[0]) {
+          this.pictures[index].role = Constant.Profile
+          GalleryService.setProfile(this.pictures[index].id)
+        } else {
+          let oldId = this.pictures.filter(images => images.role === Constant.Profile)
+          let indexOld = this.pictures.indexOf(oldId[0])
+          this.pictures[indexOld].role = Constant.NotProfile
+          this.pictures[index].role = Constant.Profile
+          GalleryService.setProfilePic(this.pictures[indexOld].id, this.pictures[index].id, this.userid)
+        }
       } catch (err) {
         console.log(err)
       }
@@ -52,7 +60,7 @@ export default {
     previewImage (picname) {
       try {
         this.dialog = true
-        this.image = 'http://localhost:5000/api/posts/uploads/' + this.username + '/' + picname
+        this.image = Constant.URL + Constant.Uploads + '/' + this.username + '/' + picname
       } catch (err) {
         console.log(err)
       }

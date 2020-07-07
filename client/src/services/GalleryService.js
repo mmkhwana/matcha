@@ -13,6 +13,10 @@ class GalleryService {
   static setProfilePic (oldId, newId, userId) {
     return General.PostExecution(Constant.SetProfilePic, { oldId, newId, userId })
   }
+
+  static setProfile (imageId) {
+    return General.PostExecution(Constant.SetProfile, { imageId })
+  }
 }
 
 export default GalleryService

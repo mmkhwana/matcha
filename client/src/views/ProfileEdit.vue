@@ -17,9 +17,11 @@
               </v-container>
             </v-col>
           <v-col cols="6" class="text-right">
-            <v-btn rounded outlined color="success">
+            <v-btn rounded outlined color="success" v-on:click="updateProfile" v-if="!progress">
               <v-icon left>mdi-check</v-icon>save
             </v-btn>
+            <v-progress-circular indeterminate color="green" v-else>
+            </v-progress-circular>
           </v-col>
       </v-row>
       <gallery @imagesList="updatePictures"/>
@@ -78,6 +80,7 @@
                       v-model="postcode"
                       label="Post Code"
                       type="number"
+                      prepend-icon="mdi-numeric-4-box-multiple-outline"
                       required
                     ></v-text-field>
                   </v-col>
@@ -90,6 +93,7 @@
                     <v-text-field
                       v-model="city"
                       label="City*"
+                      prepend-icon="mdi-city"
                       required
                     ></v-text-field>
                   </v-col>
@@ -98,13 +102,18 @@
                     cols="12"
                     md="4"
                   >
+                  <v-container id="country-container">
                     <v-autocomplete
                       v-model="country"
                       :items="countries"
+                      prepend-icon="mdi-flag-checkered"
                       label="Country*"
                       placeholder="Select..."
                       required
+                      overflow
+                      target="#country-container"
                     ></v-autocomplete>
+                  </v-container>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -116,6 +125,7 @@
                       v-model="state"
                       label="State/Province/Region*"
                       required
+                      prepend-icon="mdi-home-map-marker"
                     ></v-text-field>
                   </v-col>
 

@@ -8,6 +8,7 @@ import Settings from '../views/Settings'
 import Chat from '../views/Chat'
 import Upload from '../views/dialog'
 import EventBus from '../services/event_bus'
+import Alert from '../components/alert'
 import Vue from 'vue'
 Vue.use(VueSession)
 Vue.component('Preference', Preference)
@@ -16,9 +17,12 @@ Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
-Vue.component('Upload Photo', Upload)
+Vue.component('Upload', Upload)
 export default {
   name: 'Dashboard',
+  components: {
+    Alert
+  },
   data () {
     return {
       dropdown_icon: ['18-21', '22-25', '26-29', '30-33', '34-37'],
@@ -33,7 +37,20 @@ export default {
       check: null,
       profile: '',
       username: this.$session.get('username'),
-      fullname: this.$session.get('firstname') + ' ' + this.$session.get('lastname')
+      fullname: this.$session.get('firstname') + ' ' + this.$session.get('lastname'),
+      notifications: [
+        { message: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit' },
+        { message: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco' },
+        { message: 'Duis aute irure dolor in reprehenderit in voluptate' },
+        { message: 'Excepteur sint occaecat cupidatat non proident' }
+      ],
+      count: '0',
+      icons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram'
+      ]
     }
   },
   watch: {
@@ -56,7 +73,7 @@ export default {
         return 'Settings'
       } else if (this.titles === 'Chat') {
         return 'Chat'
-      } else if (this.titles === 'Profile Edit') {
+      } else if (this.titles === 'Edit') {
         return 'Edit'
       } else {
         return 'Profile'
@@ -73,6 +90,7 @@ export default {
     EventBus.$on('profile', (picname) => {
       this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`
     })
+    this.count = this.notifications.length
   },
   methods: {
     async changeTitles (titleName) {

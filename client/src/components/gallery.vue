@@ -12,7 +12,7 @@
     v-for="(n, position) in pictures"
     :key="position"
     cols="2"
-    sm="2"
+    sm="3"
     class="images-flex"
 >
 <v-hover v-slot:default="{ hover }">
@@ -22,6 +22,7 @@
     :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n.name}`'
     aspect-ratio='1.0'
     min-width="150px"
+    elevation="8"
     gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
     >
     <template v-slot:placeholder>

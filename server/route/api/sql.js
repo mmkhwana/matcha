@@ -22,9 +22,18 @@ module.exports = {
             all: `SELECT * FROM Matcha_Images WHERE user_id = ? ORDER BY image_role DESC`,
             profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`
         },
+        preferences:
+        {
+            all: `SELECT * FROM Matcha_User_preferences WHERE user_id = ?`
+        },
+        Pref_interest:
+        {
+            all: `SELECT * FROM Preferred_interest WHERE user_id = ?`,
+            check: `SELECT * FROM Preferred_interest WHERE pref_interest_name = ? AND user_id = ?`
+        },
         likes:
         {
-            row: `SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?`
+            all: `SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?`
         }
     },
     update:
@@ -50,7 +59,18 @@ module.exports = {
         },
         image:
         {
-            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
+            fields: `UPDATE Matcha_Images SET image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`,
+            field: `UPDATE Matcha_Images SET image_role = ? WHERE image_id = ?`
+        },
+        preferences:
+        {
+            fields: `UPDATE Matcha_User_preferences 
+            SET pref_age = ?,
+            preferred_gender = ?,
+            preferred_user_rating = ?,
+            pref_lang = ?,
+            preferred_location = ?
+            WHERE user_id = ?`
         }
     },
     delete: 
@@ -66,6 +86,10 @@ module.exports = {
         image:
         {
             row: `DELETE FROM Matcha_Images WHERE image_link = ? AND user_id = ?`
+        },
+        Pref_interest:
+        {
+            row: `DELETE FROM Preferred_interest WHERE pref_interest_name = ? AND user_id = ?`
         }
     },
     insert: 

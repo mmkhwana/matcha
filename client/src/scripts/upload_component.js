@@ -1,4 +1,5 @@
 import UserProfileService from '../services/UserProfileService'
+import EventBus from '../services/event_bus'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -7,7 +8,8 @@ export default {
   default () {
     return {
       file: null,
-      img: ''
+      img: '',
+      progress: false
     }
   },
   computed: {
@@ -29,12 +31,16 @@ export default {
       this.$destroy()
     },
     async save () {
+      this.progress = true
       var fileform = new FormData()
       fileform.append('userid', this.$session.get('userid'))
       fileform.append('file', this.file, this.file.name)
       fileform.append('username', this.$session.get('username'))
       var res = await UserProfileService.uploadImage(fileform)
-      alert(res.success)
+      if (res.success) {
+        EventBus.$emit('sendText', 'Image Uploaded Successfully')
+      }
+      this.progress = false
       this.$root.$emit('Edit')
       this.$destroy()
     }
