@@ -22,7 +22,7 @@
                   {{ posts.user_last_name}}
                   {{ posts.user_gender}}
                   {{ posts.user_age}}
-                  <v-btn icon>
+                  <v-btn icon v-on:click="like (posts.user_id)">
                 <v-icon>mdi-thumb-up-outline</v-icon>
               </v-btn>
               <v-btn icon>
@@ -35,29 +35,6 @@
               </v-container>
 </template>
 <script>
-import axios from 'axios'
-import config from '../services/config'
-
-export default {
-  name: 'users',
-
-  data () {
-    return {
-      posts: []
-    }
-  },
-
-  methods: {
-    async loadPosts () {
-      let response = await axios.get(`${config.apiUrl}`)
-      this.posts = response.data
-    }
-  },
-  mounted () {
-    this.loadPosts()
-  }
-}
+import matches from '../scripts/matches_component'
+export default matches
 </script>
-<style scoped>
-
-</style>

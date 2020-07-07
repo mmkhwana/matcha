@@ -32,15 +32,20 @@ export default {
     id: 'preferrence_id',
     age: 'pref_age',
     Gender: 'preferred_gender',
-    location : 'preferred_location',
-    profileRating : 'preferred_user_rating',
+    location: 'preferred_location',
+    profileRating: 'preferred_user_rating',
     userId: 'user_id',
-    pref_lang : 'pref_lang',
+    pref_lang: 'pref_lang'
   },
   Pref_interest: {
     id: 'pref_interest_id',
     name: 'pref_interest_name',
     userId: 'user_id',
-    prefence_id : 'preferrence_id',
+    prefence_id: 'preferrence_id'
+  },
+
+  Likes: {
+    userId: 'user_id',
+    liking: 'liking'
   }
 }

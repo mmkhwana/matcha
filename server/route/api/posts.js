@@ -25,6 +25,8 @@ router.get('/matches', async(req, res) =>
       });
 })
 
+//Faker
+
 //User
 router.post('/register_user', async(req, res) => 
 {
@@ -605,4 +607,85 @@ router.post('/set_preferences', async(req, res) =>
         });
     });
 });
+
+//likes
+
+router.get('/like', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        connect.beginTransaction((error) =>
+        {
+            if(error)
+                return;
+            
+            let params = [
+                req.body.liking
+            ];
+            let values = [
+                req.body.liking,
+                req.body.userId
+            ];
+            connect.query(sql.select.likes.row, values, (error, results) =>
+            {
+                if (error)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.send(error)
+                    });
+                    return;
+                }
+                if (!results[0])
+                {
+                    connect.query(sql.select.user.likes, params, (error, results) =>
+                    {
+                        if (error)
+                        {
+                            connect.rollback(() => 
+                            {
+                                res.send(error)
+                            });
+                            return;
+                        }
+                        if (results[0])
+                        {
+                            let likes = results[0].user_likes + 1;
+                            let param = [
+                                req.body.liking,
+                                likes
+                            ];
+                            connect.query(sql.insert.Likes.fields, param, (error, results, fields) => 
+                            {
+                                if (error)
+                                {
+                                    res.status(200).send(error);
+                                    return;
+                                }
+                                res.status(200).send(results);
+                            });
+        
+                        }
+        
+                    });
+                }
+            });
+           
+        });
+        connect.commit((error) => 
+        {
+            if (error)
+            {
+                connect.rollback((error) =>{
+                    res.send(error);
+                    return;
+                });
+            }
+            connect.release();
+            res.send("Ohk")
+        });
+    })
+});
+
+
 module.exports = router;
