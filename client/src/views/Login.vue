@@ -53,8 +53,10 @@
             </v-card-text>
             <v-container>
                 <v-card-actions justify="center">
-                    <v-btn class="btn-align" rounded  dark v-on:click="login">Log In
+                    <v-btn class="btn-align" rounded  dark v-on:click="login" v-if="!progress">Log In
                     </v-btn>
+                    <v-progress-circular class="btn-align" indeterminate color="green" v-else>
+                    </v-progress-circular>
                 </v-card-actions>
                 <v-card-actions>
                     <a href ="#" class="btn-align">Forget Password?</a>
