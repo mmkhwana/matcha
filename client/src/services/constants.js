@@ -27,5 +27,7 @@ export default {
   GetPrefInterests: 'get_pref_interest',
   SetPreferences: 'set_preferences',
   UpdatePreferences: 'update_preferences',
-  RemovePrefInterest: 'remove_pref_interest'
+  RemovePrefInterest: 'remove_pref_interest',
+  GetMatches: 'matches',
+  Like: 'like'
 }

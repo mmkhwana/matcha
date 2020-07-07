@@ -2,12 +2,12 @@
         <v-container fluid>
           <v-row>
             <v-col
-              v-for="n in 9"
-              :key="n"
+              v-for="user in posts"
+              :key="user"
               class="d-flex child-flex"
-              cols="2"
+              cols="4"
             >
-              <v-card>
+              <v-card elevation="8">
                 <v-img
                   :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
                   :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
@@ -24,23 +24,28 @@
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
                     </v-row>
                   </template>
-                  <v-card-title class="title">Khanyisa Mbukutshe</v-card-title>
-                   <v-card-subtitle>Happy Man</v-card-subtitle>
+                  <v-card-title class="title">{{ user.user_first_name + ' ' + user.user_last_name }}</v-card-title>
+                   <v-card-subtitle class="white--text">{{ user.user_age }}</v-card-subtitle>
                 </v-img>
                  <v-card-actions>
-        <v-rating
-          :value="2.5"
-          dense
-          half-increments
-          readonly
-          size="14"
-          background-color="purple lighten-3"
-          color="purple"
-        ></v-rating>
-              <v-spacer></v-spacer>
-              <v-btn icon>
-                <v-icon>mdi-chat</v-icon>
-              </v-btn>
+                  <v-rating
+                    :value="user.user_likes"
+                    dense
+                    half-increments
+                    readonly
+                    size="14"
+                    background-color="lime accent-3"
+                    color="lime accent-3"
+                  ></v-rating>
+                 </v-card-actions>
+                 <v-card-actions>
+                  <v-btn icon v-on:click="like(user.user_id)">
+                  <v-icon>mdi-thumb-up-outline</v-icon>
+                  </v-btn>
+                  <v-spacer></v-spacer>
+                  <v-btn icon>
+                    <v-icon>mdi-thumb-down</v-icon>
+                  </v-btn>
                  </v-card-actions>
               </v-card>
             </v-col>

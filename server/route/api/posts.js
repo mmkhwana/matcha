@@ -10,6 +10,23 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 //User
+
+router.get('/matches', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return;
+        connect.query(sql.select.matches.all, (error, result) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.send(result)
+        });
+    });
+});
+
 router.post('/register_user', async(req, res) => 
 {
     
@@ -809,4 +826,100 @@ router.post('/remove_pref_interest', async(req, res) =>
     });
     res.status(200).send('ok');
 });
+
+router.post('/like', async(req, res) =>
+ {
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        connect.beginTransaction((error) =>
+        {
+            if (error)
+                return;
+            let params = [
+                req.body.liking,
+                req.body.userId
+            ]
+            connect.query(sql.select.likes.all, params, (error, results) =>
+            {
+                if (error)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.send(error);
+                    });
+                    return;
+                }
+                if (!results[0])
+                {
+                    let param = [
+                        req.body.liking
+                    ];
+                    connect.query(sql.select.user.likes, param, (error, results) => 
+                    {
+                        if (error)
+                        {
+                            connect.rollback(() => 
+                            {
+                                res.send(error);
+                            });
+                            return;
+                        }
+                        if (results[0])
+                        {
+                            let likes = results[0].user_likes + 1;
+                            let values = [
+                                likes,
+                                req.body.liking 
+                            ]
+                            connect.query(sql.update.user.likes, values, (error, results) => 
+                            {
+                                if (error)
+                                {
+
+                                    connect.rollback(() => 
+                                    {
+                                        res.send(error);
+                                    });
+                                    return;
+                                }
+
+                            });
+                            let para = [
+                                req.body.liking,
+                                req.body.userId
+                            ];
+                            connect.query(sql.insert.Likes.fields, para, (error, results) =>
+                            {
+                                if (error)
+                                {
+
+                                    connect.rollback(() => 
+                                    {
+                                        res.send(error);
+                                    })
+                                    return;
+                                }
+                            });
+                        }
+                    });
+                }
+            })
+         
+        });
+        connect.commit((error) =>
+        {
+            if (error)
+            {
+                connect.rollback(() =>
+                {
+                    return;
+                });
+            }
+        });
+        connect.release();
+    });
+});
+
 module.exports = router;

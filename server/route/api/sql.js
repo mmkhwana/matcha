@@ -5,7 +5,7 @@ module.exports = {
         {
             details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
             login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
-            likes: `SELECT user_likes Matcha_Users WHERE user_id = ?`
+            likes: `SELECT user_likes FROM Matcha_Users WHERE user_id = ?`
         },
         interest :
         {
@@ -34,6 +34,10 @@ module.exports = {
         likes:
         {
             all: `SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?`
+        },
+        matches:
+        {
+            all: `SELECT * FROM Matcha_Users WHERE 1`
         }
     },
     update:
@@ -117,6 +121,10 @@ module.exports = {
         Pref_interest:
         {
             fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
+        },
+        Likes:
+        {
+            fields: `INSERT INTO Matcha_Likes (user_liked_id, user_liker_id) VALUES (?, ?)`
         }
     }
 }

@@ -93,7 +93,7 @@
     <v-container>
     <v-row>
     <v-col cols="12">
-     <template class="mx-auto scrolly" >
+     <template class="mx-auto scrolly">
        <keep-alive>
           <component :is="titles"></component>
        </keep-alive>

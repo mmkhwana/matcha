@@ -1,6 +1,7 @@
 .content-padding
 {
     padding-top: 120px;
+    min-height: 700px;
 }
 .nav-items-padding
 {
