@@ -862,7 +862,8 @@ router.post('/like', async(req, res) =>
                 if (!results[0])
                 {
                     let param = [
-                    req.body.liking]
+                    req.body.liking
+                ]
                     connect.query(sql.select.user.likes, param, (error, results) => {
                         if (error)
                         {
@@ -881,6 +882,7 @@ router.post('/like', async(req, res) =>
                             connect.query(sql.update.user.likes, values, (error, results) => {
                                 if (error)
                                 {
+
                                     connect.rollback(() => {
                                         res.send(error);
                                     })
@@ -888,6 +890,20 @@ router.post('/like', async(req, res) =>
                                 }
 
                             });
+                            let para = [
+                                req.body.liking,
+                                req.body.userId
+                            ]
+                            connect.query(sql.insert.Likes.fields, para, (error, results) =>{
+                                if (error)
+                                {
+
+                                    connect.rollback(() => {
+                                        res.send(error);
+                                    })
+                                    return;
+                                }
+                            } );
                         }
                     });
                 }
@@ -905,7 +921,6 @@ router.post('/like', async(req, res) =>
             }
         });
         connect.release();
-        res.status(200).send('ok');
     });
 });
 module.exports = router;

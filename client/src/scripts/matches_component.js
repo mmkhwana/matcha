@@ -19,10 +19,9 @@ export default {
       this.posts = response.data
     },
     async like (liking) {
-    
       let userId = this.$session.get('userid')
       try {
-        await axios.post(`${config.apiUrl}/like`, { liking, userId })
+        await axios.post(`http://localhost:5000/api/posts/like`, { liking, userId })
       } catch (error) {
         console.log(error)
       }
