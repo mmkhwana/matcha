@@ -49,6 +49,9 @@ export default {
       dialogBox: false,
       username: '',
       countries: [],
+      latitude: 0,
+      longitude: 0,
+      that: this,
       race: ['Black', 'Mix Race', 'White', 'Indian', 'Chineese'],
       relations: ['Single', 'In a Relationship', 'Engaged', 'Married', 'Seperated', 'Divorced', 'Widowed', 'Complicated']
     }
@@ -58,6 +61,7 @@ export default {
     interest: { type: String }
   },
   async mounted () {
+    this.that = this
     this.$root.$on('Edit', () => {
       this.titles = 'Edit'
     })
@@ -89,15 +93,24 @@ export default {
     output.forEach(interest => {
       this.interests.push(interest[Table.Interests.name])
     })
+    navigator.geolocation.getCurrentPosition(this.getSuccess)
   },
   methods: {
+    getSuccess  (position) {
+      this.getCoordinates(position.coords.latitude, position.coords.longitude)
+    },
+    getCoordinates (lati, longi) {
+      this.latitude = lati
+      this.longitude = longi
+    },
     async updateProfile () {
+      console.log(this.latitude + ' ' + this.longitude)
       try {
         this.progress = true
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
           this.biography, this.items[0].value, this.items[1].value, this.items[2].value, this.items[3].value,
           this.items[4].value, this.street, this.postcode, this.city, this.country, this.state,
-          this.$session.get('userid'), this.languages, this.interests)
+          this.$session.get('userid'), this.languages, this.interests, this.latitude, this.longitude)
         await UserProfileService.insertInterest(this.interests, this.$session.get('userid'))
         await UserProfileService.insertLanguage(this.languages, this.$session.get('userid'))
         this.success = results

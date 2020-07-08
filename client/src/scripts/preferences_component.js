@@ -1,5 +1,4 @@
 import PreferenceService from '../services/PreferenceService'
-import locations from '../services/MapLocationService'
 import Table from '../services/tables'
 import CheckAge from '../services/check_age'
 import Interests from '../jsons/interests'
@@ -12,6 +11,8 @@ export default {
   name: 'Preference',
   data: function () {
     return {
+      dist: ['50 ', '200', '500', '1000', 'more'],
+      distance: null,
       rating: 0.5,
       age: null,
       gender: null,
@@ -43,7 +44,7 @@ export default {
         this.gender = res[Table.Preference.gender]
         this.rating = parseInt(res[Table.Preference.rating])
         this.language = res[Table.Preference.lang]
-        this.location = res[Table.Preference.location]
+        this.distance = res[Table.Preference.location]
         if (this.age !== null) { this.prefId = parseInt(res[Table.Preference.id]) }
       } catch (error) {
         console.log(error)
@@ -62,38 +63,13 @@ export default {
     getUserSession () {
       return this.$session.get('userid')
     },
-    async getLocation () {
-      try {
-        const google = await locations()
-        const location = new google.maps.places.Autocomplete(this.$refs['input'])
-        const info = new google.maps.InfoWindow()
-        const infoContent = document.getElementById('location-window')
-        info.setContent(infoContent)
-        location.addListener('place_changed', () => {
-          info.close()
-          let place = location.getPlace()
-          let address = ''
-          if (place.address_components) {
-            address = [
-              (place.address_components[0] && place.address_components[0].short_name),
-              (place.address_components[1] && place.address_components[0].short_name),
-              (place.address_components[2] && place.address_components[2].short_name)
-            ].join(' ')
-          }
-          infoContent.children['place-icon'].src = place.icon
-          infoContent.children['place-name'].textContent = place.name
-          infoContent.children['place-address'].textContent = address
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async sendData () {
-      let result = await PreferenceService.sendData(this.age, this.rating, this.gender, this.language, 'Tabankulu', this.interests, this.$session.get('userid'))
+      let result = await PreferenceService.sendData(this.age, this.rating, this.gender, this.language, this.distance, this.interests, this.$session.get('userid'))
       EventBus.$emit('sendText', result.data)
     },
     async updatePref () {
-      await PreferenceService.updatePreferences(this.prefId, this.age, this.rating, this.gender, this.language, 'Tabankulu', this.interests, this.$session.get('userid'))
+      alert(this.distance)
+      await PreferenceService.updatePreferences(this.prefId, this.age, this.rating, this.gender, this.language, this.distance, this.interests, this.$session.get('userid'))
       EventBus.$emit('sendText', 'Saved successfully.')
     },
     async remove (index, interest) {
@@ -122,12 +98,6 @@ export default {
       dist = dist * 60 * 1.1515
       if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error messege' }
       return dist
-    },
-    result: fetch(navigator.geolocation.getCurrentPosition(
-      function (position) {
-        var long = position.coords.longitude
-        var lat = position.coords.latitude
-        console.log(long, lat)
-      }))
+    }
   }
 }

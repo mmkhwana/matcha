@@ -57,7 +57,9 @@ module.exports = {
              user_post_code = ?,
              user_city = ?,
              user_country = ?,
-             user_state = ?
+             user_state = ?,
+             user_latitude = ?,
+             user_longitude = ?
             WHERE user_id = ?`,
             likes: `UPDATE Matcha_Users SET user_likes = ? WHERE user_id = ?`
         },

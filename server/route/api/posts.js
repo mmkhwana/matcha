@@ -562,6 +562,8 @@ router.post('/update_profile', async(req, res) =>
             req.body.city,
             req.body.country,
             req.body.state,
+            req.body.latitude,
+            req.body.longitude,
             req.body.userid
         ];
         connect.query(sql.update.user.fields, params, (error, results)=>
