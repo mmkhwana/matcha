@@ -30,7 +30,8 @@ export default {
       }
     }
   },
-  mounted () {
+  async mounted () {
     this.loadPosts()
+    await Matches.matching(this.$session.get('userid'))
   }
 }

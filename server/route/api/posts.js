@@ -8,8 +8,22 @@ const router = express.Router();
 const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const { con } = require('./dbconnection');
 
 //User
+
+let distance_for_two_people = (lat1, lon1, lat2, lon2, unit) => {
+    var radlat1 = Math.PI * lat1 / 180
+    var radlat2 = Math.PI * lat2 / 180
+    var theta = lon1 - lon2
+    var radtheta = Math.PI * theta / 180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error messege' }
+    return dist
+  }
 
 router.get('/matches', async(req, res) =>
 {
@@ -921,6 +935,79 @@ router.post('/like', async(req, res) =>
             }
         });
         connect.release();
+    });
+});
+
+router.post('/matching', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        let sql = 'SELECT user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_id = ?';
+        let param = [
+            req.body.userId
+        ]
+        connect.query(sql, param, (error, results) =>
+        {
+            if (error)
+                return;
+            let lat = results[0].user_latitude;
+            let longi = results[0].user_longitude;
+            let sqlAll = 'SELECT user_id, user_age, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+            let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
+            let userDist = 0;
+            let age = 0;
+            let prefGender;
+            let prefLang;
+            connect.query(sqldist, param, (error, results) =>
+            {
+                if (error)
+                    return;
+                userDist = results[0].preferred_location;
+                age = results[0].pref_age;
+                prefGender = results[0].preferred_gender;
+                prefLang = results[0].pref_lang;
+            });
+            connect.query(sqlAll, param, (error, results) =>
+            {
+                if (error)
+                    return;
+                let users = results;
+                users.forEach(user =>
+                {
+                    let userId = user.user_id;
+                    let latitude = user.user_latitude;
+                    let longitude = user.user_longitude;
+                    let userAge = user.user_age;
+                    let userGender = user.user_gender;
+                    if (latitude != null)
+                    {
+                        let sqlLangs = 'SELECT lang_name FROM Matcha_User_Languages WHERE user_id = ?';
+                        var userLangs = [];
+                        let value = [
+                            userId
+                        ];
+                        connect.query(sqlLangs, value, (error, results) =>
+                        {
+                            if (error)
+                                return;
+                            userLangs = results[0];
+                            let dist =  distance_for_two_people(latitude, longitude, lat, longi, 'K');
+                            if (dist <= parseInt(userDist))
+                            {
+                                if (parseInt(userAge) <= parseInt(age))
+                                {
+                                    console.log(userGender + ' ' + prefGender);
+                                    console.log(userLangs.lang_name);
+                                    console.log(prefLang);
+                                }
+                            }                           
+                        });
+                    }
+                });
+            });
+        });
     });
 });
 

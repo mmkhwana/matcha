@@ -9,6 +9,10 @@ class MatchesService {
   static like (liking, userId) {
     return GeneralService.PostExecution(Constants.Like, { liking, userId })
   }
+
+  static matching (userId) {
+    return GeneralService.PostExecution('matching', { userId })
+  }
 }
 
 export default MatchesService
