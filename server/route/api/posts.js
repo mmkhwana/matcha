@@ -8,8 +8,39 @@ const router = express.Router();
 const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const { con } = require('./dbconnection');
 
 //User
+
+let distance_for_two_people = (lat1, lon1, lat2, lon2, unit) => {
+    var radlat1 = Math.PI * lat1 / 180
+    var radlat2 = Math.PI * lat2 / 180
+    var theta = lon1 - lon2
+    var radtheta = Math.PI * theta / 180
+    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
+    dist = Math.acos(dist)
+    dist = dist * 180 / Math.PI
+    dist = dist * 60 * 1.1515
+    if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error messege' }
+    return dist
+  }
+
+router.get('/matches', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return;
+        connect.query(sql.select.matches.all, (error, result) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.send(result)
+        });
+    });
+});
+
 router.post('/register_user', async(req, res) => 
 {
     
@@ -545,6 +576,8 @@ router.post('/update_profile', async(req, res) =>
             req.body.city,
             req.body.country,
             req.body.state,
+            req.body.latitude,
+            req.body.longitude,
             req.body.userid
         ];
         connect.query(sql.update.user.fields, params, (error, results)=>
@@ -560,6 +593,133 @@ router.post('/update_profile', async(req, res) =>
     res.status(200).send("Profile Updated Successfully");
 });
 
+router.post('/get_preferences', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query(sql.select.preferences.all, param, (error, results) =>
+        {
+            connect.release();
+            if (error)
+            {
+                res.send(error);
+                return;
+            }
+            res.status(200).send(results);
+        });
+    });
+});
+
+router.post('/get_pref_interest', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query(sql.select.Pref_interest.all, param, (error, results) =>
+        {
+            connect.release();
+            if (error)
+            {
+                res.send(error);
+                return;
+            }
+            res.status(200).send(results);
+        });
+    });
+});
+
+router.post('/update_preferences', async (req, res) => 
+{
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        connect.beginTransaction((error) =>
+        {
+            if (error)
+                return;
+            let params = [
+                req.body.age,
+                req.body.gender,
+                req.body.rating,
+                req.body.language,
+                req.body.location,
+                req.body.userId,
+            ];
+            connect.query(sql.update.preferences.fields, params, (error, results) =>
+            {
+                if (error)
+                {
+                    connect.rollback(() =>
+                    {
+                        res.send(err)
+                    });
+                    return;
+                }
+            });
+            let pref_arr = req.body.Interests
+            pref_arr.forEach(interest =>
+            {
+                let params = [
+                    interest,
+                    req.body.userId
+                ];
+                let param = [
+                    interest,
+                    req.body.userId,
+                    req.body.prefId,
+                ];
+                connect.query(sql.select.Pref_interest.check, params, (error, results) =>
+                {
+                    if (error)
+                    {
+                        connect.rollback(() =>
+                        {
+                            res.send(error);
+                        });
+                        return;
+                    }
+                    if (!results[0])
+                    {
+                        connect.query(sql.insert.Pref_interest.fields, param, (error, results) => 
+                        {
+                            if (error)
+                            {
+                                connect.rollback(() =>
+                                {
+                                    res.send(err)
+                                });
+                                return;
+                            }
+                        });
+                    }
+                });
+            });
+        });
+        connect.commit((error) =>
+        {
+            if (error)
+            {
+                connect.rollback(() =>
+                {
+                    return;
+                });
+            }
+        });
+        connect.release();
+        res.status(200).send('ok');
+    });
+});
+
 router.post('/set_preferences', async(req, res) => 
 {
     Connection.con.getConnection((error, connect) => 
@@ -568,6 +728,8 @@ router.post('/set_preferences', async(req, res) =>
             return;
         connect.beginTransaction((error) =>
         {
+            if (error)
+                return;
             let params = [
                 req.body.gender,
                 req.body.age,
@@ -658,41 +820,198 @@ router.post('/set_preferences', async(req, res) =>
     });
 });
 
-router.post('/remove_preference', async(req, res) =>
+router.post('/remove_pref_interest', async(req, res) =>
 {
     Connection.con.getConnection((err, connect) =>
     {
         if (err)
             return;
-        connect.beginTransaction((err) =>
+        let params = [
+            req.body.prefInterest,
+            req.body.userId
+        ];
+        connect.query(sql.delete.Pref_interest.row, params, (error, results) =>
         {
-            if (err)
+            connect.release();
+            if (error)
             {
-                res.send(err)
+                res.send(err);
                 return;
             }
-            let interests = req.body.Interests;
-            interests.forEach(interest =>
-            {
-                let params = [
-                    interest,
-                    req.body.userId
-                ];
-            });
-        });
-        connect.commit((err) =>
+        })
+    });
+    res.status(200).send('ok');
+});
+
+router.post('/like', async(req, res) =>
+ {
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        connect.beginTransaction((error) =>
         {
-            if (err)
+            if (error)
+                return;
+            let params = [
+                req.body.liking,
+                req.body.userId
+            ]
+            connect.query(sql.select.likes.all, params, (error, results) =>
+            {
+                if (error)
+                {
+                    connect.rollback(() => 
+                    {
+                        res.send(error);
+                    });
+                    return;
+                }
+                if (!results[0])
+                {
+                    let param = [
+                        req.body.liking
+                    ];
+                    connect.query(sql.select.user.likes, param, (error, results) => 
+                    {
+                        if (error)
+                        {
+                            connect.rollback(() => 
+                            {
+                                res.send(error);
+                            });
+                            return;
+                        }
+                        if (results[0])
+                        {
+                            let likes = results[0].user_likes + 1;
+                            let values = [
+                                likes,
+                                req.body.liking 
+                            ]
+                            connect.query(sql.update.user.likes, values, (error, results) => 
+                            {
+                                if (error)
+                                {
+
+                                    connect.rollback(() => 
+                                    {
+                                        res.send(error);
+                                    });
+                                    return;
+                                }
+
+                            });
+                            let para = [
+                                req.body.liking,
+                                req.body.userId
+                            ];
+                            connect.query(sql.insert.Likes.fields, para, (error, results) =>
+                            {
+                                if (error)
+                                {
+
+                                    connect.rollback(() => 
+                                    {
+                                        res.send(error);
+                                    })
+                                    return;
+                                }
+                            });
+                        }
+                    });
+                }
+            })
+         
+        });
+        connect.commit((error) =>
+        {
+            if (error)
             {
                 connect.rollback(() =>
                 {
-                    res.send(err);
+                    return;
                 });
-                return;
             }
         });
         connect.release();
     });
-    res.status(200).send('ok'); 
 });
+
+router.post('/matching', async(req, res) => 
+{
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)
+            return;
+        let sql = 'SELECT user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_id = ?';
+        let param = [
+            req.body.userId
+        ]
+        connect.query(sql, param, (error, results) =>
+        {
+            if (error)
+                return;
+            let lat = results[0].user_latitude;
+            let longi = results[0].user_longitude;
+            let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+            let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
+            let userDist = 0;
+            let age = 0;
+            let prefGender;
+            let prefLang;
+            connect.query(sqldist, param, (error, results) =>
+            {
+                if (error)
+                    return;
+                userDist = results[0].preferred_location;
+                age = results[0].pref_age;
+                prefGender = results[0].preferred_gender;
+                prefLang = results[0].pref_lang;
+            });
+            connect.query(sqlAll, param, (error, results) =>
+            {
+                if (error)
+                    return;
+                let users = results;
+                let passedUsers = new Array();
+                var [] = passedUsers = users.forEach(user =>
+                {
+                    let userId = user.user_id;
+                    let latitude = user.user_latitude;
+                    let longitude = user.user_longitude;
+                    let userAge = user.user_age;
+                    let userGender = user.user_gender;
+                    if (latitude != null)
+                    {
+                        let sqlLangs = 'SELECT lang_name FROM Matcha_User_Languages WHERE user_id = ?';
+                        var userLangs = [];
+                        let value = [
+                            userId
+                        ];
+                        connect.query(sqlLangs, value, (error, results) =>
+                        {
+                            if (error)
+                                return;
+                            userLangs = results;
+                            let dist =  distance_for_two_people(latitude, longitude, lat, longi, 'K');
+                            console.log("Dist:" + dist + ' ' + "userDist:" + userDist + ' ' + "userAge:" + userAge + ' ' + "age:" + age + ' ' + "userGender:" + userGender + ' '+ "preGender:" + prefGender)
+                            if (dist <= parseInt(userDist) && parseInt(userAge) <= parseInt(age) && userGender === prefGender)
+                            {
+                                // let output = userLangs.filter(lang => { lang == prefLang })
+                                // console.log(output)
+                              
+                                return user;
+                                console.log(passedUsers)
+                            }                           
+                        });
+                    }
+                });
+                console.log(passedUsers)
+                //res.status(200).send(passedUsers);
+            });
+        });
+    });
+});
+
 module.exports = router;

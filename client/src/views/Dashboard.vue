@@ -7,6 +7,7 @@
         width="100%"
         prominent
         elevation="10"
+        shrink-on-scroll
         fixed
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -92,7 +93,7 @@
     <v-container>
     <v-row>
     <v-col cols="12">
-     <template class="mx-auto scrolly" >
+     <template class="mx-auto scrolly">
        <keep-alive>
           <component :is="titles"></component>
        </keep-alive>

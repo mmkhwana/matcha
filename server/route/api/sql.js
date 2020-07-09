@@ -4,7 +4,8 @@ module.exports = {
         user:
         {
             details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
-            login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`
+            login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
+            likes: `SELECT user_likes FROM Matcha_Users WHERE user_id = ?`
         },
         interest :
         {
@@ -29,6 +30,14 @@ module.exports = {
         {
             all: `SELECT * FROM Preferred_interest WHERE user_id = ?`,
             check: `SELECT * FROM Preferred_interest WHERE pref_interest_name = ? AND user_id = ?`
+        },
+        likes:
+        {
+            all: `SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?`
+        },
+        matches:
+        {
+            all: `SELECT * FROM Matcha_Users WHERE 1`
         }
     },
     update:
@@ -48,13 +57,26 @@ module.exports = {
              user_post_code = ?,
              user_city = ?,
              user_country = ?,
-             user_state = ?
-            WHERE user_id = ?`
+             user_state = ?,
+             user_latitude = ?,
+             user_longitude = ?
+            WHERE user_id = ?`,
+            likes: `UPDATE Matcha_Users SET user_likes = ? WHERE user_id = ?`
         },
         image:
         {
-            fields: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`,
-            field: `UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`
+            fields: `UPDATE Matcha_Images SET image_role = ? WHERE image_id = ?; UPDATE Matcha_Images set image_role = ? WHERE image_id = ?`,
+            field: `UPDATE Matcha_Images SET image_role = ? WHERE image_id = ?`
+        },
+        preferences:
+        {
+            fields: `UPDATE Matcha_User_preferences 
+            SET pref_age = ?,
+            preferred_gender = ?,
+            preferred_user_rating = ?,
+            pref_lang = ?,
+            preferred_location = ?
+            WHERE user_id = ?`
         }
     },
     delete: 
@@ -70,6 +92,10 @@ module.exports = {
         image:
         {
             row: `DELETE FROM Matcha_Images WHERE image_link = ? AND user_id = ?`
+        },
+        Pref_interest:
+        {
+            row: `DELETE FROM Preferred_interest WHERE pref_interest_name = ? AND user_id = ?`
         }
     },
     insert: 
@@ -97,6 +123,10 @@ module.exports = {
         Pref_interest:
         {
             fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
+        },
+        Likes:
+        {
+            fields: `INSERT INTO Matcha_Likes (user_liked_id, user_liker_id) VALUES (?, ?)`
         }
     }
 }
