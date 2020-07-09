@@ -42,21 +42,43 @@ router.get('/matches', async(req, res) =>
       });
 })
 //matching likes
-
 router.get('/matching_likes', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
-        {
+    {
         if (error) console.log(error);
         var sql = "SELECT * FROM Matcha_likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
-        
-    connect.query(sql, function (err, result) {
-          if (err) throw err;
-          console.log(result);
-          res.send(result)
-          //res.render('Matches.vue')
+        let param = [
+            req.body.userLikedId,
+            req.body.userLikerId
+        ]
+    
+        connect.query(sql, param, function (err, result) 
+        {
+            connect.release();
+            if (err)
+            {
+                throw err;
+            }
+            if (result[0])
+            {
+                let params = [
+                    req.body.userLikerId,
+                    req.body.userLikedId
+                ]
+                connect.query(sql, params, function (err, result)
+                {
+                    connect.release();
+                    if (err)
+                    {
+                        throw err;
+                    }
+                });
+            }
+            res.send(result)
+            //res.render('Matches.vue')
         });
-      });
+    });
 })
 
 //Faker

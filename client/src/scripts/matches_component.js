@@ -23,15 +23,6 @@ export default {
         this.posts.push(element)
       })
     },
-    async loadMatches () {
-      let response = await axios.get(`${config.apiUrl}`)
-      let response3 = await axios.get(`${config.apiUrl3}`)
-      this.posts = response.data
-      let result = response3.data
-      result.forEach(element => {
-        this.posts.push(element)
-      })
-    },
     async like (liking) {
       let userId = this.$session.get('userid')
       try {
