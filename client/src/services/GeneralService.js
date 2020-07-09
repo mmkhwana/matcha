@@ -62,6 +62,18 @@ class GeneralService {
     })
   }
 
+  static GetExecutionNoParam (router) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(Constant.URL + router)
+        resolve(res.data)
+        reject(res.data)
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
   static getReturnArrayExecution (router, param) {
     return new Promise(async (resolve, reject) => {
       try {

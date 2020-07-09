@@ -17,7 +17,7 @@ Vue.component('Profile', Profile)
 Vue.component('Settings', Settings)
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
-Vue.component('Upload Photo', Upload)
+Vue.component('Upload', Upload)
 export default {
   name: 'Dashboard',
   components: {
@@ -44,7 +44,13 @@ export default {
         { message: 'Duis aute irure dolor in reprehenderit in voluptate' },
         { message: 'Excepteur sint occaecat cupidatat non proident' }
       ],
-      count: '0'
+      count: '0',
+      icons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram'
+      ]
     }
   },
   watch: {
@@ -67,7 +73,7 @@ export default {
         return 'Settings'
       } else if (this.titles === 'Chat') {
         return 'Chat'
-      } else if (this.titles === 'Profile Edit') {
+      } else if (this.titles === 'Edit') {
         return 'Edit'
       } else {
         return 'Profile'
