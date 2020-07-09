@@ -9,12 +9,46 @@ const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
+//faker
+
+router.get('/faker', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+        {
+        if (error) console.log(error);
+        var sql = "SELECT * FROM faker_users ";
+        
+    connect.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log(result);
+          res.send(result)
+        });
+      });
+})
+
 router.get('/matches', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
         {
         if (error) console.log(error);
         var sql = "SELECT * FROM Matcha_Users WHERE 1";
+        
+    connect.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log(result);
+          res.send(result)
+          //res.render('Matches.vue')
+        });
+      });
+})
+//matching likes
+
+router.get('/matching_likes', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+        {
+        if (error) console.log(error);
+        var sql = "SELECT * FROM Matcha_likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
         
     connect.query(sql, function (err, result) {
           if (err) throw err;
