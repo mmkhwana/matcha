@@ -954,7 +954,7 @@ router.post('/matching', async(req, res) =>
                 return;
             let lat = results[0].user_latitude;
             let longi = results[0].user_longitude;
-            let sqlAll = 'SELECT user_id, user_age, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+            let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
             let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
             let userDist = 0;
             let age = 0;
@@ -974,7 +974,8 @@ router.post('/matching', async(req, res) =>
                 if (error)
                     return;
                 let users = results;
-                users.forEach(user =>
+                let passedUsers = new Array();
+                var [] = passedUsers = users.forEach(user =>
                 {
                     let userId = user.user_id;
                     let latitude = user.user_latitude;
@@ -992,20 +993,22 @@ router.post('/matching', async(req, res) =>
                         {
                             if (error)
                                 return;
-                            userLangs = results[0];
+                            userLangs = results;
                             let dist =  distance_for_two_people(latitude, longitude, lat, longi, 'K');
-                            if (dist <= parseInt(userDist))
+                            console.log("Dist:" + dist + ' ' + "userDist:" + userDist + ' ' + "userAge:" + userAge + ' ' + "age:" + age + ' ' + "userGender:" + userGender + ' '+ "preGender:" + prefGender)
+                            if (dist <= parseInt(userDist) && parseInt(userAge) <= parseInt(age) && userGender === prefGender)
                             {
-                                if (parseInt(userAge) <= parseInt(age))
-                                {
-                                    console.log(userGender + ' ' + prefGender);
-                                    console.log(userLangs.lang_name);
-                                    console.log(prefLang);
-                                }
+                                // let output = userLangs.filter(lang => { lang == prefLang })
+                                // console.log(output)
+                              
+                                return user;
+                                console.log(passedUsers)
                             }                           
                         });
                     }
                 });
+                console.log(passedUsers)
+                //res.status(200).send(passedUsers);
             });
         });
     });

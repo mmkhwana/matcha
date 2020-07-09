@@ -15,8 +15,7 @@ export default {
   methods: {
     async loadPosts () {
       try {
-        let response = await Matches.getMatches()
-        this.posts = response
+        await Matches.getMatches()
       } catch (error) {
 
       }
@@ -32,6 +31,7 @@ export default {
   },
   async mounted () {
     this.loadPosts()
-    await Matches.matching(this.$session.get('userid'))
+    let res = await Matches.matching(this.$session.get('userid'))
+    this.posts = res
   }
 }
