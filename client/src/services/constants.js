@@ -22,5 +22,12 @@ export default {
   hair: 'Hair',
   Profile: 'profile',
   NotProfile: 'none',
-  ImageList: 'imagesList'
+  ImageList: 'imagesList',
+  GetPreferences: 'get_preferences',
+  GetPrefInterests: 'get_pref_interest',
+  SetPreferences: 'set_preferences',
+  UpdatePreferences: 'update_preferences',
+  RemovePrefInterest: 'remove_pref_interest',
+  GetMatches: 'matches',
+  Like: 'like'
 }

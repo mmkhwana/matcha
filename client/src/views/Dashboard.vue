@@ -1,20 +1,20 @@
 <template>
-  <v-card
-    class="mx-auto scrolly"
-    height="100vh"
+  <div
     width="100%"
   >
     <v-app-bar
       dark
         width="100%"
         prominent
-        elevation="12"
+        elevation="10"
+        shrink-on-scroll
+        fixed
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
          <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
-                <v-menu bottom left>
+          <v-menu bottom left transittion="scroll-x-reverse-transition">
             <template v-slot:activator="{ on, attrs }">
               <v-btn icon
                 v-bind="attrs"
@@ -33,6 +33,7 @@
               <v-list-item
                 v-for="(item, i) in notifications"
                 :key="i"
+                link
               >
                 <v-list-item-avatar>
                   <v-img :src= profile></v-img>
@@ -74,30 +75,34 @@
           :key="item.title"
           link
         >
-          <v-list-item-icon>
+          <v-list-item-icon v-if="item.title !== 'Log Out'">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content v-on:click="changeTitles(item.title)">
-              <v-list-item-title >{{ item.title }}</v-list-item-title>
+              <v-list-item-title v-if="item.title !== 'Log Out'">{{ item.title }}</v-list-item-title>
+              <v-list-item-title v-else><v-btn block>{{ item.title }}</v-btn></v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-row>
-    <v-col cols="12">
     <v-card-text
     class="content-padding"
     >
-     <template>
+    <v-container>
+    <v-row>
+    <v-col cols="12">
+     <template class="mx-auto scrolly">
        <keep-alive>
           <component :is="titles"></component>
        </keep-alive>
     </template>
-    </v-card-text>
     </v-col>
     </v-row>
+    </v-container>
+    </v-card-text>
+    <Alert/>
      <v-card height="auto" class="footer">
         <v-footer
           dark
@@ -130,7 +135,7 @@ This site is built to allow two potential lovers to meet. No bullshit.
           </v-card>
         </v-footer>
       </v-card>
-  </v-card>
+  </div>
 </template>
 <style src="../assets/css/dashboard.css" lang="css">
 </style>

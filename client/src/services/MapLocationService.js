@@ -9,7 +9,7 @@ export default () => {
   const script = document.createElement('script')
   script.async = true
   script.defer = true
-  script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyABDN7KmuK0NJA7fWwcQoWh2EO0h_LEwac&libraries=places&callback=getLocations'
+  script.src = 'https://maps.googleapis.com/maps/'
   script.onerror = errorResults
   document.querySelector('head').appendChild(script)
   return promise

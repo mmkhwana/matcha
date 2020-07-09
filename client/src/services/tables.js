@@ -33,5 +33,20 @@ export default {
     link: 'image_link',
     role: 'image_role',
     userId: 'user_id'
+  },
+  Preference: {
+    id: 'preferrence_id',
+    gender: 'preferred_gender',
+    rating: 'preferred_user_rating',
+    userid: 'user_id',
+    age: 'pref_age',
+    lang: 'pref_lang',
+    location: 'preferred_location'
+  },
+  PrefInterest: {
+    id: 'pref_interest_id',
+    interest: 'pref_interest_name',
+    prefid: 'preferrence_id',
+    userid: 'user_id'
   }
 }
