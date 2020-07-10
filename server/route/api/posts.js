@@ -12,19 +12,6 @@ const { con } = require('./dbconnection');
 
 //User
 
-let distance_for_two_people = (lat1, lon1, lat2, lon2, unit) => {
-    var radlat1 = Math.PI * lat1 / 180
-    var radlat2 = Math.PI * lat2 / 180
-    var theta = lon1 - lon2
-    var radtheta = Math.PI * theta / 180
-    var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta)
-    dist = Math.acos(dist)
-    dist = dist * 180 / Math.PI
-    dist = dist * 60 * 1.1515
-    if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error messege' }
-    return dist
-  }
-
 router.get('/matches', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
@@ -71,7 +58,6 @@ router.post('/register_user', async(req, res) =>
                     res.status(200).send(results);
                     return;
                 }
-                console.log("hihihi")
                 let transporter = nodemailer.createTransport({
                     service: 'gmail.com',
                     auth: {
@@ -938,7 +924,7 @@ router.post('/like', async(req, res) =>
     });
 });
 
-router.post('/matching', async(req, res) => 
+router.post('/matching', async (req, res) => 
 {
     Connection.con.getConnection((error, connect) =>
     {
@@ -948,69 +934,51 @@ router.post('/matching', async(req, res) =>
         let param = [
             req.body.userId
         ]
-        connect.query(sql, param, (error, results) =>
+        connect.beginTransaction((err) =>
         {
-            if (error)
+            if (err)
                 return;
-            let lat = results[0].user_latitude;
-            let longi = results[0].user_longitude;
-            let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
-            let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
-            let userDist = 0;
-            let age = 0;
-            let prefGender;
-            let prefLang;
-            connect.query(sqldist, param, (error, results) =>
+            connect.query(sql, param, (error, results) =>
             {
                 if (error)
                     return;
-                userDist = results[0].preferred_location;
-                age = results[0].pref_age;
-                prefGender = results[0].preferred_gender;
-                prefLang = results[0].pref_lang;
-            });
-            connect.query(sqlAll, param, (error, results) =>
-            {
-                if (error)
-                    return;
-                let users = results;
-                let passedUsers = new Array();
-                var [] = passedUsers = users.forEach(user =>
+                let lat = results[0].user_latitude;
+                let longi = results[0].user_longitude;
+                let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+                let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
+                let userDist = 0;
+                let age = 0;
+                let prefGender;
+                let prefLang;
+                connect.query(sqldist, param, (error, results) =>
                 {
-                    let userId = user.user_id;
-                    let latitude = user.user_latitude;
-                    let longitude = user.user_longitude;
-                    let userAge = user.user_age;
-                    let userGender = user.user_gender;
-                    if (latitude != null)
-                    {
-                        let sqlLangs = 'SELECT lang_name FROM Matcha_User_Languages WHERE user_id = ?';
-                        var userLangs = [];
-                        let value = [
-                            userId
-                        ];
-                        connect.query(sqlLangs, value, (error, results) =>
-                        {
-                            if (error)
-                                return;
-                            userLangs = results;
-                            let dist =  distance_for_two_people(latitude, longitude, lat, longi, 'K');
-                            console.log("Dist:" + dist + ' ' + "userDist:" + userDist + ' ' + "userAge:" + userAge + ' ' + "age:" + age + ' ' + "userGender:" + userGender + ' '+ "preGender:" + prefGender)
-                            if (dist <= parseInt(userDist) && parseInt(userAge) <= parseInt(age) && userGender === prefGender)
-                            {
-                                // let output = userLangs.filter(lang => { lang == prefLang })
-                                // console.log(output)
-                              
-                                return user;
-                                console.log(passedUsers)
-                            }                           
-                        });
-                    }
+                    if (error)
+                        return;
+                    userDist = results[0].preferred_location;
+                    age = results[0].pref_age;
+                    prefGender = results[0].preferred_gender;
+                    prefLang = results[0].pref_lang;
                 });
-                console.log(passedUsers)
-                //res.status(200).send(passedUsers);
+                connect.query(sqlAll, param, (error, results) =>
+                {
+                    if (error)
+                        return;
+                    let users = results;
+                    res.status(200).send({ 'matchData': users, 'userData':{ 'lat': lat, 'longi':longi, 'age':age, 'userDist':userDist, 'prefGender':prefGender } });
+                });
             });
         });
+        connect.commit((err) =>
+        {
+            if (err)
+            {
+                connect.rollback(() =>
+                {
+                    return;
+                });
+            }
+        });
+        connect.release();
     });
 });
 

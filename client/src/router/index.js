@@ -30,7 +30,7 @@ const routes = [
     component: () => import('../views/Matches.vue')
   },
   {
-    path: '/preference',
+    path: 'Dashboard/preference',
     name: 'Preference',
     component: () => import('../views/Preference.vue')
   },
@@ -43,6 +43,11 @@ const routes = [
     path: '/chat',
     name: 'Chat',
     component: () => import('../views/Chat.vue')
+  },
+  {
+    path: 'Dashboard/OtherProfile',
+    name: 'OtherProfile',
+    component: () => import('../views/OtherProfile.vue')
   }
 ]
 

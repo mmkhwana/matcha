@@ -11,7 +11,7 @@
         fixed
     >
     <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-         <v-toolbar-title ref="title">{{titles}}</v-toolbar-title>
+         <v-toolbar-title ref="title" color="grey darken-4">{{titles}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
           <v-menu bottom left transittion="scroll-x-reverse-transition">
@@ -58,7 +58,6 @@
         <v-list-item-avatar>
           <v-img :src= profile></v-img>
         </v-list-item-avatar>
-
         <v-list-item-title >{{ fullname }}</v-list-item-title>
       </v-list-item>
 

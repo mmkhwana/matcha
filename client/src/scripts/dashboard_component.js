@@ -7,6 +7,7 @@ import VueSession from 'vue-session'
 import Settings from '../views/Settings'
 import Chat from '../views/Chat'
 import Upload from '../views/dialog'
+import OtherProfile from '../views/OtherProfile'
 import EventBus from '../services/event_bus'
 import Alert from '../components/alert'
 import Vue from 'vue'
@@ -18,6 +19,7 @@ Vue.component('Settings', Settings)
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
 Vue.component('Upload', Upload)
+Vue.component('OtherProfile', OtherProfile)
 export default {
   name: 'Dashboard',
   components: {
@@ -86,6 +88,12 @@ export default {
     })
     this.$root.$on('Upload', () => {
       this.titles = 'Upload Photo'
+    })
+    this.$root.$on('OtherProfile', (Fullname) => {
+      this.titles = 'OtherProfile'
+    })
+    this.$root.$on('Matches', (Fullname) => {
+      this.titles = 'Matches'
     })
     EventBus.$on('profile', (picname) => {
       this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`
