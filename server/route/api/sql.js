@@ -50,7 +50,6 @@ module.exports = {
              user_biography = ?, 
              user_relationship_status = ?, 
              user_height = ?, 
-             user_age = ?, 
              user_race = ?, 
              user_hair = ?,
              user_street_address = ?,
@@ -61,7 +60,8 @@ module.exports = {
              user_latitude = ?,
              user_longitude = ?
             WHERE user_id = ?`,
-            likes: `UPDATE Matcha_Users SET user_likes = ? WHERE user_id = ?`
+            likes: `UPDATE Matcha_Users SET user_likes = ? WHERE user_id = ?`,
+            coordinates: `UPDATE Matcha_Users SET user_latitude = ?, user_longitude = ? WHERE user_id = ?`
         },
         image:
         {
@@ -74,7 +74,6 @@ module.exports = {
             SET pref_age = ?,
             preferred_gender = ?,
             preferred_user_rating = ?,
-            pref_lang = ?,
             preferred_location = ?
             WHERE user_id = ?`
         }
@@ -102,7 +101,7 @@ module.exports = {
     {
         user:
         {
-            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?)`
+            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_race, user_age) VALUES (?,?,?,?,?,?,?,?)`
         },
         interest:
         {
@@ -118,7 +117,7 @@ module.exports = {
         },
         preferences:
         {
-            fields: `INSERT INTO Matcha_User_preferences (preferred_gender, pref_age, preferred_location, preferred_user_rating, user_id, pref_lang) VALUES (?,?,?,?,?,?)`
+            fields: `INSERT INTO Matcha_User_preferences (preferred_gender, pref_age, preferred_location, preferred_user_rating, user_id) VALUES (?,?,?,?,?)`
         },
         Pref_interest:
         {

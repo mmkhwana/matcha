@@ -169,17 +169,18 @@
                       <div v-else-if="item.name === 'Age'">
                         <v-text-field
                           v-model="item.value"
-                          type="number"
+                          type="text"
                           hint="age(yrs)"
+                          :disabled="true"
                         ></v-text-field>
                       </div>
                       <div v-else-if="item.name === 'Race'">
-                          <v-autocomplete
+                          <v-text-field
                             v-model="item.value"
-                            :items="race"
                             placeholder="Select..."
                             required
-                          ></v-autocomplete>
+                            :disabled="true"
+                        ></v-text-field>
                       </div>
                       <div v-else-if="item.name === 'Relationship'">
                           <v-autocomplete
@@ -206,28 +207,36 @@
     <v-card-title>
       <v-row>
         <v-col
-        cols="2"
+        cols="6"
+        class="text-left"
         >
         Languages
         </v-col>
+        <v-col cols="6" class="text-right">
+          <v-menu top left transittion="scroll-x-reverse-transition" max-height='300px'>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus-circle-outline</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list
+              class="menu-interests"
+              v-for="(item, i) in defaultLanguages"
+              :key="i"
+            >
+              <v-list-item
+                link
+                v-on:click="addLanguage(item)"
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+      </v-col>
       </v-row>
     </v-card-title>
     <v-card-text full-width>
-      <v-expansion-panels>
-        <v-expansion-panel
-        >
-          <v-expansion-panel-header>Enter additional Language(s)</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-autocomplete
-              v-model="lang"
-              :items="defaultLanguages"
-              placeholder="Select..."
-              @keyup.enter="addLanguage"
-              required
-            ></v-autocomplete>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
       <v-row>
       <v-col
         v-for='(item, index) in languages'
@@ -244,27 +253,36 @@
     <v-card-title>
       <v-row>
         <v-col
-        cols="2"
+        cols="6"
+        class="text-left"
         >
         Interests
         </v-col>
+        <v-col cols="6" class="text-right">
+          <v-menu top left transittion="scroll-x-reverse-transition" max-height='300px'>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon v-bind="attrs" v-on="on">
+                <v-icon>mdi-plus-circle-outline</v-icon>
+              </v-btn>
+            </template>
+
+            <v-list
+              class="menu-interests"
+              v-for="(item, i) in defaultInterests"
+              :key="i"
+            >
+              <v-list-item
+                link
+                v-on:click="addInterest(item)"
+              >
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+      </v-col>
       </v-row>
     </v-card-title>
     <v-card-text>
-      <v-expansion-panels>
-        <v-expansion-panel>
-          <v-expansion-panel-header>Enter additional interest(s)</v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-autocomplete
-              v-model="interest"
-              :items="defaultInterests"
-              placeholder="Select..."
-              @keyup.enter="addInterest"
-              required
-            ></v-autocomplete>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
       <v-row>
       <v-col
         v-for='(item, index) in interests'

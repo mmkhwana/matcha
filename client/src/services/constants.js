@@ -29,5 +29,6 @@ export default {
   UpdatePreferences: 'update_preferences',
   RemovePrefInterest: 'remove_pref_interest',
   GetMatches: 'matches',
-  Like: 'like'
+  Like: 'like',
+  Coordinates: 'update_coordinates'
 }

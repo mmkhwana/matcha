@@ -12,6 +12,27 @@ const { con } = require('./dbconnection');
 
 //User
 
+router.post('/update_coordinates', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+    {
+        if (error)
+            return;
+        let param = [
+            req.body.lati,
+            req.body.longi,
+            req.body.userid
+        ];
+        connect.query(sql.update.user.coordinates, param, (error, result) =>
+        {
+            connect.release();
+            if (error)
+                return;
+            res.send(result)
+        });
+    });
+});
+
 router.get('/matches', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
@@ -43,15 +64,16 @@ router.post('/register_user', async(req, res) =>
             req.body.lastname,
             password,
             req.body.gender,
+            req.body.race,
             req.body.date
         ];
         Connection.con.getConnection((error, connect) => 
         {
-            console.log(error);
             if (error)
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
             { 
+                console.log(error);
                 connect.release();
                 if (error)
                 {
@@ -554,7 +576,6 @@ router.post('/update_profile', async(req, res) =>
             req.body.biography,
             req.body.relation,
             req.body.height,
-            req.body.age,
             req.body.race,
             req.body.hair,
             req.body.street,
@@ -637,7 +658,6 @@ router.post('/update_preferences', async (req, res) =>
                 req.body.age,
                 req.body.gender,
                 req.body.rating,
-                req.body.language,
                 req.body.location,
                 req.body.userId,
             ];
@@ -651,44 +671,6 @@ router.post('/update_preferences', async (req, res) =>
                     });
                     return;
                 }
-            });
-            let pref_arr = req.body.Interests
-            pref_arr.forEach(interest =>
-            {
-                let params = [
-                    interest,
-                    req.body.userId
-                ];
-                let param = [
-                    interest,
-                    req.body.userId,
-                    req.body.prefId,
-                ];
-                connect.query(sql.select.Pref_interest.check, params, (error, results) =>
-                {
-                    if (error)
-                    {
-                        connect.rollback(() =>
-                        {
-                            res.send(error);
-                        });
-                        return;
-                    }
-                    if (!results[0])
-                    {
-                        connect.query(sql.insert.Pref_interest.fields, param, (error, results) => 
-                        {
-                            if (error)
-                            {
-                                connect.rollback(() =>
-                                {
-                                    res.send(err)
-                                });
-                                return;
-                            }
-                        });
-                    }
-                });
             });
         });
         connect.commit((error) =>
@@ -722,7 +704,6 @@ router.post('/set_preferences', async(req, res) =>
                 req.body.location,
                 req.body.rating,
                 req.body.userId,
-                req.body.language,
             ];
             connect.query(sql.select.preferences.all, req.body.userId, (error, results) =>
             {
@@ -746,44 +727,6 @@ router.post('/set_preferences', async(req, res) =>
                                  return; 
                             });
                         }
-                        let pref_arr = req.body.Interests
-                        pref_arr.forEach(interest =>
-                        {
-                            let params = [
-                                interest,
-                                req.body.userId
-                            ];
-                            let param = [
-                                interest,
-                                req.body.userId,
-                                results.insertId
-                            ];
-                            connect.query(sql.select.Pref_interest.check, params, (error, results) =>
-                            {
-                                if (error)
-                                {
-                                    connect.rollback(() =>
-                                    {
-                                        res.send(error);
-                                    });
-                                    return;
-                                }
-                                if (!results[0])
-                                {
-                                    connect.query(sql.insert.Pref_interest.fields, param, (error, results) => 
-                                    {
-                                        if (error)
-                                        {
-                                            connect.rollback(() =>
-                                            {
-                                                res.send(err)
-                                            });
-                                            return;
-                                        }
-                                    });
-                                }
-                            });
-                        });
                     });
                 }
 

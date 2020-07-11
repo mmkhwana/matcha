@@ -1,7 +1,5 @@
 import PreferenceService from '../services/PreferenceService'
 import Table from '../services/tables'
-import CheckAge from '../services/check_age'
-import Interests from '../jsons/interests'
 import EventBus from '../services/event_bus'
 import VueSession from 'vue-session'
 import Vue from 'vue'
@@ -16,21 +14,16 @@ export default {
       rating: 0.5,
       age: null,
       gender: null,
-      language: null,
       location: null,
       locations: [],
-      dropdown_icon: [{ text: '18-21' }, { text: '22-25' }, { text: '26-29' }, { text: '30-33' }, { text: '34-37' }],
-      languages: [{ text: 'English' }, { text: 'Xhosa' }, { text: 'Zulu' }, { text: 'Sotho' }, { text: 'Sepedi' }],
+      dropdown_icon: [{ text: '25 & under' }, { text: '35 & under' }, { text: '45 & under' }, { text: 'Above 45' }],
       gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Lesbians' }, { text: 'Gays' }],
       results: [],
       city: '',
-      interests: [],
-      defaultInterests: [],
       prefId: -404
     }
   },
   async mounted () {
-    this.defaultInterests = Interests
     this.getPreferences()
     this.getPrefInterests()
   },
@@ -38,22 +31,11 @@ export default {
     async getPreferences () {
       try {
         const res = (await PreferenceService.getPreferences(this.getUserSession()))[0]
-        this.age = CheckAge.check(res[Table.Preference.age])
+        this.age = this.reversecheckingAge(res[Table.Preference.age])
         this.gender = res[Table.Preference.gender]
         this.rating = parseInt(res[Table.Preference.rating])
-        this.language = res[Table.Preference.lang]
         this.distance = res[Table.Preference.location]
         if (this.age !== null) { this.prefId = parseInt(res[Table.Preference.id]) }
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async getPrefInterests () {
-      try {
-        const res = (await PreferenceService.getPrefeInterest(this.getUserSession()))
-        res.forEach(interest => {
-          this.interests.push(interest[Table.PrefInterest.interest])
-        })
       } catch (error) {
         console.log(error)
       }
@@ -62,12 +44,13 @@ export default {
       return this.$session.get('userid')
     },
     async sendData () {
-      let result = await PreferenceService.sendData(this.age, this.rating, this.gender, this.language, this.distance, this.interests, this.$session.get('userid'))
+      let checkedAge = this.checkingAge(this.age)
+      let result = await PreferenceService.sendData(checkedAge, this.rating, this.gender, this.distance, this.$session.get('userid'))
       EventBus.$emit('sendText', result.data)
     },
     async updatePref () {
-      alert(this.distance)
-      await PreferenceService.updatePreferences(this.prefId, this.age, this.rating, this.gender, this.language, this.distance, this.interests, this.$session.get('userid'))
+      let checkedAge = this.checkingAge(this.age)
+      await PreferenceService.updatePreferences(this.prefId, checkedAge, this.rating, this.gender, this.distance, this.$session.get('userid'))
       EventBus.$emit('sendText', 'Saved successfully.')
     },
     async remove (index, interest) {
@@ -83,6 +66,28 @@ export default {
       const res = this.interests.filter(inter => inter === item)
       if (!res.includes(item)) {
         this.interests.push(item)
+      }
+    },
+    checkingAge (age) {
+      if (age === '25 & under') {
+        return 25
+      } else if (age === '35 & under') {
+        return 35
+      } else if (age === '45 & under') {
+        return 45
+      } else {
+        return 46
+      }
+    },
+    reversecheckingAge (age) {
+      if (parseInt(age) === 25) {
+        return '25 & under'
+      } else if (parseInt(age) === 35) {
+        return '35 & under'
+      } else if (parseInt(age) === 45) {
+        return '45 & under'
+      } else {
+        return 'Above 45'
       }
     }
   }

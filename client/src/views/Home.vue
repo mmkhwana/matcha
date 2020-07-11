@@ -36,6 +36,18 @@
                     </v-container>
                   </v-row>
                   <v-row>
+                    <v-container elevation="6">
+                      <v-overflow-btn
+                      v-model="race_item"
+                      :items="race"
+                      label="Select Race"
+                      required
+                      >
+                      <v-div></v-div>
+                      </v-overflow-btn>
+                    </v-container>
+                  </v-row>
+                  <v-row>
                   <v-col
                     cols="12"
                     md="6"

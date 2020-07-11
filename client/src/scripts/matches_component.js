@@ -45,7 +45,9 @@ export default {
         let matchGender = user.user_gender
         let dist = this.calcDistance(matchLati, matchLongi, userLati, userLongi, 'K')
         if (matchLati !== null) {
-          if (dist <= parseInt(userDist) && parseInt(matchAge) <= parseInt(userAge) && matchGender === userPrefGender) {
+          console.log(dist)
+          console.log(userDist)
+          if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
           }
         }
