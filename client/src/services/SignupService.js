@@ -13,14 +13,12 @@ class SignupService {
           data.map(post => ({
             ...post,
             createdAt: new Date(post.createdAt)
-          })
-          )
+          }))
         )
       } catch (error) {
         reject(error)
       }
-    }
-    )
+    })
   }
 
   static registerUser (gender, firstname, lastname, username, email, date, pass, confirm) {
