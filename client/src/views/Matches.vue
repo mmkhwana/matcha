@@ -44,9 +44,7 @@
                   <v-icon>mdi-thumb-up-outline</v-icon>
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-btn icon>
-                    <v-icon>mdi-thumb-down</v-icon>
-                  </v-btn>
+                  <v-chip filter outlined>12 likes</v-chip>
                  </v-card-actions>
               </v-card>
             </v-col>

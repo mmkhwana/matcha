@@ -53,7 +53,6 @@ router.post('/register_user', async(req, res) =>
 {
     
     let password = '';
-    let email = '';
     if (req.body.confirm === req.body.pass)
     {
         password = bcrypt.hashSync(req.body.pass, 8)
@@ -888,7 +887,7 @@ router.post('/matching', async (req, res) =>
                 let lat = results[0].user_latitude;
                 let longi = results[0].user_longitude;
                 let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
-                let sqldist = 'SELECT pref_age, pref_lang, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
+                let sqldist = 'SELECT pref_age, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
                 let userDist = 0;
                 let age = 0;
                 let prefGender;
