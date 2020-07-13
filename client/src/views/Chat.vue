@@ -19,18 +19,18 @@
             class="py-0"
           >
           <p class="Online">Online: {{ users.length }}</p>
-            <v-list-item two-line :class="miniVariant && 'px-0'">
+            <v-list-item >
               <v-list-item-avatar>
                 <img src="https://randomuser.me/api/portraits/men/81.jpg">
               </v-list-item-avatar>
 
               <v-list-item-content
-                e v-on:click="chattingUser()"
+                e v-on:click="Matchesliker(user.user_liker_id,user.user_liked_id )"
                   v-for="i in items"
                   :key="i.Users"
               >
               {{ i.Users }}
-              <p class="surname">{{ username }}</p>
+              <!-- <p class="surname">{{ username }}</p> -->
                 <v-list-item-title>
                   </v-list-item-title>
               </v-list-item-content>
@@ -58,72 +58,13 @@
 </template>
 
 <script>
-import OnlineUser from '../components/OnlineUser.vue'
-import io from 'socket.io-client'
-import Vue from 'vue'
-Vue.component('Online User', OnlineUser)
-export default {
-  name: 'Chat',
-  components: {
-    OnlineUser
-  },
-  data () {
-    return {
-      items: [{ 'Users': 'Username' }],
-      Users: 'Username',
-      username: '',
-      socket: io('http://localhost:5000'),
-      messages: [],
-      users: []
-    }
-  },
-  methods: {
-    updateMessage (message) {
-      this.messages.push(message)
-      this.socket.emit('msg', message)
-    },
-    getMessages () {
-      return 'value'
-    },
-    JoinServer: function () {
-      this.socket.on('LoggedIn', data => {
-        this.messages = data.messages
-        this.users = data.users
-        this.socket.emit('newuser', this.username)
-      })
-      this.listen()
-    },
-    listen: function () {
-      this.socket.on('userOnline', user => {
-        this.users.push(user)
-      })
-      this.socket.on('userLeft', user => {
-        this.users.splice(this.users.indexOf(user), 1)
-      })
-
-      this.socket.on('msg', message => {
-        this.messages.push(message)
-      })
-    }
-  },
-  mounted: function () {
-    this.$root.$on('OnlineUser', () => {
-      this.Users = 'Online User'
-    })
-    this.username = prompt('What is your user name?', 'Anonymous')
-
-    if (!this.username) {
-      this.username = 'Anonymous'
-    }
-
-    this.JoinServer()
-  }
-}
+import chat from '../scripts/chat_component'
+export default chat
 </script>
 <style scoped>
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 9%;
+  font-size: 2%;
   color: black;
   margin: 0;
   padding: 0;

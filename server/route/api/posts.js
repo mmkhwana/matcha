@@ -9,24 +9,83 @@ const sql = require('./sql');
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
-//User
+//faker
+
+router.get('/faker', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
+        {
+        if (error) console.log(error);
+        var sql = "SELECT * FROM faker_users ";
+        
+    connect.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log(result);
+          res.send(result)
+        });
+      });
+})
 
 router.get('/matches', async(req, res) =>
 {
     Connection.con.getConnection((error, connect) => 
+        {
+        if (error) console.log(error);
+        var sql = "SELECT * FROM Matcha_Users WHERE 1";
+        
+    connect.query(sql, function (err, result) {
+          if (err) throw err;
+          console.log(result);
+          res.send(result)
+          //res.render('Matches.vue')
+        });
+      });
+})
+//matching likes
+
+router.get('/matching_likes', async(req, res) =>
+{
+    Connection.con.getConnection((error, connect) => 
     {
-        if (error)
-            return;
-        connect.query(sql.select.matches.all, (error, result) =>
+        if (error) console.log(error);
+        var sql = "SELECT * FROM Matcha_likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
+        let param = [
+            req.body.userLikedId,
+            req.body.userLikerId
+        ]
+    
+        connect.query(sql, param, function (err, result) 
         {
             connect.release();
-            if (error)
-                return;
+            if (err)
+            {
+                throw err;
+            }
+            if (result[0])
+            {
+                let params = [
+                    req.body.userLikerId,
+                    req.body.userLikedId
+                ]
+                connect.query(sql, params, function (err, result)
+                {
+                    connect.release();
+                    if (err)
+                    {
+                        throw err;
+                    }
+                });
+                
+            }
             res.send(result)
+            //res.render('Matches.vue')
         });
     });
-});
+})
 
+//Faker
+
+//User
 router.post('/register_user', async(req, res) => 
 {
     
@@ -57,6 +116,13 @@ router.post('/register_user', async(req, res) =>
                     res.status(200).send(results);
                     return;
                 }
+                Connection.con.connect(function(err) {
+                    if(err) throw err;
+                    Connection.con.query("SELECT * `FROM Matcha_Users` WHERE 1", function(err, result, fields){
+                        if (err) throw err;
+                        console.log(result);
+                    })
+                })
                 console.log("hihihi")
                 let transporter = nodemailer.createTransport({
                     service: 'gmail.com',
@@ -329,7 +395,7 @@ router.post('/insert_language', async(req, res) =>
                 });
             });
         });
-        res.status(200).send({data:"okay"});
+        res.status(200).send({data:"Okay"});
         connect.release();
     });
 
@@ -562,8 +628,6 @@ router.post('/update_profile', async(req, res) =>
             req.body.city,
             req.body.country,
             req.body.state,
-            req.body.latitude,
-            req.body.longitude,
             req.body.userid
         ];
         connect.query(sql.update.user.fields, params, (error, results)=>
@@ -571,9 +635,10 @@ router.post('/update_profile', async(req, res) =>
             connect.release();
             if (error)
             {
-                console.log(error);
-                return ;
+                res.status(200).send(error);
+                return;
             }
+            res.status(200).send(results);
         });
     })
     res.status(200).send("Profile Updated Successfully");
@@ -829,12 +894,12 @@ router.post('/remove_pref_interest', async(req, res) =>
     res.status(200).send('ok');
 });
 
+//Likes
+
 router.post('/like', async(req, res) =>
  {
-    Connection.con.getConnection((error, connect) =>
+    Connection.con.getConnection((err, connect) =>
     {
-        if (error)
-            return;
         connect.beginTransaction((error) =>
         {
             if (error)
@@ -847,25 +912,22 @@ router.post('/like', async(req, res) =>
             {
                 if (error)
                 {
-                    connect.rollback(() => 
-                    {
+                    connect.rollback(() => {
                         res.send(error);
-                    });
+                    })
                     return;
                 }
                 if (!results[0])
                 {
                     let param = [
-                        req.body.liking
-                    ];
-                    connect.query(sql.select.user.likes, param, (error, results) => 
-                    {
+                    req.body.liking
+                ]
+                    connect.query(sql.select.user.likes, param, (error, results) => {
                         if (error)
                         {
-                            connect.rollback(() => 
-                            {
+                            connect.rollback(() => {
                                 res.send(error);
-                            });
+                            })
                             return;
                         }
                         if (results[0])
@@ -875,15 +937,13 @@ router.post('/like', async(req, res) =>
                                 likes,
                                 req.body.liking 
                             ]
-                            connect.query(sql.update.user.likes, values, (error, results) => 
-                            {
+                            connect.query(sql.update.user.likes, values, (error, results) => {
                                 if (error)
                                 {
 
-                                    connect.rollback(() => 
-                                    {
+                                    connect.rollback(() => {
                                         res.send(error);
-                                    });
+                                    })
                                     return;
                                 }
 
@@ -891,19 +951,64 @@ router.post('/like', async(req, res) =>
                             let para = [
                                 req.body.liking,
                                 req.body.userId
-                            ];
-                            connect.query(sql.insert.Likes.fields, para, (error, results) =>
-                            {
+                            ]
+                            connect.query(sql.insert.Likes.fields, para, (error, results) =>{
                                 if (error)
                                 {
 
-                                    connect.rollback(() => 
-                                    {
+                                    connect.rollback(() => {
                                         res.send(error);
                                     })
                                     return;
                                 }
-                            });
+                            } );
+                            if (error) console.log(error);
+                                var sql = "SELECT * FROM Matcha_likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
+                                let param = [
+                                    req.body.userLikedId,
+                                    req.body.userLikerId
+                                ]
+                                connect.query(sql, param, function (err, result) 
+                                {
+                                    connect.release();
+                                    if (err)
+                                    {
+                                        throw err;
+                                    }
+                                    if (result[0])
+                                    {
+                                        let params = [
+                                            req.body.userLikerId,
+                                            req.body.userLikedId
+                                        ]
+                                        connect.query(sql, params, function (err, result)
+                                        {
+                                            connect.release();
+                                            if (err)
+                                            {
+                                                throw err;
+                                            }
+                                        });
+                                        
+                                    }
+                                    var sql1 = "UPDATE Matcha_Likes SET likeEachOther = ? WHERE user_id = ?";
+                                    let likeEachOther = 1
+                                    let par = [
+                                        likeEachOther,
+                                        req.body.userId
+                                    ]
+                                    connect.query(sql1, par, (error, result) =>{
+                                        if (error)
+                                        {
+        
+                                            connect.rollback(() => {
+                                                res.send(error);
+                                            })
+                                            return;
+                                        }
+                                    });
+                                    res.send(result)
+                                });
                         }
                     });
                 }
@@ -923,5 +1028,4 @@ router.post('/like', async(req, res) =>
         connect.release();
     });
 });
-
 module.exports = router;

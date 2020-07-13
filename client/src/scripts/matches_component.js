@@ -1,4 +1,5 @@
-import Matches from '../services/MatchesService'
+import axios from 'axios'
+import config from '../services/config'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -14,17 +15,18 @@ export default {
 
   methods: {
     async loadPosts () {
-      try {
-        let response = await Matches.getMatches()
-        this.posts = response
-      } catch (error) {
-
-      }
+      let response = await axios.get(`${config.apiUrl}`)
+      let response2 = await axios.get(`${config.apiUrl2}`)
+      this.posts = response.data
+      let result = response2.data
+      result.forEach(element => {
+        this.posts.push(element)
+      })
     },
     async like (liking) {
       let userId = this.$session.get('userid')
       try {
-        await Matches.like(liking, userId)
+        await axios.post(`http://localhost:5000/api/posts/like`, { liking, userId })
       } catch (error) {
         console.log(error)
       }
