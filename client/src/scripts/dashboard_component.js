@@ -88,7 +88,7 @@ export default {
       this.titles = 'Edit'
     })
     this.$root.$on('Upload', () => {
-      this.titles = 'Upload Photo'
+      this.titles = 'Upload'
     })
     this.$root.$on('OtherProfile', (Fullname) => {
       this.titles = 'OtherProfile'

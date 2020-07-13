@@ -238,6 +238,8 @@ router.get('/uploads/:username/:name', (req, res) => {
 
 router.post('/uploads', async(req, res) => {
     let images = [];
+    let username;
+    let file = __dirname + '/uploads/' + req.body.username;
     Connection.con.getConnection((err, connect) => {
         if (err)
             return;
@@ -246,9 +248,22 @@ router.post('/uploads', async(req, res) => {
             if (error)
                 return;
             if (results[0]) {
-                images = results;
+                if (fs.existsSync(file))
+                {
+                    results.forEach(image => {
+                        file = __dirname + '/uploads/' + req.body.username + '/' + image.image_name;
+                        if (fs.existsSync(file)) {
+                            images.push(image);
+                        }
+                    });
+                    if (images)
+                    {
+                        res.status(201).send(images);
+                        return;
+                    }
+                }
             }
-            res.status(201).send(images);
+            res.status(201).send('nopics');
         });
     });
 });

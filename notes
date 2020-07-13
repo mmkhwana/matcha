@@ -3,7 +3,7 @@ Weekend Goals!!!!!!
 2. Disbale age & race changes in profile - Done!!!
 3. Remove lang from matching algo & preferences but can add more than 1 to profile(make it easy) - Done!!!!
 4. Add a suggestions section to the Matches page
-5. Add interst number in common on user cards - Remove dislike and place chip instead
+5. Add interest number in common on user cards - Remove dislike and place chip instead
 6. Change age to 25 and under 35 and under and so forth
 7. Fix and implement rating system
 8. Fix menu when scrolling down
@@ -13,3 +13,4 @@ Weekend Goals!!!!!!
 Monday
 1. Fix chat
 2. Chat notifications
+3. Check Users profile pictures (if no pictures, display a placeholder)

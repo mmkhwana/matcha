@@ -8,7 +8,9 @@ export default {
 
   data () {
     return {
-      posts: []
+      posts: [],
+      postsSuggestions: [],
+      likes_no: '12 common interests'
     }
   },
 
@@ -17,7 +19,7 @@ export default {
       try {
         await Matches.getMatches()
       } catch (error) {
-
+        console.log(error)
       }
     },
     openProfile (userId, name, surname) {
@@ -50,6 +52,9 @@ export default {
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
           }
+        }
+        if (matchGender === userPrefGender) {
+          this.postsSuggestions.push(user)
         }
       })
     },
