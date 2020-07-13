@@ -30,13 +30,14 @@
                 </v-img>
                  <v-card-actions>
                   <v-rating
-                    :value="user.user_likes"
+                    :ref="`rating${user.user_id}`"
                     dense
                     half-increments
-                    readonly
+                    hover
                     size="14"
-                    background-color="lime accent-3"
+                    background-color="grey darken-1"
                     color="lime accent-3"
+                    empty-icon="$ratingFull"
                   ></v-rating>
                  </v-card-actions>
                  <v-card-actions>
@@ -54,9 +55,11 @@
           justify="center">
             <v-col cols="12">
               <v-card elevation="12">
+                <v-container>
                 <v-card-title class="text-right">
                   Suggested Cute Catches
                 </v-card-title>
+                </v-container>
               </v-card>
             </v-col>
           </v-row>
@@ -90,7 +93,6 @@
                 </v-img>
                  <v-card-actions>
                   <v-rating
-                    :value="user.user_likes"
                     dense
                     half-increments
                     readonly

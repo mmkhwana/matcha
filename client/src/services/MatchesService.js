@@ -6,8 +6,8 @@ class MatchesService {
     return GeneralService.GetExecutionNoParam(Constants.GetMatches)
   }
 
-  static like (liking, userId) {
-    return GeneralService.PostExecution(Constants.Like, { liking, userId })
+  static like (liking, rating, userId) {
+    return GeneralService.PostExecution(Constants.Like, { liking, rating, userId })
   }
 
   static matching (userId) {

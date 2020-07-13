@@ -38,8 +38,9 @@
           half-increments
           hover
           size="14"
-          background-color="purple lighten-3"
-          color="purple"
+          background-color="grey darken-1"
+          color="lime accent-3"
+          empty-icon="$ratingFull"
         ></v-rating>
 
         <div class="grey--text ml-3">({{ rating }})</div>

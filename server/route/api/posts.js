@@ -311,7 +311,8 @@ router.post('/insert_language', async(req, res) => {
                     lang,
                     req.body.userId
                 ];
-                connect.query(sql.select.language.check, values, (error, results) => {
+                connect.query(sql.select.language.check, values, (error, results) =>
+                {
                     if (error) {
                         connect.rollback(() => {
                             res.status(200).send(error);
@@ -323,7 +324,8 @@ router.post('/insert_language', async(req, res) => {
                             lang,
                             req.body.userId
                         ];
-                        connect.query(sql.insert.language.fields, values, (error, results) => {
+                        connect.query(sql.insert.language.fields, values, (error, results) => 
+                        {
                             if (err) {
                                 connect.rollback(() => {
                                     res.status(200).send(err);
@@ -712,9 +714,14 @@ router.post('/like', async(req, res) => {
                             return;
                         }
                         if (results[0]) {
-                            let likes = results[0].user_likes + 1;
+                            let userRaters = results[0].user_raters + 1;
+                            let rating = req.body.rating
+                            let userRatingsSum = results[0].user_ratings_sum + rating;
+                            let avg = userRatingsSum / userRaters
                             let values = [
-                                likes,
+                                userRaters,
+                                userRatingsSum,
+                                avg,
                                 req.body.liking
                             ]
                             connect.query(sql.update.user.likes, values, (error, results) => {
@@ -729,7 +736,8 @@ router.post('/like', async(req, res) => {
                             });
                             let para = [
                                 req.body.liking,
-                                req.body.userId
+                                req.body.userId,
+                                rating
                             ];
                             connect.query(sql.insert.Likes.fields, para, (error, results) => {
                                 if (error) {
@@ -777,7 +785,7 @@ router.post('/matching', async (req, res) =>
                     return;
                 let lat = results[0].user_latitude;
                 let longi = results[0].user_longitude;
-                let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_likes, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+                let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
                 let sqldist = 'SELECT pref_age, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
                 let userDist = 0;
                 let age = 0;

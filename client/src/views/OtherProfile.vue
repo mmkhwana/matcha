@@ -3,15 +3,18 @@
     <v-container id="dropdown-example-2">
     <v-row>
         <v-col cols="6" class="text-left">
-            <v-card-actions>
+            <v-card-actions v-if="rating !== 0">
                 <v-rating
+                v-model="rating"
                 dense
                 half-increments
                 readonly
                 size="14"
-                background-color="lime accent-3"
+                background-color="grey darken-1"
                 color="lime accent-3"
+                empty-icon="$ratingFull"
                 ></v-rating>
+                <div class="grey--text ml-3">({{ rating }})</div>
             </v-card-actions>
         </v-col>
         <v-col cols="6" class="text-right">

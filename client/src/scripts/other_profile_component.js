@@ -27,7 +27,8 @@ export default {
       city: '',
       country: '',
       state: '',
-      userid: ''
+      userid: '',
+      rating: 0
     }
   },
   mounted: function () {
@@ -53,6 +54,7 @@ export default {
       this.state = res[Table.User.state]
       this.biography = res[Table.User.biography]
       this.personality[0].value = res[Table.User.status]
+      this.rating = res[Table.User.AvgRating]
       if (res[Table.User.height]) {
         this.personality[1].value = res[Table.User.height] + 'm'
       } else {

@@ -23,7 +23,6 @@ export default {
     this.userid = this.$session.get('userid')
     let images = []
     const pics = await GalleryService.readImages(this.username, this.userid)
-    alert(JSON.stringify(pics))
     if (pics !== 'nopics') {
       images = pics.data
       images.forEach(row => {

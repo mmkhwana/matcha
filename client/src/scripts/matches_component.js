@@ -1,4 +1,5 @@
 import Matches from '../services/MatchesService'
+import EventBus from '../services/event_bus'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -27,11 +28,16 @@ export default {
       this.$root.$emit('OtherProfile')
     },
     async like (liking) {
-      let userId = this.$session.get('userid')
-      try {
-        await Matches.like(liking, userId)
-      } catch (error) {
-        console.log(error)
+      let rating = this.$refs['rating' + liking][0]._data.internalValue
+      if (rating !== 0) {
+        let userId = this.$session.get('userid')
+        try {
+          await Matches.like(liking, rating, userId)
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        EventBus.$emit('sendText', 'Rate first.')
       }
     },
     checkMatching (userData, matchData) {
@@ -51,10 +57,9 @@ export default {
           console.log(userDist)
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
+          } else if (matchGender === userPrefGender) {
+            this.postsSuggestions.push([ { 'rate': 0 }, user ])
           }
-        }
-        if (matchGender === userPrefGender) {
-          this.postsSuggestions.push(user)
         }
       })
     },

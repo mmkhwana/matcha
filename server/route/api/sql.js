@@ -3,7 +3,7 @@ module.exports = {
         user: {
             details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
             login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
-            likes: `SELECT user_likes FROM Matcha_Users WHERE user_id = ?`
+            likes: `SELECT user_raters, user_ratings_sum, user_rating_avg FROM Matcha_Users WHERE user_id = ?`
         },
         interest: {
             all: `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`,
@@ -49,7 +49,7 @@ module.exports = {
              user_latitude = ?,
              user_longitude = ?
             WHERE user_id = ?`,
-            likes: `UPDATE Matcha_Users SET user_likes = ? WHERE user_id = ?`,
+            likes: `UPDATE Matcha_Users SET user_raters = ?, user_ratings_sum = ?, user_rating_avg = ? WHERE user_id = ?`,
             coordinates: `UPDATE Matcha_Users SET user_latitude = ?, user_longitude = ? WHERE user_id = ?`
         },
         image: {
@@ -100,7 +100,7 @@ module.exports = {
             fields: `INSERT INTO Preferred_interest (pref_interest_name, user_id, preferrence_id) VALUES (?,?, ?)`
         },
         Likes: {
-            fields: `INSERT INTO Matcha_Likes (user_liked_id, user_liker_id) VALUES (?, ?)`
+            fields: `INSERT INTO Matcha_Likes (user_liked_id, user_liker_id, user_rating) VALUES (?, ?, ?)`
         }
     }
 }
