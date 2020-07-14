@@ -790,15 +790,17 @@ router.post('/matching', async (req, res) =>
                 let userDist = 0;
                 let age = 0;
                 let prefGender;
-                let prefLang;
                 connect.query(sqldist, param, (error, results) =>
                 {
                     if (error)
                         return;
-                    userDist = results[0].preferred_location;
-                    age = results[0].pref_age;
-                    prefGender = results[0].preferred_gender;
-                    prefLang = results[0].pref_lang;
+                    if (results[0])
+                    {
+                        userDist = results[0].preferred_location;
+                        age = results[0].pref_age;
+                        prefGender = results[0].preferred_gender;
+                        prefLang = results[0].pref_lang;
+                    }
                 });
                 connect.query(sqlAll, param, (error, results) =>
                 {
@@ -820,6 +822,35 @@ router.post('/matching', async (req, res) =>
             }
         });
         connect.release();
+    });
+});
+
+router.post('/read_interests', async(req, res) => {
+    let arr = [];
+    let interest = [];
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let sql = `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`;
+        connect.query(sql, req.body.userId, (error, results) => {
+            if (error)
+                return;
+            if (Object.keys(results).length !== 0)
+            {
+                arr = results;
+                connect.query(sql, req.body.otherUser, (error, result) => {
+                    connect.release();
+                    if (error)
+                        return;
+                    if (Object.keys(result).length !== 0)
+                    {
+                        interest = result;
+                        res.status(200).send({ 'user': arr, 'otherUser': interest});
+                        return;
+                    }
+                })
+            }
+        });
     });
 });
 
