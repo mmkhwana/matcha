@@ -11,7 +11,10 @@ export default {
     return {
       posts: [],
       postsSuggestions: [],
-      likes_no: '12 common interests'
+      interes: ' common interest(s)',
+      otherInteres: [],
+      userInteres: [],
+      number: 0
     }
   },
 
@@ -53,15 +56,43 @@ export default {
         let matchGender = user.user_gender
         let dist = this.calcDistance(matchLati, matchLongi, userLati, userLongi, 'K')
         if (matchLati !== null) {
-          console.log(dist)
-          console.log(userDist)
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
+            user.interests = 0
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {
-            this.postsSuggestions.push([ { 'rate': 0 }, user ])
+            user.interests = 10 + ' common interest(s)'
+            this.postsSuggestions.push(user)
           }
         }
       })
+    },
+    userIntere (otherUserId) {
+      this.userInteres.forEach(interest => {
+        this.otherIntere(interest)
+      })
+      if (this.number !== 0) {
+        let res = this.posts.filter(user => user.user_id === otherUserId)
+        let index = this.posts.indexOf(res[0])
+        this.posts[index].interests = this.number
+      }
+    },
+    otherIntere (interest) {
+      this.number = 0
+      this.otherInteres.forEach(other => {
+        if (interest.interest_name === other.interest_name) {
+          this.number++
+        }
+      })
+    },
+    async matchInterests (otherUserId) {
+      let res = await Matches.matchInterests(this.$session.get('userid'), otherUserId)
+      if (Object.keys(res).length !== 0) {
+        this.otherInteres = res.otherUser
+        this.userInteres = res.user
+        this.userIntere(otherUserId)
+        this.otherInteres = null
+        this.userInteres = null
+      }
     },
     calcDistance (lat1, lon1, lat2, lon2, unit) {
       var radlat1 = Math.PI * lat1 / 180
@@ -72,7 +103,7 @@ export default {
       dist = Math.acos(dist)
       dist = dist * 180 / Math.PI
       dist = dist * 60 * 1.1515
-      if (unit === 'K') { dist = dist * 1.609344 } else { return 'Error message' }
+      if (unit === 'K') { dist = dist * 1.609344 }
       return dist
     }
   },
@@ -81,6 +112,8 @@ export default {
     this.posts = []
     let res = await Matches.matching(this.$session.get('userid'))
     this.checkMatching(res.userData, res.matchData)
+    this.posts.forEach(user => {
+      this.matchInterests(user.user_id)
+    })
   }
-
 }

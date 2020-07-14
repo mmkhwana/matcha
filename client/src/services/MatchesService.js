@@ -13,6 +13,9 @@ class MatchesService {
   static matching (userId) {
     return GeneralService.PostExecution('matching', { userId })
   }
+  static matchInterests (userId, otherUser) {
+    return GeneralService.PostExecution('read_interests', { userId, otherUser })
+  }
 }
 
 export default MatchesService
