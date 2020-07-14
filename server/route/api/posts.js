@@ -962,54 +962,54 @@ router.post('/like', async(req, res) =>
                                     return;
                                 }
                             } );
-                            if (error) console.log(error);
-                                var sql = "SELECT * FROM Matcha_likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
-                                let param = [
-                                    req.body.userLikedId,
-                                    req.body.userLikerId
-                                ]
-                                connect.query(sql, param, function (err, result) 
+                
+                        }
+                        if (error) console.log(error);
+                        var sqll = "SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND WHERE user_liker_id = ?";
+                        let param = [
+                                req.body.userLikedId,
+                                req.body.userLikerId
+                            ]
+                        connect.query(sqll, param, function (err, result) 
+                        {
+                            connect.release();
+                                if (err)
                                 {
-                                    connect.release();
-                                    if (err)
-                                    {
-                                        throw err;
-                                    }
-                                    if (result[0])
-                                    {
-                                        let params = [
-                                            req.body.userLikerId,
-                                            req.body.userLikedId
-                                        ]
-                                        connect.query(sql, params, function (err, result)
-                                        {
-                                            connect.release();
-                                            if (err)
-                                            {
-                                                throw err;
-                                            }
-                                        });
-                                        
-                                    }
-                                    var sql1 = "UPDATE Matcha_Likes SET likeEachOther = ? WHERE user_id = ?";
-                                    let likeEachOther = 1
-                                    let par = [
-                                        likeEachOther,
-                                        req.body.userId
+                                    throw err;
+                                }
+                                if (result[0])
+                                {
+                                    let params = [
+                                        req.body.userLikerId,
+                                        req.body.userLikedId
                                     ]
-                                    connect.query(sql1, par, (error, result) =>{
-                                        if (error)
+                                    connect.query(sqll, params, function (err, result)
+                                    {
+                                        connect.release();
+                                        if (err)
                                         {
-        
-                                            connect.rollback(() => {
-                                                res.send(error);
-                                            })
-                                            return;
+                                            throw err;
                                         }
+                                    });
+                                }
+                                var sql1 = "UPDATE Matcha_Likes SET likeEachOther = ? WHERE user_id = ?";
+                                let likeEachOther = 1
+                                let par = [
+                                    likeEachOther,
+                                    req.body.userId
+                                ]
+                                connect.query(sql1.update.user.likes, par, (error, result) =>{
+                                if (error)
+                                {
+        
+                                    connect.rollback(() => {
+                                        res.send(error);
+                                    })
+                                        return;
+                                    }
                                     });
                                     res.send(result)
                                 });
-                        }
                     });
                 }
             })
