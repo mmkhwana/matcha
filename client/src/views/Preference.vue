@@ -38,24 +38,14 @@
           half-increments
           hover
           size="14"
-          background-color="purple lighten-3"
-          color="purple"
+          background-color="grey darken-1"
+          color="lime accent-3"
+          empty-icon="$ratingFull"
         ></v-rating>
 
         <div class="grey--text ml-3">({{ rating }})</div>
       </v-row>
     </v-card-text>
-    <v-container id="dropdown-example-2">
-      <v-card-title>Language</v-card-title>
-        <v-overflow-btn
-        class="my-2"
-        v-model="language"
-        :items="languages"
-        label=""
-        overflow
-        target="#dropdown-example-2"
-        ></v-overflow-btn>
-    </v-container>
     <v-container id="dropdown-example-2">
       <v-card-title>Location distance (KM)</v-card-title>
     <v-radio-group v-model="distance">
@@ -69,34 +59,6 @@
     </v-container>
 
     <v-divider class="mx-4"></v-divider>
-
-    <v-row>
-      <v-col cols="10" class="text-left">
-        <v-card-title>Interest(s)</v-card-title>
-      </v-col>
-      <v-col cols="2" class="text-right">
-          <v-menu top left transittion="scroll-x-reverse-transition" max-height='300px'>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn icon v-bind="attrs" v-on="on">
-                <v-icon>mdi-plus-circle-outline</v-icon>
-              </v-btn>
-            </template>
-
-            <v-list
-              class="menu-interests"
-              v-for="(item, i) in defaultInterests"
-              :key="i"
-            >
-              <v-list-item
-                link
-                v-on:click="addInterest(item)"
-              >
-                <v-list-item-title>{{ item }}</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-      </v-col>
-    </v-row>
     <v-card-text>
       <v-row>
         <v-col

@@ -22,7 +22,9 @@ export default {
       username: '',
       pass: '',
       error: '',
-      progress: false
+      progress: false,
+      latitude: 0,
+      longitude: 0
     }
   },
   beforeCreate () {
@@ -30,7 +32,17 @@ export default {
       router.push({ name: 'Dashboard' })
     }
   },
+  mounted: function () {
+    navigator.geolocation.getCurrentPosition(this.getSuccess)
+  },
   methods: {
+    getSuccess  (position) {
+      this.getCoordinates(position.coords.latitude, position.coords.longitude)
+    },
+    getCoordinates (lati, longi) {
+      this.latitude = lati
+      this.longitude = longi
+    },
     async login () {
       this.error = ''
       this.checkForm()
@@ -46,6 +58,8 @@ export default {
             this.$session.set('lastname', users[Table.User.lastName])
             this.$session.set('username', users[Table.User.userName])
             this.$session.set('userid', users[Table.User.userId])
+            this.$session.set('latitude', this.latitude)
+            this.$session.set('longitude', this.longitude)
             router.push({ name: 'Dashboard' })
           }
           this.progress = false
@@ -54,6 +68,7 @@ export default {
           this.progress = false
         }
       }
+      this.progress = false
     },
     register () {
       router.push({ name: 'home' })

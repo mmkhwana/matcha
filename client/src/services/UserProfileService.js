@@ -37,6 +37,9 @@ class UserProfileService {
   static uploadImage (imageData) {
     return General.PostUploadImageExecution(Constant.Upload, imageData)
   }
+  static coordinates (lati, longi, userid) {
+    return General.PostExecution(Constant.Coordinates, { lati, longi, userid })
+  }
 }
 
 export default UserProfileService

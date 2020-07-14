@@ -23,12 +23,14 @@ export default {
     this.userid = this.$session.get('userid')
     let images = []
     const pics = await GalleryService.readImages(this.username, this.userid)
-    images = pics.data
-    images.forEach(row => {
-      this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })
-    })
-    this.$emit(Constant.ImageList, this.pictures)
-    EventBus.$emit(Constant.Profile, this.pictures[0].name)
+    if (pics !== 'nopics') {
+      images = pics.data
+      images.forEach(row => {
+        this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })
+      })
+      this.$emit(Constant.ImageList, this.pictures)
+      EventBus.$emit(Constant.Profile, this.pictures[0].name)
+    }
   },
   methods: {
     removePicture (picname, index) {

@@ -1,0 +1,26 @@
+.v-card.images-flex:hover
+{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.show-btns:hover 
+{
+    color: rgb(0, 0, 0, 0.3) !important;
+    cursor: pointer;
+    opacity: 0.6;
+}
+.text-align
+{
+    text-align: center;
+    width: auto;
+    border: 1px solid red;
+    width: 200px;
+}
+
+.v-card-title
+{
+    text-align: center;
+    width: 200px;
+    border: 1px solid red;
+}

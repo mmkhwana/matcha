@@ -15,7 +15,8 @@ export default {
     postcode: 'user_post_code',
     city: 'user_city',
     country: 'user_country',
-    state: 'user_state'
+    state: 'user_state',
+    AvgRating: 'user_rating_avg'
   },
   Interests: {
     id: 'interest_id',

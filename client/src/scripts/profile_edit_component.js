@@ -104,7 +104,6 @@ export default {
       this.longitude = longi
     },
     async updateProfile () {
-      console.log(this.latitude + ' ' + this.longitude)
       try {
         this.progress = true
         let results = await UserProfileService.updateProfile(this.firstname, this.lastname,
@@ -133,23 +132,22 @@ export default {
     async removeInterest (index, item) {
       try {
         this.interests.splice(index, 1)
-        alert(item)
         await UserProfileService.removeInterest(item, this.$session.get('userid'))
       } catch (error) {
         console.log(error)
       }
     },
-    addLanguage () {
-      const res = this.languages.filter(lan => lan === this.lang)
-      if (this.lang && !res.includes(this.lang)) {
-        this.languages.push(this.lang)
+    addLanguage (item) {
+      const res = this.languages.filter(lan => lan === item)
+      if (item && !res.includes(item)) {
+        this.languages.push(item)
         this.lang = ''
       }
     },
-    addInterest () {
-      const res = this.interests.filter(interest => interest === this.interest)
-      if (this.interest && !res.includes(this.interest)) {
-        this.interests.push(this.interest)
+    addInterest (item) {
+      const res = this.interests.filter(interest => interest === item)
+      if (item && !res.includes(item)) {
+        this.interests.push(item)
         this.interest = ''
       }
     },

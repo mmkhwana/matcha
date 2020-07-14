@@ -28,9 +28,11 @@ export default {
         'mdi-instagram'
       ],
       gender_type: [{ text: 'Female' }, { text: 'Male' }, { text: 'Lesbian' }, { text: 'Gay' }],
+      race: ['Black', 'Mix Race', 'White', 'Indian', 'Chinese'],
       gender: '',
       age: 0,
-      progress: false
+      progress: false,
+      race_item: ''
     }
   },
   beforeCreate () {
@@ -54,13 +56,14 @@ export default {
         if (this.age < 18) {
           this.error = 'Hey kid this is adult world. Come back once you reach puberty age.'
         } else {
-          var respond = await SignupService.registerUser(this.gender, this.firstname, this.lastname, this.username, this.email, this.age, this.pass, this.confirm)
+          var respond = await SignupService.registerUser(this.gender, this.race_item, this.firstname, this.lastname, this.username, this.email, this.age, this.pass, this.confirm)
           this.response = respond
           if (this.response === 'User Registered') {
             this.progress = false
             router.push({ name: 'Login' })
           } else {
             this.error = 'Not registered. Please try again or check the internet connection!'
+            this.progress = false
           }
         }
       }
@@ -69,6 +72,9 @@ export default {
       router.push({ name: 'Login' })
     },
     checkForm: function () {
+      if (!this.race_item) {
+        this.error = 'Race required.'
+      }
       if (!this.date) {
         this.error = 'birth year and month required.'
       }

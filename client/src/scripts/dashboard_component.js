@@ -7,7 +7,9 @@ import VueSession from 'vue-session'
 import Settings from '../views/Settings'
 import Chat from '../views/Chat'
 import Upload from '../views/dialog'
+import OtherProfile from '../views/OtherProfile'
 import EventBus from '../services/event_bus'
+import Service from '../services/UserProfileService'
 import Alert from '../components/alert'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -18,6 +20,7 @@ Vue.component('Settings', Settings)
 Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
 Vue.component('Upload', Upload)
+Vue.component('OtherProfile', OtherProfile)
 export default {
   name: 'Dashboard',
   components: {
@@ -85,14 +88,30 @@ export default {
       this.titles = 'Edit'
     })
     this.$root.$on('Upload', () => {
-      this.titles = 'Upload Photo'
+      this.titles = 'Upload'
+    })
+    this.$root.$on('OtherProfile', (Fullname) => {
+      this.titles = 'OtherProfile'
+    })
+    this.$root.$on('Matches', (Fullname) => {
+      this.titles = 'Matches'
     })
     EventBus.$on('profile', (picname) => {
       this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`
     })
     this.count = this.notifications.length
+    this.updateCoordinates()
   },
   methods: {
+    async updateCoordinates () {
+      try {
+        if (this.$session.get('latitude') && this.$session.get('longitude')) {
+          await Service.coordinates(this.$session.get('latitude'), this.$session.get('longitude'), this.$session.get('userid'))
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async changeTitles (titleName) {
       if (titleName === 'Log Out') {
         if (this.$session.exists()) {
