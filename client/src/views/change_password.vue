@@ -13,7 +13,6 @@
     <v-flex xs12 sm8 md4 >
         <h1 class="text-color display-3 mb-4">Welcome to Matcha</h1>
         <h4 class="text-color subheading font-weight-thin display-2">Meet Your Match!</h4>
-        <v-btn v-on:click="register" rounded color="pink accent-4"  dark lg >Want to register?</v-btn>
     </v-flex>
     <v-flex xs8 sm8 md4 >
         <v-card>
@@ -25,25 +24,24 @@
                     <v-container>
                     <v-row>
                         <v-text-field
-                            icon="person"
-                            name="username"
-                            label="Username"
-                            type="text"
+                            name="email"
+                            label="Please enter your new password"
+                            type="newpassword"
                             required
-                            v-model="username"
-                            prepend-icon="mdi-account"
+                            v-model="newpassword"
+                            prepend-icon="mdi-image-filter-vintage"
                             class="dotted-line"
                         >
                         </v-text-field>
                     </v-row>
                     <v-row>
                         <v-text-field
-                            name="user_pwd"
-                            label="Password"
-                            type="password"
+                            name="email"
+                            label="Please confirm  your password"
+                            type="confirmpassword"
                             required
-                            v-model="pass"
-                            prepend-icon="mdi-lock"
+                            v-model="confirmpassword"
+                            prepend-icon="mdi-image-filter-vintage"
                             class="dotted-line"
                         >
                         </v-text-field>
@@ -53,13 +51,12 @@
             </v-card-text>
             <v-container>
                 <v-card-actions justify="center">
-                    <v-btn class="btn-align" rounded  dark v-on:click="login" v-if="!progress">Log In
+                    <v-btn  type="submit" class="btn-align" rounded  dark v-on:click="changepassword" v-if="!progress">Change Password
                     </v-btn>
                     <v-progress-circular class="btn-align" indeterminate color="green" v-else>
                     </v-progress-circular>
                 </v-card-actions>
                 <v-card-actions>
-                    <a href ="http://localhost:8080/resetpassword" class="btn-align">Forget Password?</a>
                 </v-card-actions>
             </v-container>
         </v-card>
@@ -103,6 +100,41 @@ This site is built to allow two potential lovers to meet. No bullshit.
 <style scoped src="../assets/css/signup.css" lang="css">
 </style>
 <script>
-import login from '../scripts/login_component'
-export default login
+import user from '../services/SignupService'
+export default {
+  data () {
+    return {
+      error: '',
+      newpassword: '',
+      confirmpassword: ''
+    }
+  },
+  methods: {
+    changepassword () {
+      this.error = ''
+      this.checkerrors()
+      if (this.newpassword !== this.confirmpassword) {
+        this.error = 'Passwords Are Not Of Equal Length'
+      }
+
+      if (!this.error) {
+        let email = this.$route.params.email
+        user.changepassword(this.newpassword, email)
+      }
+    },
+    checkerrors () {
+      let res = this.validPassword(this.newpassword)
+      let res1 = this.validPassword(this.confirmpassword)
+      if (res === false || res1 === false) {
+        this.error = 'Min. 8 characters with at least one capital letter, a number and a special character.'
+      }
+    },
+    validPassword: function (pass) {
+      var pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
+      return pattern.test(pass)
+    }
+  }
+
+}
+
 </script>

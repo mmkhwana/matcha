@@ -147,6 +147,51 @@ router.post('/login_user', async(req, res) => {
     });
 });
 
+//reset
+router.post('/account/send_verification', async(req, res) =>
+{
+    console.log('we here')
+    
+    Connection.con.getConnection((error, connect) =>
+    {
+        if (error)  console.log(error);
+        var sql = "SELECT * FROM Matcha_Users WHERE user_email = ?";
+        let param = [ req.body.email ];
+        console.log(param);
+        connect.query(sql, param, function (err, result) {
+            if (err) throw err;
+            let transporter = nodemailer.createTransport({
+                service: 'gmail.com',
+                auth: {
+                   user: 'unathinkomo16@gmail.com',
+                   pass: '0786324448'
+              }
+            });
+      
+              var mailOptions = {
+                  from: 'unathinkomo16@gmail.com',
+                  to: req.body.email,
+                  subject: 'change your password',
+                  html : `<a href=http://localhost:8080/changepassword/${req.body.email}>verification link</a>`,
+              };
+              
+              transporter.sendMail(mailOptions, function(error, info){
+              if (error) {
+                  console.log(error);
+              } else {
+                  console.log('Email sent: ' + info.response);
+              }
+              });
+
+           
+            console.log(result)
+
+        }
+        )
+    })
+    
+})
+
 router.post('/upload', async(req, res) => {
     let dest = 'server/route/api/uploads/tmp';
     let store = multer.diskStorage({
@@ -199,6 +244,34 @@ router.post('/upload', async(req, res) => {
         }
     });
 });
+
+//changepassword
+router.post('/change_password', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error) console.log(error)
+        let pass =  bcrypt.hashSync(req.body.pass, 8)
+        let param = [
+            req.body.email
+        ]
+        let sql = "SELECT * from Matcha_Users WHERE user_email = ? ";
+        connect.query(sql, param, function(err, results) {
+                if(err) {
+                    throw err;
+                } else if (results) {
+                    console.log(results);
+                    let value = [pass, req.body.email]
+                    sql = "UPDATE  Matcha_Users set user_password = ?";
+                    connect.query(sql, value, function(err, results, field) {
+                        console.log(results)
+                        if (err) {
+                            res.send(err)
+                        }
+                        res.send('ok')
+                    })
+                }
+            })
+        })
+})
 
 //verify
 
