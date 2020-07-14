@@ -1,0 +1,12 @@
+.v-card.images-flex:hover
+{
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.show-btns:hover 
+{
+    color: rgb(0, 0, 0, 0.3) !important;
+    cursor: pointer;
+    opacity: 0.6;
+}

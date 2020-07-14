@@ -2,18 +2,19 @@
         <v-container fluid>
           <v-row>
             <v-col
-              v-for="user in posts"
-              :key="user"
+              v-for="(user, i) in posts"
+              :key="i"
               class="d-flex child-flex"
               cols="4"
             >
               <v-card elevation="8">
                 <v-img
-                  :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                  :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                  :src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
+                  :lazy-src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
                   aspect-ratio="1.5"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                  class="white--text align-end grey lighten-2"
+                  class="white--text align-end grey lighten-2 show-btns"
+                  @click="openProfile(user.user_id, user.user_first_name, user.user_last_name)"
                 >
                   <template v-slot:placeholder>
                     <v-row
@@ -52,6 +53,8 @@
           </v-row>
         </v-container>
 </template>
+<style scoped src='../assets/css/matches.css'>
+</style>
 <script>
 import matches from '../scripts/matches_component'
 export default matches
