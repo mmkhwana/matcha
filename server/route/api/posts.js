@@ -254,11 +254,9 @@ router.post('/change_password', async(req, res) => {
                 if(err) {
                     throw err;
                 } else if (results) {
-                    console.log(results);
                     let value = [pass, req.body.email]
                     sql = "UPDATE  Matcha_Users set user_password = ?";
                     connect.query(sql, value, function(err, results, field) {
-                        console.log(results)
                         if (err) {
                             res.send(err)
                         }
