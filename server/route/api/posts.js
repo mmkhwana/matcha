@@ -810,7 +810,6 @@ router.post('/like', async(req, res) => {
                             ]
                         connect.query(sqll, param, function (err, result) 
                         {
-                            connect.release();
                                 if (err)
                                 {
                                     throw err;
@@ -823,7 +822,6 @@ router.post('/like', async(req, res) => {
                                     ]
                                     connect.query(sqll, params, function (err, result)
                                     {
-                                        connect.release();
                                         if (err)
                                         {
                                             throw err;
