@@ -39,6 +39,7 @@ module.exports = {
              user_biography = ?, 
              user_relationship_status = ?, 
              user_height = ?, 
+             user_age = ?, 
              user_race = ?, 
              user_hair = ?,
              user_street_address = ?,
@@ -61,6 +62,7 @@ module.exports = {
             SET pref_age = ?,
             preferred_gender = ?,
             preferred_user_rating = ?,
+            pref_lang = ?,
             preferred_location = ?
             WHERE user_id = ?`
         }
@@ -81,7 +83,7 @@ module.exports = {
     },
     insert: {
         user: {
-            fields: `INSERT INTO Matcha_Users (user_token, user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?,?)`
+            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?)`
         },
         interest: {
             fields: `INSERT INTO Matcha_User_Interests (interest_name, user_id) VALUES (?,?)`
