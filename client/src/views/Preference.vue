@@ -42,7 +42,6 @@
           color="lime accent-3"
           empty-icon="$ratingFull"
         ></v-rating>
-
         <div class="grey--text ml-3">({{ rating }})</div>
       </v-row>
     </v-card-text>

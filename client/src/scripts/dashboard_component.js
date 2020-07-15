@@ -1,5 +1,6 @@
 import Matches from '../views/Matches'
 import Preference from '../views/Preference'
+import History from '../views/History'
 import Profile from '../views/Profile'
 import Edit from '../views/ProfileEdit'
 import router from '../router'
@@ -21,6 +22,7 @@ Vue.component('Chat', Chat)
 Vue.component('Edit', Edit)
 Vue.component('Upload', Upload)
 Vue.component('OtherProfile', OtherProfile)
+Vue.component('History', History)
 export default {
   name: 'Dashboard',
   components: {
@@ -32,6 +34,7 @@ export default {
       items: [{ title: 'Profile', icon: 'mdi-account' },
         { title: 'Preference', icon: 'mdi-settings' },
         { title: 'Matches', icon: 'mdi-account-group' },
+        { title: 'History', icon: 'mdi-account-search' },
         { title: 'Chat', icon: 'mdi-chat' },
         { title: 'Settings', icon: 'mdi-settings' },
         { title: 'Log Out', icon: 'mdi-logout' }],
@@ -78,6 +81,8 @@ export default {
         return 'Chat'
       } else if (this.titles === 'Edit') {
         return 'Edit'
+      } else if (this.titles === 'History') {
+        return 'History'
       } else {
         return 'Profile'
       }
@@ -95,6 +100,9 @@ export default {
     })
     this.$root.$on('Matches', (Fullname) => {
       this.titles = 'Matches'
+    })
+    this.$root.$on('history', () => {
+      this.titles = 'History'
     })
     EventBus.$on('profile', (picname) => {
       this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`

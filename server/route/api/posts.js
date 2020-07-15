@@ -146,14 +146,11 @@ router.post('/login_user', async(req, res) => {
 //reset
 router.post('/account/send_verification', async(req, res) =>
 {
-    console.log('we here')
-    
     Connection.con.getConnection((error, connect) =>
     {
         if (error)  console.log(error);
         var sql = "SELECT * FROM Matcha_Users WHERE user_email = ?";
         let param = [ req.body.email ];
-        console.log(param);
         connect.query(sql, param, function (err, result) {
             if (err) throw err;
             let transporter = nodemailer.createTransport({
@@ -244,27 +241,29 @@ router.post('/upload', async(req, res) => {
 //changepassword
 router.post('/change_password', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
-        if (error) console.log(error)
+        if (error)
+            return;
         let pass =  bcrypt.hashSync(req.body.pass, 8)
         let param = [
             req.body.email
-        ]
+        ];
         let sql = "SELECT * from Matcha_Users WHERE user_email = ? ";
         connect.query(sql, param, function(err, results) {
-                if(err) {
-                    throw err;
-                } else if (results) {
-                    let value = [pass, req.body.email]
-                    sql = "UPDATE  Matcha_Users set user_password = ?";
-                    connect.query(sql, value, function(err, results, field) {
-                        if (err) {
-                            res.send(err)
-                        }
-                        res.send('ok')
-                    })
-                }
-            })
+            if(err) {
+                return;
+            } else if (results) {
+                let value = [pass, req.body.email];
+                sql = "UPDATE  Matcha_Users set user_password = ?";
+                connect.query(sql, value, function(err, results) {
+                    connect.release();
+                    if (err) {
+                        return;
+                    }
+                    res.send('ok')
+                })
+            }
         })
+    })
 })
 
 //verify
@@ -919,6 +918,174 @@ router.post('/read_interests', async(req, res) => {
                         return;
                     }
                 })
+            }
+        });
+    });
+});
+
+router.post('/retrieve_history_ids', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query(sql.select.history.all, param, (error, results) => {
+            connect.release();
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/retrieve_history_info', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query(sql.select.history.user, param, (error, results) => {
+            connect.release();
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/put_history', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.checkedId,
+            req.body.checkerId
+        ];
+        connect.query(sql.select.history.check, param, (error, results) => {
+            if (error)
+                return;
+            if (!results[0])
+            {
+                connect.query(sql.insert.History.fields, param, (error, results) => {
+                    connect.release();
+                    if (error)
+                        return;
+                    res.status(200).send('ok');
+                });
+            }
+        });
+    });
+});
+
+router.post('/search_with_one', async(req, res) => {
+    let query = ''
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        if (req.body.type === 'age')
+            query = sql.select.user.searchWithAge;
+        else if (req.body.type === 'rating')
+                    query = sql.select.user.searchWithRating;
+        else if (req.body.type === 'dist')
+                    query = sql.select.user.searchWithDist
+        let param = [
+            req.body.value,
+            req.body.gender
+        ];
+        connect.query(query, param, (error, results) => {
+            console.log(error)
+            console.log(results)
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/search_with_two', async(req, res) => {
+    let query = '';
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        if (req.body.type === 'age&rating')
+            query = sql.select.user.searchWithAgeRating;
+        else if (req.body.type === 'age&dist')
+                    query = sql.select.user.searchWithAgeDist;
+        else if (req.body.type === 'rating&dist')
+                    query = sql.select.user.searchWithRatingDist
+        let param = [
+            req.body.number,
+            req.body.value,
+            req,body.gender
+        ];
+        connect.query(query, param, (error, results) => {
+            console.log(error)
+            console.log(results)
+            connect.release();
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/search_with_all', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.userId,
+        ];
+        connect.query(sql.select.preferences.all, param, (error, results) => {
+            if (error)
+                return;
+            let params;
+            if (!results[0])
+            {
+                params = [
+                    req.body.age,
+                    req.body.rating
+                ];
+                connect.query(sql.select.user.searchWithAllGender, params, (error, results) => {
+                    console.log(error)
+                    console.log(results)
+                    connect.release();
+                    if (error)
+                        return;
+                    res.status(200).send(results);
+                });
+            } else {
+                params = [
+                    req.body.age,
+                    req.body.rating,
+                    results[0].preferred_gender
+                ];
+                connect.query(sql.select.user.searchWithAll, params, (error, results) => {
+                    console.log(error)
+                    console.log(results)
+                    connect.release();
+                    if (error)
+                        return;
+                    res.status(200).send(results);
+                });
             }
         });
     });

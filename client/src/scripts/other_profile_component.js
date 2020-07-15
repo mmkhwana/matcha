@@ -28,20 +28,28 @@ export default {
       country: '',
       state: '',
       userid: '',
-      rating: 0
+      rating: 0,
+      parent: ''
     }
   },
   mounted: function () {
     let data = this.$session.get('matchId')
     this.userid = data.userId
+    this.parent = data.parent
     this.getDetails()
     this.getImages()
   },
   methods:
   {
     closeProfile () {
-      this.$root.$emit('Matches')
-      this.$destroy()
+      if (this.parent === 'Matches') {
+        this.$root.$emit('Matches')
+        this.$destroy()
+      }
+      if (this.parent === 'History') {
+        this.$root.$emit('history')
+        this.$destroy()
+      }
     },
     async getDetails () {
       const res = (await UserProfileService.getUserDetails(this.userid))[0]

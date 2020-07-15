@@ -1,4 +1,6 @@
 import Matches from '../services/MatchesService'
+import History from '../services/HistoryService'
+import Convert from '../services/ConvertService'
 import EventBus from '../services/event_bus'
 import VueSession from 'vue-session'
 import Vue from 'vue'
@@ -11,10 +13,16 @@ export default {
     return {
       posts: [],
       postsSuggestions: [],
+      dist: ['50 ', '200', '500', '1000'],
+      age_gap: ['25 & under', '35 & under', '45 & under', 'Above 45'],
+      rating: 0,
+      age: '',
+      distance: '',
       interes: ' common interest(s)',
       otherInteres: [],
       userInteres: [],
-      number: 0
+      number: 0,
+      progress: false
     }
   },
 
@@ -26,9 +34,48 @@ export default {
         console.log(error)
       }
     },
+    search () {
+      if (this.rating !== 0 || this.age || this.distance) {
+        this.progress = true
+        let age = Convert.Age(this.age)
+        try {
+          if (this.rating !== 0 && this.age && this.distance) {
+            Matches.searchWithAll(age, this.rating, this.distance)
+          } else if (this.rating !== 0 && this.age) {
+            Matches.searchWithAgeRating(age, this.rating)
+          } else if (this.age && this.distance) {
+            Matches.searchWithAgeDistance(age, this.distance)
+          } else if (this.rating !== 0 && this.distance) {
+            Matches.searchWithRatingDistance(this.rating, this.distance)
+          } else if (this.age) {
+            Matches.searchWithAge(age)
+          } else if (this.rating !== 0) {
+            Matches.searchWithRating(this.rating)
+          } else if (this.distance) {
+            Matches.searchWithDistance(this.distance)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    },
+    clear () {
+      this.rating = 0
+      this.age = ''
+      this.distance = ''
+    },
     openProfile (userId, name, surname) {
-      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname })
+      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'parent': 'Matches' })
       this.$root.$emit('OtherProfile')
+      this.putIntoHistory(userId, this.$session.get('userid'))
+      EventBus.$emit('updateHistory')
+    },
+    async putIntoHistory (checkedUser, checkerUser) {
+      try {
+        await History.putIntoHistory(checkedUser, checkerUser)
+      } catch (error) {
+        console.log(error)
+      }
     },
     async like (liking) {
       let rating = this.$refs['rating' + liking][0]._data.internalValue
