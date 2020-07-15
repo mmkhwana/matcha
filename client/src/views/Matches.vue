@@ -1,13 +1,19 @@
 <template>
         <v-container fluid>
-          <v-row>
+          <v-row
+          >
+            <v-flex
+              class="images-flex"
+            >
             <v-col
               v-for="(user, i) in posts"
               :key="i"
-              class="d-flex child-flex"
+              class="images-flex"
               cols="4"
             >
-              <v-card elevation="8">
+              <v-card elevation="8"
+                min-width="200px"
+                >
                 <v-img
                   :src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
                   :lazy-src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
@@ -26,7 +32,7 @@
                     </v-row>
                   </template>
                   <v-card-title class="title">{{ user.user_first_name + ' ' + user.user_last_name }}</v-card-title>
-                   <v-card-subtitle class="white--text">{{ user.user_age }}</v-card-subtitle>
+                  <v-card-subtitle class="white--text text-left">{{ user.user_age }}</v-card-subtitle>
                 </v-img>
                  <v-card-actions>
                   <v-rating
@@ -45,10 +51,11 @@
                   <v-icon>mdi-thumb-up-outline</v-icon>
                   </v-btn>
                   <v-spacer></v-spacer>
-                  <v-chip filter outlined>{{likes_no}}</v-chip>
+                  <v-chip filter outlined v-if="user.interests">{{user.interests + interes}}</v-chip>
                  </v-card-actions>
               </v-card>
             </v-col>
+            </v-flex>
           </v-row>
           <v-row
           align="center"
@@ -63,18 +70,28 @@
               </v-card>
             </v-col>
           </v-row>
-          <v-row>
+          <v-row
+              align="center"
+              justify="center"
+          >
+            <v-flex
+              align="center"
+              justify="center"
+              class="images-flex"
+            >
             <v-col
               v-for="(user, i) in postsSuggestions"
               :key="i"
-              class="d-flex child-flex"
               cols="4"
+              sm="4"
+              class="images-flex"
             >
               <v-card elevation="8">
                 <v-img
                   :src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
                   :lazy-src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
                   aspect-ratio="1.5"
+                  min-width="150px"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
                   class="white--text align-end grey lighten-2 show-btns"
                   @click="openProfile(user.user_id, user.user_first_name, user.user_last_name)"
@@ -110,6 +127,7 @@
                  </v-card-actions>
               </v-card>
             </v-col>
+            </v-flex>
           </v-row>
         </v-container>
 </template>
