@@ -870,13 +870,11 @@ router.post('/like', async(req, res) => {
                                     return;
                                 }
                             } );
-                
-                        }
-                        if (error) console.log(error);
+                            if (error) console.log(error);
                         var sqll = 'SELECT * FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?';
                         let param = [
-                                req.body.userLikedId,
-                                req.body.userLikerId
+                                req.body.liking,
+                                req.body.userId
                             ]
                         connect.query(sqll, param, function (err, result) 
                         {
@@ -887,8 +885,8 @@ router.post('/like', async(req, res) => {
                                 if (result[0])
                                 {
                                     let params = [
-                                        req.body.userLikerId,
-                                        req.body.userLikedId
+                                        req.body.userId,
+                                        req.body.liking
                                     ]
                                     connect.query(sqll, params, function (err, result)
                                     {
@@ -912,10 +910,16 @@ router.post('/like', async(req, res) => {
                                          res.send(error);
                                     })
                                         return;
-                                    }
-                                    });
-                                    res.send(result)
-                                });
+                                }
+                                res.send(result)
+                                return;
+                                    }); 
+                                    console.log('liked each other')   
+                                });   
+                
+                        }
+                            
+                            
                     });
                 }
             })

@@ -40,22 +40,16 @@ export default {
       this.$root.$emit('OtherProfile')
     },
     async like (liking) {
-      let userId = this.$session.get('userid')
-      try {
-        await axios.post(`http://localhost:5000/api/posts/like`, { liking, userId })
-      } catch (error) {
-        console.log(error)
-        let rating = this.$refs['rating' + liking][0]._data.internalValue
-        if (rating !== 0) {
-          let userId = this.$session.get('userid')
-          try {
-            await Matches.like(liking, rating, userId)
-          } catch (error) {
-            console.log(error)
-          }
-        } else {
-          EventBus.$emit('sendText', 'Rate first.')
+      let rating = this.$refs['rating' + liking][0]._data.internalValue
+      if (rating !== 0) {
+        let userId = this.$session.get('userid')
+        try {
+          await Matches.like(liking, rating, userId)
+        } catch (error) {
+          console.log(error)
         }
+      } else {
+        EventBus.$emit('sendText', 'Rate first.')
       }
     },
     checkMatching (userData, matchData) {
