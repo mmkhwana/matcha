@@ -36,6 +36,7 @@ export default {
   PutIntoHistory: 'put_history',
   Matching: 'matching',
   ReadInterests: 'read_interests',
+  SearchWithOne: 'search_with_one',
   SearchWithAge: 'search_with_age',
   SearchWithRating: 'search_with_rating',
   SearchWithDistance: 'search_with_distance',

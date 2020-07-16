@@ -7,11 +7,10 @@ module.exports = {
             searchWithAgeRating: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_age = ? AND user_rating_avg = ? AND user_gender = ?`,
             searchWithAgeDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_gender = ?`,
             searchWithRatingDist: `SELECT user_id, user_name, user_first_name, user_age, user_last_name, user_latitude, user_longitude FROM Matcha_Users WHERE user_rating_avg = ? AND user_gender = ?`,
-            searchWithAge: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_age = ? AND user_gender = ?`,
-            searchWithRating: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_rating_avg = ? AND user_gender = ?`,
-            searchWithDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_gender = ?`,
+            searchWithDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users`,
             searchWithAll: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_rating_avg =? AND user_gender = ?`,
-            searchWithAllGender: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_rating_avg =?`
+            searchWithAllGender: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_rating_avg =?`,
+            searchWith: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE `
         },
         interest: {
             all: `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`,

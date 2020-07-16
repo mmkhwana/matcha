@@ -4,7 +4,9 @@
           align="center"
           justify="center">
             <v-col cols="6">
-            <v-expansion-panels class="mb-6">
+            <v-expansion-panels
+              class="mb-6"
+            >
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 Advance Search
@@ -98,7 +100,9 @@
               </v-expansion-panels>
             </v-col>
             <v-col cols="6">
- <v-expansion-panels class="mb-6">
+          <v-expansion-panels
+            class="mb-6"
+          >
             <v-expansion-panel>
               <v-expansion-panel-header disable-icon-rotate>
                 Sort

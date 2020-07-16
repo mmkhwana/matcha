@@ -17,16 +17,16 @@ class MatchesService {
     return GeneralService.PostExecution(Constants.ReadInterests, { userId, otherUser })
   }
 
-  static searchWithAge (age) {
-    return GeneralService.PostExecution(Constants.SearchWithAge, { age })
+  static searchWithOne (userId, value, type) {
+    return GeneralService.PostExecution(Constants.SearchWithOne, { userId, value, type })
   }
 
   static searchWithRating (rating) {
     return GeneralService.PostExecution(Constants.SearchWithRating, { rating })
   }
 
-  static searchWithDistance (distance) {
-    return GeneralService.PostExecution(Constants.SearchWithDistance, { distance })
+  static searchWithDistance (userId, distance) {
+    return GeneralService.PostExecution(Constants.SearchWithDistance, { userId, distance })
   }
 
   static searchWithAll (age, rating, distance) {

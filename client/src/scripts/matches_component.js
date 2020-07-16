@@ -22,7 +22,8 @@ export default {
       otherInteres: [],
       userInteres: [],
       number: 0,
-      progress: false
+      progress: false,
+      userData: []
     }
   },
 
@@ -34,7 +35,7 @@ export default {
         console.log(error)
       }
     },
-    search () {
+    async search () {
       if (this.rating !== 0 || this.age || this.distance) {
         this.progress = true
         let age = Convert.Age(this.age)
@@ -48,12 +49,16 @@ export default {
           } else if (this.rating !== 0 && this.distance) {
             Matches.searchWithRatingDistance(this.rating, this.distance)
           } else if (this.age) {
-            Matches.searchWithAge(age)
+            let res = await Matches.searchWithOne(this.$session.get('userid'), age, 'age')
+            this.posts = res
           } else if (this.rating !== 0) {
-            Matches.searchWithRating(this.rating)
+            let res = await Matches.searchWithOne(this.$session.get('userid'), this.rating, 'rating')
+            this.posts = res
           } else if (this.distance) {
-            Matches.searchWithDistance(this.distance)
+            let res = Matches.searchWithDistance(this.$session.get('userid'), this.distance)
+            alert(JSON.stringify(res.userData))
           }
+          this.progress = false
         } catch (error) {
           console.log(error)
         }
@@ -63,6 +68,7 @@ export default {
       this.rating = 0
       this.age = ''
       this.distance = ''
+      this.init()
     },
     openProfile (userId, name, surname) {
       this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'parent': 'Matches' })
@@ -152,15 +158,19 @@ export default {
       dist = dist * 60 * 1.1515
       if (unit === 'K') { dist = dist * 1.609344 }
       return dist
+    },
+    async init () {
+      this.posts = []
+      let res = await Matches.matching(this.$session.get('userid'))
+      this.userData = res.userData
+      this.checkMatching(res.userData, res.matchData)
+      this.posts.forEach(user => {
+        this.matchInterests(user.user_id)
+      })
     }
   },
-  async mounted () {
+  mounted () {
     this.loadPosts()
-    this.posts = []
-    let res = await Matches.matching(this.$session.get('userid'))
-    this.checkMatching(res.userData, res.matchData)
-    this.posts.forEach(user => {
-      this.matchInterests(user.user_id)
-    })
+    this.init()
   }
 }

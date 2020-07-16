@@ -253,7 +253,7 @@ router.post('/change_password', async(req, res) => {
                 return;
             } else if (results) {
                 let value = [pass, req.body.email];
-                sql = "UPDATE  Matcha_Users set user_password = ?";
+                sql = "UPDATE  Matcha_Users set user_password = ? WHERE user_email = ?";
                 connect.query(sql, value, function(err, results) {
                     connect.release();
                     if (err) {
@@ -810,7 +810,6 @@ router.post('/like', async(req, res) => {
                             ];
                             connect.query(sql.insert.Likes.fields, para, (error, results) => {
                                 if (error) {
-
                                     connect.rollback(() => {
                                         res.send(error);
                                     })
@@ -981,7 +980,11 @@ router.post('/put_history', async(req, res) => {
                     if (error)
                         return;
                     res.status(200).send('ok');
+                    return;
                 });
+            } else {
+                connect.release();
+                res.status(200).send('ok');
             }
         });
     });
@@ -992,26 +995,78 @@ router.post('/search_with_one', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
             return;
-        if (req.body.type === 'age')
-            query = sql.select.user.searchWithAge;
-        else if (req.body.type === 'rating')
-                    query = sql.select.user.searchWithRating;
-        else if (req.body.type === 'dist')
-                    query = sql.select.user.searchWithDist
-        let param = [
-            req.body.value,
-            req.body.gender
-        ];
-        connect.query(query, param, (error, results) => {
-            console.log(error)
-            console.log(results)
+        connect.query(sql.select.preferences.all, req.body.userId, (error, results) => {
             if (error)
                 return;
-            if (results[0])
+            let param = '';
+            if (!results[0])
             {
+                if (req.body.type === 'age')
+                query = sql.select.user.searchWithAge;
+                else if (req.body.type === 'rating')
+                            query = sql.select.user.searchWithRating;
+                param = [
+                    req.body.value
+                ];
+            } else {
+                let gender = results[0].preferred_gender;
+                if (req.body.type === 'age')
+                     query = sql.select.user.searchWith + 'user_age <= ?  AND user_gender = ?';
+                else if (req.body.type === 'rating')
+                            query = sql.select.user.searchWith + 'user_rating_avg <= ? AND user_rating_avg > 0.0 AND user_gender = ?';
+                param = [
+                    req.body.value,
+                    gender
+                ];
+            }
+            connect.query(query, param, (error, results) => {
+                console.log(error)
+                console.log(results)
+                connect.release();
+                if (error)
+                    return;
                 res.status(200).send(results);
                 return;
+            });
+        });
+    });
+});
+
+router.post('/search_with_distance', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+        {
+            connect.release();
+            return;
+        }
+        let param = [
+            req.body.userId
+        ];
+        connect.query(sql.select.user.details, param, (error, results) => {
+            if (error)
+            {
+                connect.release();
+                return;
             }
+            connect.query(sql.select.preferences.all, param, (error, result) => {
+                if (error)
+                {
+                    connect.release();
+                    return;
+                }
+                let sql_stmt = '';
+                if (result[0])
+                    sql_stmt = sql.select.user.searchWithDist + ` WHERE user_gender = '${result[0].preferred_gender}'`;
+                else
+                    sql_stmt = sql.select.user.searchWithDist;
+                connect.query(sql_stmt, (error, result) => {
+                    connect.release();
+                    if (error)
+                        return;
+                    res.status(200).send({'matchData': result, 'userData': results});
+                    console.log(result);
+                });
+            });
         });
     });
 });
@@ -1020,7 +1075,10 @@ router.post('/search_with_two', async(req, res) => {
     let query = '';
     Connection.con.getConnection((error, connect) => {
         if (error)
+        {
+            connect.release();
             return;
+        }
         if (req.body.type === 'age&rating')
             query = sql.select.user.searchWithAgeRating;
         else if (req.body.type === 'age&dist')
