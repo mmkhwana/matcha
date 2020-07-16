@@ -65,7 +65,7 @@
                     cols="12"
                     md="6"
                   >
-                  <v-card-title>Distance(km)</v-card-title>
+                  <v-card-title><v-row><v-col cols="12">Distance(km)</v-col></v-row></v-card-title>
                   </v-col>
                   <v-col
                     cols="12"
@@ -79,6 +79,50 @@
                   </v-overflow-btn>
                   </v-col>
                 </v-row>
+                  <v-card-title>
+                  <v-row>
+                    <v-col
+                    cols="12"
+                    class="text-left"
+                    md="6"
+                    >
+                    Interests
+                    </v-col>
+                    <v-col cols="12" md="6" class="text-right">
+                      <v-menu top left transittion="scroll-x-reverse-transition" max-height='300px'>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn icon v-bind="attrs" v-on="on">
+                            <v-icon>mdi-plus-circle-outline</v-icon>
+                          </v-btn>
+                        </template>
+
+                        <v-list
+                          class="menu-interests"
+                          v-for="(item, i) in defaultInterests"
+                          :key="i"
+                        >
+                          <v-list-item
+                            link
+                            v-on:click="addInterest(item)"
+                          >
+                            <v-list-item-title>{{ item }}</v-list-item-title>
+                          </v-list-item>
+                        </v-list>
+                      </v-menu>
+                  </v-col>
+                  </v-row>
+                </v-card-title>
+                <v-card-text full-width>
+                  <v-row>
+                  <v-col
+                    v-for='(item, index) in interests'
+                    :key='index'
+                    class="shrink"
+                  >
+                    <v-chip close filter outlined @click:close="removeInterest(index, item)">{{ item }}</v-chip>
+                  </v-col>
+                  </v-row>
+                </v-card-text>
                 <v-row>
                 <v-col
                     cols="12"

@@ -2,6 +2,7 @@ import Matches from '../services/MatchesService'
 import History from '../services/HistoryService'
 import Convert from '../services/ConvertService'
 import EventBus from '../services/event_bus'
+import Interests from '../jsons/interests'
 import VueSession from 'vue-session'
 import Vue from 'vue'
 Vue.use(VueSession)
@@ -13,6 +14,8 @@ export default {
     return {
       posts: [],
       postsSuggestions: [],
+      defaultInterests: [],
+      interests: [],
       dist: ['50 ', '200', '500', '1000'],
       age_gap: ['25 & under', '35 & under', '45 & under', 'Above 45'],
       rating: 0,
@@ -28,15 +31,8 @@ export default {
   },
 
   methods: {
-    async loadPosts () {
-      try {
-        await Matches.getMatches()
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async search () {
-      if (this.rating !== 0 || this.age || this.distance) {
+      if (this.rating !== 0 || this.age || this.distance || this.interests.length !== 0) {
         this.progress = true
         let age = Convert.Age(this.age)
         try {
@@ -75,6 +71,11 @@ export default {
             if (Object.keys(res).length !== 0) {
               this.processDistance(res)
             }
+          } else if (this.interests.length) {
+            let res = await Matches.matching(this.$session.get('userid'))
+            if (Object.keys(res).length !== 0) {
+              this.processInterests(res)
+            }
           }
           this.progress = false
           this.rating = 0
@@ -99,10 +100,33 @@ export default {
         }
       })
     },
+    async processInterests (res) {
+      this.userData = res.userData
+      await this.checkingInterests(res.userData, res.matchData)
+      this.posts.forEach(user => {
+        this.matchInterests(user.user_id)
+      })
+    },
+    async checkingInterests (userData, matchData) {
+      this.posts = []
+      matchData.forEach(user => {
+        let matchGender = user.user_gender
+        if (userData.prefGender) {
+          if (matchGender === userData.prefGender) {
+            user.interests = 0
+            this.posts.push(user)
+          }
+        } else {
+          user.interests = 0
+          this.posts.push(user)
+        }
+      })
+    },
     clear () {
       this.rating = 0
       this.age = ''
       this.distance = ''
+      this.interests.splice(0)
       this.init()
     },
     openProfile (userId, name, surname) {
@@ -148,13 +172,13 @@ export default {
             user.interests = 0
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {
-            user.interests = 10 + ' common interest(s)'
+            user.interests = 0
             this.postsSuggestions.push(user)
           }
         }
       })
     },
-    userIntere (otherUserId) {
+    async userIntere (otherUserId) {
       this.userInteres.forEach(interest => {
         this.otherIntere(interest)
       })
@@ -177,7 +201,7 @@ export default {
       if (Object.keys(res).length !== 0) {
         this.otherInteres = res.otherUser
         this.userInteres = res.user
-        this.userIntere(otherUserId)
+        await this.userIntere(otherUserId)
         this.otherInteres = null
         this.userInteres = null
       }
@@ -194,8 +218,19 @@ export default {
       if (unit === 'K') { dist = dist * 1.609344 }
       return dist
     },
+    removeInterest (index, item) {
+      this.interests.splice(index, 1)
+    },
+    addInterest (item) {
+      const res = this.interests.filter(interest => interest === item)
+      if (item && !res.includes(item)) {
+        this.interests.push(item)
+        this.interest = ''
+      }
+    },
     async init () {
       this.posts = []
+      this.defaultInterests = Interests
       let res = await Matches.matching(this.$session.get('userid'))
       this.userData = res.userData
       this.checkMatching(res.userData, res.matchData)
@@ -205,7 +240,6 @@ export default {
     }
   },
   mounted () {
-    this.loadPosts()
     this.init()
   }
 }
