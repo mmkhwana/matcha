@@ -125,6 +125,7 @@ router.post('/login_user', async(req, res) => {
                 return;
             }
             if (results[0]) {
+
                 bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
                     if (error) {
                         res.status(200).send(error);
@@ -175,10 +176,7 @@ router.post('/account/send_verification', async(req, res) =>
                   console.log('Email sent: ' + info.response);
               }
               });
-
-           
             console.log(result)
-
         }
         )
     })
@@ -1020,8 +1018,6 @@ router.post('/search_with_one', async(req, res) => {
                 ];
             }
             connect.query(query, param, (error, results) => {
-                console.log(error)
-                console.log(results)
                 connect.release();
                 if (error)
                     return;
@@ -1036,7 +1032,6 @@ router.post('/search_with_distance', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
         {
-            connect.release();
             return;
         }
         let param = [
@@ -1045,13 +1040,11 @@ router.post('/search_with_distance', async(req, res) => {
         connect.query(sql.select.user.details, param, (error, results) => {
             if (error)
             {
-                connect.release();
                 return;
             }
             connect.query(sql.select.preferences.all, param, (error, result) => {
                 if (error)
                 {
-                    connect.release();
                     return;
                 }
                 let sql_stmt = '';
@@ -1062,7 +1055,9 @@ router.post('/search_with_distance', async(req, res) => {
                 connect.query(sql_stmt, (error, result) => {
                     connect.release();
                     if (error)
+                    {
                         return;
+                    }
                     res.status(200).send({'matchData': result, 'userData': results});
                     console.log(result);
                 });
@@ -1076,30 +1071,92 @@ router.post('/search_with_two', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
         {
-            connect.release();
             return;
         }
-        if (req.body.type === 'age&rating')
-            query = sql.select.user.searchWithAgeRating;
-        else if (req.body.type === 'age&dist')
-                    query = sql.select.user.searchWithAgeDist;
-        else if (req.body.type === 'rating&dist')
-                    query = sql.select.user.searchWithRatingDist
         let param = [
-            req.body.number,
-            req.body.value,
-            req,body.gender
+            req.body.userId
         ];
-        connect.query(query, param, (error, results) => {
-            console.log(error)
-            console.log(results)
-            connect.release();
+        connect.query(sql.select.preferences.all, param, (error, results) => {
             if (error)
-                return;
-            if (results[0])
             {
-                res.status(200).send(results);
+                res.send('error');
                 return;
+            }
+            let user = [];
+            connect.query(sql.select.user.details, param, (error, result) => {
+                if (error)
+                {
+                    res.send('error');
+                    return;
+                }
+                user = result;
+            });
+            if (req.body.type === 'age&rating')
+                query = sql.select.user.searchWithAgeRating;
+            else if (req.body.type === 'age&dist')
+                        query = sql.select.user.searchWithAgeDist;
+            else if (req.body.type === 'rating&dist')
+                    query = sql.select.user.searchWithRatingDist
+            if (!results[0])
+            {
+                let params = '';
+                if (req.body.type === 'age&rating')
+                {
+                    params = [
+                        req.body.number,
+                        req.body.value
+                    ];
+                }
+                else
+                {
+                    params = [
+                        req.body.number
+                    ];
+                }
+                connect.query(query, params, (error, results) => {
+                    if (error)
+                    {
+                        res.send('error');
+                        return;
+                    }
+                    if (req.body.type === 'age&rating')
+                        res.status(200).send(results)
+                    else 
+                        res.status(200).send({'matchData': results, 'userData': user})
+                });
+            } 
+            else
+            {
+                query += ` AND user_gender = ?`
+                let params = '';
+                if (req.body.type === 'age&rating')
+                {
+                    params = [
+                        req.body.number,
+                        req.body.value,
+                        results[0].preferred_gender
+                    ];
+                }
+                else
+                {
+                    params = [
+                        req.body.number,
+                        results[0].preferred_gender
+                    ];
+                }
+                connect.query(query, params, (error, results) => {
+                    console.log(error);
+                    console.log(results);
+                    if (error)
+                    {
+                        res.send('error');
+                        return;
+                    }
+                    if (req.body.type === 'age&rating')
+                        res.status(200).send(results)
+                    else 
+                        res.status(200).send({'matchData': results, 'userData': user})
+                });
             }
         });
     });
@@ -1116,6 +1173,15 @@ router.post('/search_with_all', async(req, res) => {
             if (error)
                 return;
             let params;
+            let user = [];
+            connect.query(sql.select.user.details, param, (error, result) => {
+                if (error)
+                {
+                    res.send('error');
+                    return;
+                }
+                user = result;
+            });
             if (!results[0])
             {
                 params = [
@@ -1123,12 +1189,10 @@ router.post('/search_with_all', async(req, res) => {
                     req.body.rating
                 ];
                 connect.query(sql.select.user.searchWithAllGender, params, (error, results) => {
-                    console.log(error)
-                    console.log(results)
                     connect.release();
                     if (error)
                         return;
-                    res.status(200).send(results);
+                    res.status(200).send({ 'matchData': results, 'userData': user });
                 });
             } else {
                 params = [
@@ -1137,12 +1201,10 @@ router.post('/search_with_all', async(req, res) => {
                     results[0].preferred_gender
                 ];
                 connect.query(sql.select.user.searchWithAll, params, (error, results) => {
-                    console.log(error)
-                    console.log(results)
                     connect.release();
                     if (error)
                         return;
-                    res.status(200).send(results);
+                    res.status(200).send({ 'matchData': results, 'userData': user });
                 });
             }
         });

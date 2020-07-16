@@ -41,28 +41,63 @@ export default {
         let age = Convert.Age(this.age)
         try {
           if (this.rating !== 0 && this.age && this.distance) {
-            Matches.searchWithAll(age, this.rating, this.distance)
+            let res = await Matches.searchWithAll(this.$session.get('userid'), age, this.rating)
+            if (Object.keys(res).length !== 0) {
+              this.processDistance(res)
+            }
           } else if (this.rating !== 0 && this.age) {
-            Matches.searchWithAgeRating(age, this.rating)
+            let res = await Matches.searchWithTwo(this.$session.get('userid'), age, this.rating, 'age&rating')
+            if (Object.keys(res).length !== 0) {
+              this.posts = res
+            }
           } else if (this.age && this.distance) {
-            Matches.searchWithAgeDistance(age, this.distance)
+            let res = await Matches.searchWithTwo(this.$session.get('userid'), age, this.distance, 'age&dist')
+            if (Object.keys(res.matchData).length !== 0) {
+              this.processDistance(res)
+            }
           } else if (this.rating !== 0 && this.distance) {
-            Matches.searchWithRatingDistance(this.rating, this.distance)
+            let res = await Matches.searchWithTwo(this.$session.get('userid'), this.rating, this.distance, 'rating&dist')
+            if (Object.keys(res.matchData).length !== 0) {
+              this.processDistance(res)
+            }
           } else if (this.age) {
             let res = await Matches.searchWithOne(this.$session.get('userid'), age, 'age')
-            this.posts = res
+            if (Object.keys(res).length !== 0) {
+              this.posts = res
+            }
           } else if (this.rating !== 0) {
             let res = await Matches.searchWithOne(this.$session.get('userid'), this.rating, 'rating')
-            this.posts = res
+            if (Object.keys(res).length !== 0) {
+              this.posts = res
+            }
           } else if (this.distance) {
-            let res = Matches.searchWithDistance(this.$session.get('userid'), this.distance)
-            alert(JSON.stringify(res.userData))
+            let res = await Matches.searchWithDistance(this.$session.get('userid'), this.distance)
+            if (Object.keys(res).length !== 0) {
+              this.processDistance(res)
+            }
           }
           this.progress = false
+          this.rating = 0
+          this.age = ''
+          this.distance = ''
         } catch (error) {
           console.log(error)
         }
       }
+    },
+    processDistance (res) {
+      let userdata = res.userData[0]
+      let matchData = res.matchData
+      this.posts = []
+      let dist = ''
+      matchData.forEach(user => {
+        if (user.user_latitude) {
+          dist = this.calcDistance(user.user_latitude, user.user_longitude, userdata.user_latitude, userdata.user_longitude, 'K')
+          if (dist <= this.distance) {
+            this.posts.push(user)
+          }
+        }
+      })
     },
     clear () {
       this.rating = 0

@@ -37,6 +37,8 @@ export default {
   Matching: 'matching',
   ReadInterests: 'read_interests',
   SearchWithOne: 'search_with_one',
+  SearchWithTwo: 'search_with_two',
+  SearchWithAll: 'search_with_all',
   SearchWithAge: 'search_with_age',
   SearchWithRating: 'search_with_rating',
   SearchWithDistance: 'search_with_distance',
