@@ -16,12 +16,11 @@
     class="images-flex"
 >
 <v-hover v-slot:default="{ hover }">
-    <v-card :class="{ 'on-hover': hover }">
+    <v-card :class="{ 'on-hover': hover }" min-width="200px">
     <v-img
     :src='`http://localhost:5000/api/posts/uploads/${username}/${n.name}`'
     :lazy-src='`http://localhost:5000/api/posts/uploads/${username}/${n.name}`'
     aspect-ratio='1.0'
-    min-width="150px"
     elevation="8"
     gradient='to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)'
     >

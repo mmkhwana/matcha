@@ -66,7 +66,7 @@
                   >
                     <v-text-field
                       v-model="street"
-                      label="Address*"
+                      label="Street Address"
                       prepend-icon="mdi-map-marker"
                       required
                     ></v-text-field>
@@ -78,7 +78,7 @@
                   >
                     <v-text-field
                       v-model="postcode"
-                      label="Post Code"
+                      label="Postal Code"
                       type="number"
                       prepend-icon="mdi-numeric-4-box-multiple-outline"
                       required
@@ -92,7 +92,7 @@
                   >
                     <v-text-field
                       v-model="city"
-                      label="City*"
+                      label="City"
                       prepend-icon="mdi-city"
                       required
                     ></v-text-field>
@@ -107,7 +107,7 @@
                       v-model="country"
                       :items="countries"
                       prepend-icon="mdi-flag-checkered"
-                      label="Country*"
+                      label="Country"
                       placeholder="Select..."
                       required
                       overflow
@@ -123,7 +123,7 @@
                   >
                     <v-text-field
                       v-model="state"
-                      label="State/Province/Region*"
+                      label="State/Province/Region"
                       required
                       prepend-icon="mdi-home-map-marker"
                     ></v-text-field>

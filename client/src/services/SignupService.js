@@ -24,6 +24,9 @@ class SignupService {
   static registerUser (gender, race, firstname, lastname, username, email, date, pass, confirm) {
     return GeneralService.PostExecution(Constant.RegisterUser, { gender, race, firstname, lastname, username, email, date, pass, confirm })
   }
+  static changepassword (pass, email) {
+    return GeneralService.PostExecution('change_password', { pass, email })
+  }
 
   static deleteUser (id) {
     return axios.delete(`${url}${id}`)

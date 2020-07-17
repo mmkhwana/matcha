@@ -11,7 +11,38 @@ class MatchesService {
   }
 
   static matching (userId) {
-    return GeneralService.PostExecution('matching', { userId })
+    return GeneralService.PostExecution(Constants.Matching, { userId })
+  }
+  static matchInterests (userId, otherUser) {
+    return GeneralService.PostExecution(Constants.ReadInterests, { userId, otherUser })
+  }
+
+  static searchWithOne (userId, value, type) {
+    return GeneralService.PostExecution(Constants.SearchWithOne, { userId, value, type })
+  }
+
+  static searchWithTwo (userId, number, value, type) {
+    return GeneralService.PostExecution(Constants.SearchWithTwo, { userId, number, value, type })
+  }
+
+  static searchWithAll (userId, age, rating) {
+    return GeneralService.PostExecution(Constants.SearchWithAll, { userId, age, rating })
+  }
+
+  static searchWithDistance (userId, distance) {
+    return GeneralService.PostExecution(Constants.SearchWithDistance, { userId, distance })
+  }
+
+  static searchWithAgeRating (age, rating) {
+    return GeneralService.PostExecution(Constants.SearchWithAgeRating, { age, rating })
+  }
+
+  static searchWithAgeDistance (age, distance) {
+    return GeneralService.PostExecution(Constants.SearchWithAgeDistance, { age, distance })
+  }
+
+  static searchWithRatingDistance (rating, distance) {
+    return GeneralService.PostExecution(Constants.SearchWithRatingDistance, { rating, distance })
   }
 }
 

@@ -3,7 +3,14 @@ module.exports = {
         user: {
             details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
             login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
-            likes: `SELECT user_raters, user_ratings_sum, user_rating_avg FROM Matcha_Users WHERE user_id = ?`
+            likes: `SELECT user_raters, user_ratings_sum, user_rating_avg FROM Matcha_Users WHERE user_id = ?`,
+            searchWithAgeRating: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_age <= ? AND user_rating_avg <= ? `,
+            searchWithAgeDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age <= ? `,
+            searchWithRatingDist: `SELECT user_id, user_name, user_first_name, user_age, user_last_name, user_latitude, user_longitude FROM Matcha_Users WHERE user_rating_avg <= ? `,
+            searchWithDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users`,
+            searchWithAll: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age <= ? AND user_rating_avg <= ? AND user_rating_avg > 0.0 AND user_gender = ?`,
+            searchWithAllGender: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age = ? AND user_rating_avg =?`,
+            searchWith: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE `
         },
         interest: {
             all: `SELECT interest_name FROM Matcha_User_Interests WHERE user_id = ?`,
@@ -29,6 +36,11 @@ module.exports = {
         },
         matches: {
             all: `SELECT * FROM Matcha_Users WHERE 1`
+        },
+        history: {
+            all: `SELECT user_checked_id FROM Matcha_User_History WHERE user_checker_id = ?`,
+            user: `SELECT user_id, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_id = ?`,
+            check: `SELECT * FROM Matcha_User_History WHERE user_checked_id = ? AND user_checker_id = ?`
         }
     },
     update: {
@@ -39,6 +51,7 @@ module.exports = {
              user_biography = ?, 
              user_relationship_status = ?, 
              user_height = ?, 
+             user_age = ?, 
              user_race = ?, 
              user_hair = ?,
              user_street_address = ?,
@@ -61,6 +74,7 @@ module.exports = {
             SET pref_age = ?,
             preferred_gender = ?,
             preferred_user_rating = ?,
+            pref_lang = ?,
             preferred_location = ?
             WHERE user_id = ?`
         }
@@ -81,7 +95,7 @@ module.exports = {
     },
     insert: {
         user: {
-            fields: `INSERT INTO Matcha_Users (user_token, user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?,?)`
+            fields: `INSERT INTO Matcha_Users (user_name, user_email, user_first_name, user_last_name, user_password, user_gender, user_age) VALUES (?,?,?,?,?,?,?)`
         },
         interest: {
             fields: `INSERT INTO Matcha_User_Interests (interest_name, user_id) VALUES (?,?)`
@@ -101,6 +115,9 @@ module.exports = {
         },
         Likes: {
             fields: `INSERT INTO Matcha_Likes (user_liked_id, user_liker_id, user_rating) VALUES (?, ?, ?)`
+        },
+        History: {
+            fields: `INSERT INTO Matcha_User_History (user_checked_id, user_checker_id) VALUES (?, ?)`
         }
     }
 }

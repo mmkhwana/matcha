@@ -2,51 +2,28 @@
   <v-card
     class="mx-auto my-12"
   >
-     <v-container id="dropdown-example-1">
+     <v-container>
        <v-card-title>Age</v-card-title>
         <v-overflow-btn
         v-model="age"
         :items="dropdown_icon"
         label=""
-        target = "#dropdown-example-1"
         >
         <v-div></v-div>
         </v-overflow-btn>
     </v-container>
 
-     <v-container id="dropdown-example-1">
+     <v-container>
        <v-card-title>Gender</v-card-title>
         <v-overflow-btn
         v-model="gender"
         :items="gender_type"
         label=""
-        target = "#dropdown-example-1"
         >
         <v-div></v-div>
         </v-overflow-btn>
     </v-container>
-
-    <v-card-text>
-      <v-row
-        align="center"
-        class="mx-0"
-      >
-      <v-card-title>Profile Rating</v-card-title>
-        <v-rating
-          v-model="rating"
-          dense
-          half-increments
-          hover
-          size="14"
-          background-color="grey darken-1"
-          color="lime accent-3"
-          empty-icon="$ratingFull"
-        ></v-rating>
-
-        <div class="grey--text ml-3">({{ rating }})</div>
-      </v-row>
-    </v-card-text>
-    <v-container id="dropdown-example-2">
+    <v-container>
       <v-card-title>Location distance (KM)</v-card-title>
     <v-radio-group v-model="distance">
       <v-radio

@@ -30,5 +30,19 @@ export default {
   RemovePrefInterest: 'remove_pref_interest',
   GetMatches: 'matches',
   Like: 'like',
-  Coordinates: 'update_coordinates'
+  Coordinates: 'update_coordinates',
+  RetrieveHistoryId: 'retrieve_history_ids',
+  RetrieveHistoryInfo: 'retrieve_history_info',
+  PutIntoHistory: 'put_history',
+  Matching: 'matching',
+  ReadInterests: 'read_interests',
+  SearchWithOne: 'search_with_one',
+  SearchWithTwo: 'search_with_two',
+  SearchWithAll: 'search_with_all',
+  SearchWithAge: 'search_with_age',
+  SearchWithRating: 'search_with_rating',
+  SearchWithDistance: 'search_with_distance',
+  SearchWithAgeRating: 'search_with_age_rating',
+  SearchWithAgeDistance: 'search_with_age_distance',
+  SearchWithRatingDistance: 'search_with_rating_distance'
 }
