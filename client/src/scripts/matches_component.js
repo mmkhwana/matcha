@@ -101,7 +101,6 @@ export default {
       })
     },
     async processInterests (res) {
-      this.userData = res.userData
       await this.checkingInterests(res.userData, res.matchData)
       this.posts.forEach(user => {
         this.matchInterests(user.user_id)
@@ -186,13 +185,22 @@ export default {
         let res = this.posts.filter(user => user.user_id === otherUserId)
         let index = this.posts.indexOf(res[0])
         this.posts[index].interests = this.number
+        if (Object.keys(this.interests).length !== 0) {
+          this.posts = this.posts.filter(user => user.interests >= 1)
+        }
       }
     },
     otherIntere (interest) {
       this.number = 0
       this.otherInteres.forEach(other => {
-        if (interest.interest_name === other.interest_name) {
-          this.number++
+        if (Object.keys(this.interests).length !== 0) {
+          if (interest === other.interest_name) {
+            this.number++
+          }
+        } else {
+          if (interest.interest_name === other.interest_name) {
+            this.number++
+          }
         }
       })
     },
@@ -200,7 +208,11 @@ export default {
       let res = await Matches.matchInterests(this.$session.get('userid'), otherUserId)
       if (Object.keys(res).length !== 0) {
         this.otherInteres = res.otherUser
-        this.userInteres = res.user
+        if (Object.keys(this.interests).length !== 0) {
+          this.userInteres = this.interests
+        } else {
+          this.userInteres = res.user
+        }
         await this.userIntere(otherUserId)
         this.otherInteres = null
         this.userInteres = null
