@@ -71,7 +71,7 @@ router.post('/register_user', async(req, res) => {
                 console.log(error);
                 connect.release();
                 if (error) {
-                    res.status(200).send(results);
+                    res.status(200).send(error);
                     return;
                 }
                 console.log("hihihi")

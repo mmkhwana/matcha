@@ -178,6 +178,7 @@ export default {
       })
     },
     async userIntere (otherUserId) {
+      this.number = 0
       this.userInteres.forEach(interest => {
         this.otherIntere(interest)
       })
@@ -191,7 +192,6 @@ export default {
       }
     },
     otherIntere (interest) {
-      this.number = 0
       this.otherInteres.forEach(other => {
         if (Object.keys(this.interests).length !== 0) {
           if (interest === other.interest_name) {

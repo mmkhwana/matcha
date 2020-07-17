@@ -21,7 +21,7 @@ export default {
         { name: Constant.race, value: '' },
         { name: Constant.hair, value: '' }
       ],
-      username: 'kmbukuts',
+      username: '',
       street: '',
       postcode: '',
       city: '',
@@ -36,6 +36,7 @@ export default {
     let data = this.$session.get('matchId')
     this.userid = data.userId
     this.parent = data.parent
+    this.username = data.username
     this.getDetails()
     this.getImages()
   },
