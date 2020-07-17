@@ -16,7 +16,7 @@ export default {
       router.push({ name: 'Login' })
     },
     Registerbtn () {
-      router.push({ name: '/' })
+      router.push({ name: 'home' })
     },
     async reset_password () {
       await General.getReturnArrayExecution('account/send_verification', { email: this.email })

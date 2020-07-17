@@ -20,31 +20,6 @@
     <v-card flat>
                   <v-card-text>
                <v-container>
-                  <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="street"
-                      label="Street Address"
-                      :disabled="true"
-                      prepend-icon="mdi-map-marker"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="postcode"
-                      label="Postal Code"
-                      prepend-icon="mdi-numeric-4-box-multiple-outline"
-                      :disabled="true"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
                 <v-row>
                   <v-col
                     cols="12"

@@ -14,7 +14,7 @@
     </v-container>
 
      <v-container>
-       <v-card-title>Gender</v-card-title>
+       <v-card-title>Interested in</v-card-title>
         <v-overflow-btn
         v-model="gender"
         :items="gender_type"

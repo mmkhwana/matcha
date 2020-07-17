@@ -167,17 +167,27 @@ export default {
         let matchGender = user.user_gender
         let dist = this.calcDistance(matchLati, matchLongi, userLati, userLongi, 'K')
         if (matchLati !== null) {
+          if (matchGender === 'Female' && userPrefGender !== 'Bi-sexual') {
+            matchGender = 'Women'
+          } else if (matchGender === 'Male' && userPrefGender !== 'Bi-sexual') {
+            matchGender = 'Men'
+          }
+          if (userPrefGender === 'Bi-sexual') {
+            matchGender = 'Bi-sexual'
+          }
+          user.interests = 0
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
-            user.interests = 0
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {
-            user.interests = 0
+            this.posts.push(user)
+          } else {
             this.postsSuggestions.push(user)
           }
         }
       })
     },
     async userIntere (otherUserId) {
+      this.number = 0
       this.userInteres.forEach(interest => {
         this.otherIntere(interest)
       })
@@ -191,7 +201,6 @@ export default {
       }
     },
     otherIntere (interest) {
-      this.number = 0
       this.otherInteres.forEach(other => {
         if (Object.keys(this.interests).length !== 0) {
           if (interest === other.interest_name) {
