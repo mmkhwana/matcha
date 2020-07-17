@@ -13,6 +13,8 @@
     <v-flex xs12 sm8 md4 >
         <h1 class="text-color display-3 mb-4">Welcome to Matcha</h1>
         <h4 class="text-color subheading font-weight-thin display-2">Meet Your Match!</h4>
+        <v-btn v-on:click="Loginbtn" rounded color="pink accent-4" dark lg >Log in</v-btn>
+        <v-btn v-on:click="Registerbtn" rounded color="pink accent-4" dark lg >Register</v-btn>
     </v-flex>
     <v-flex xs8 sm8 md4 >
         <v-card>
