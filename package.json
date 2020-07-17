@@ -1,35 +1,35 @@
 {
-  "name": "matcha",
-  "version": "1.0.0",
-  "description": "express and vue web",
-  "main": "index.js",
-  "scripts": {
-    "start": "server/index.js",
-    "Dev": "node server/index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mmkhwana/matcha.git"
-  },
-  "author": "Peter",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mmkhwana/matcha/issues"
-  },
-  "homepage": "https://github.com/mmkhwana/matcha#readme",
-  "dependencies": {
-    "bcrypt": "^5.0.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongodb": "^3.5.9",
-    "multer": "^1.4.2",
-    "mysql": "github:mysqljs/mysql",
-    "serve": "^11.3.2",
-    "socket.io": "^2.3.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+    "name": "matcha",
+    "version": "1.0.0",
+    "description": "express and vue web",
+    "main": "index.js",
+    "scripts": {
+        "start": "server/index.js",
+        "Dev": "node server/index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mmkhwana/matcha.git"
+    },
+    "author": "Peter",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/mmkhwana/matcha/issues"
+    },
+    "homepage": "https://github.com/mmkhwana/matcha#readme",
+    "dependencies": {
+        "bcrypt": "^5.0.0",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "mongodb": "^3.5.9",
+        "multer": "^1.4.2",
+        "mysql": "github:mysqljs/mysql",
+        "nodemailer": "^6.4.10",
+        "socket.io": "^2.3.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.4"
+    }
 }

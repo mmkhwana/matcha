@@ -13,6 +13,7 @@ export default {
     return {
       posts: [],
       error: '',
+      success: '',
       firstname: '',
       lastname: '',
       username: '',
@@ -27,7 +28,7 @@ export default {
         'mdi-linkedin',
         'mdi-instagram'
       ],
-      gender_type: [{ text: 'Female' }, { text: 'Male' }, { text: 'Lesbian' }, { text: 'Gay' }],
+      gender_type: [{ text: 'Female' }, { text: 'Male' }],
       race: ['Black', 'Mix Race', 'White', 'Indian', 'Chinese'],
       gender: '',
       age: 0,
@@ -55,15 +56,26 @@ export default {
         this.age = year - birthYear
         if (this.age < 18) {
           this.error = 'Hey kid this is adult world. Come back once you reach puberty age.'
+          this.progress = false
         } else {
           var respond = await SignupService.registerUser(this.gender, this.race_item, this.firstname, this.lastname, this.username, this.email, this.age, this.pass, this.confirm)
           this.response = respond
           if (this.response === 'User Registered') {
+            this.success = 'Check the email for verification'
             this.progress = false
-            router.push({ name: 'Login' })
           } else {
-            this.error = 'Not registered. Please try again or check the internet connection!'
-            this.progress = false
+            if (this.response.code === 'ER_DUP_ENTRY') {
+              if (this.response.msg.includes('user_email')) {
+                this.error = 'Email already exist!'
+                this.progress = false
+              } else {
+                this.error = 'Username already exist!'
+                this.progress = false
+              }
+            } else {
+              this.error = 'Not registered. Please try again or check the internet connection!'
+              this.progress = false
+            }
           }
         }
       }
