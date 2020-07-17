@@ -81,12 +81,12 @@ router.post('/register_user', async(req, res) => {
                 }
                 let transporter = nodemailer.createTransport({
                     service: 'gmail.com',
-                        pass: '0786324448'                    auth: {
+                    auth: {
                         user: 'unathinkomo16@gmail.com',
-
+                        pass: '0786324448'
                     }
                 });
-f
+
                 var mailOptions = {
                     from: 'unathinkomo16@gmail.com',
                     to: req.body.email,
@@ -129,18 +129,23 @@ router.post('/login_user', async(req, res) => {
                 return;
             }
             if (results[0]) {
-
-                bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
-                    if (error) {
-                        res.status(200).send(error);
-                        return;
-                    }
-                    if (response)
-                        res.status(200).send(results);
-                    else {
-                        res.status(200).send(response);
-                    }
-                });
+                if (results[0].verify == 0)
+                {
+                    res.status(200).send(['notverified']);
+                } else
+                {
+                    bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
+                        if (error) {
+                            res.status(200).send(error);
+                            return;
+                        }
+                        if (response)
+                            res.status(200).send(results);
+                        else {
+                            res.status(200).send(response);
+                        }
+                    }); 
+                }
             } else {
                 res.status(200).send(["notfound"]);
             }
