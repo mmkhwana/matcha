@@ -22,13 +22,16 @@
                 <div v-if="error" class="alert">
                   <p>{{ error }}</p>
                 </div>
+                <div v-else-if="success" class="success">
+                  <p>{{ success }}</p>
+                </div>
                   <v-form  >
                   <v-row>
                     <v-container elevation="6">
                       <v-overflow-btn
                       v-model="gender"
                       :items="gender_type"
-                      label="Select Gender"
+                      label="Select Sex"
                       required
                       >
                       <v-div></v-div>
@@ -42,7 +45,7 @@
                       :items="race"
                       label="Select Race"
                       required
-                      >
+   c                   >
                       <v-div></v-div>
                       </v-overflow-btn>
                     </v-container>

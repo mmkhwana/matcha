@@ -1,16 +1,37 @@
-Weekend Goals!!!!!!
 1. ASk for location on home page - Done!!!!
 2. Disbale age & race changes in profile - Done!!!
 3. Remove lang from matching algo & preferences but can add more than 1 to profile(make it easy) - Done!!!!
 4. Add a suggestions section to the Matches page
 5. Add interest number in common on user cards - Remove dislike and place chip instead
 6. Change age to 25 and under 35 and under and so forth
-7. Fix and implement rating system
-8. Fix menu when scrolling down
+7. Fix and implement rating system - Done!!!!
+8. Fix menu when scrolling down in mobile mode
 9. Bottom save button see if not at the top
 10. Fix registration page responsiveness
+11. Social media icons to wethinkcode links
+12. Provide author file
+13. Change and rename sexual preference(make a bisexual option) - This is a must be able to manage
+14. We must also match users based on rating
+15. "The user must be able to check who looked at his/her profile as well as who “liked”him/her."
+16. Check website for mobile (afternoon goal)
+17. Check "inject html into user javascript in unprotected variables"
+18. Error check unwanted content - Images or videos
+19.Cannot alter SQL request
+20. !!!!!!!!!!!!!!Intergratge new user email verification!!!!!!!!!!!!!!
+21. Double check change password
+22. Integrate chat option
+23. Notifications
+- When user gets a like
+- profile has been checked
+- recieve a message
+- like user liked back
+- A CONNECTED USER HAS UNLIKED YOU(10 second delay are allowed)
 
-Monday
-1. Fix chat
-2. Chat notifications
-3. Check Users profile pictures (if no pictures, display a placeholder)
+24. !!!!!!!!!Script to create database and verify it has 500 different profiles - Dummy data!!!!!
+25. Check Users profile pictures (if no pictures, display a placeholder)
+
+https://github.com/wethinkcode-students/corrections_42_curriculum/blob/master/matcha.markingsheet.pdf
+
+26. Reset password link not working and page not allowing us ot go back to home, Check all pages
+27. Duplicate entries need to change error message
+28. Remove street address and postal code

@@ -45,6 +45,15 @@
     text-align: center;
 }
 
+.success{
+    color: #fff;
+    background: #10b53f;
+    border-radius: 10px;
+    padding: 2px;
+    border: 1px dotted;
+    text-align: center;
+}
+
 @media screen and (max-width: 940px)
 {
     .footer

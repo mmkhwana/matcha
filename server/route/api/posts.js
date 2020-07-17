@@ -51,15 +51,20 @@ router.post('/register_user', async(req, res) => {
 
     let password = '';
     let email = '';
+
     if (req.body.confirm === req.body.pass) {
         password = bcrypt.hashSync(req.body.pass, 8)
+        var token = bcrypt.hashSync('toptoptop', 9)
+        token = token.replace('/', 'k');
         let values = [
+            token,
             req.body.username,
             req.body.email,
             req.body.firstname,
             req.body.lastname,
             password,
             req.body.gender,
+            req.body.race,
             req.body.date
         ];
         Connection.con.getConnection((error, connect) => 
@@ -67,27 +72,26 @@ router.post('/register_user', async(req, res) => {
             if (error)
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
-            { 
+            {
                 console.log(error);
                 connect.release();
                 if (error) {
-                    res.status(200).send(results);
+                    res.status(200).send({'code': error.code, 'msg': error.sqlMessage});
                     return;
                 }
-                console.log("hihihi")
                 let transporter = nodemailer.createTransport({
                     service: 'gmail.com',
-                    auth: {
+                        pass: '0786324448'                    auth: {
                         user: 'unathinkomo16@gmail.com',
-                        pass: '0786324448'
+
                     }
                 });
-
+f
                 var mailOptions = {
                     from: 'unathinkomo16@gmail.com',
                     to: req.body.email,
                     subject: 'Regestration verification',
-                    html: `<a>verification link</a>`,
+                    html: `<a href=http://localhost:8080/verify/${token}/${req.body.email}>verification link</a>`,
                 };
 
                 transporter.sendMail(mailOptions, function(error, info) {
