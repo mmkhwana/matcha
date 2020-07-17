@@ -73,31 +73,6 @@
     <v-card flat>
                   <v-card-text>
                <v-container>
-                  <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="street"
-                      label="Street Address*"
-                      :disabled="true"
-                      prepend-icon="mdi-map-marker"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="postcode"
-                      label="Post Code"
-                      prepend-icon="mdi-numeric-4-box-multiple-outline"
-                      :disabled="true"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
                 <v-row>
                   <v-col
                     cols="12"
@@ -105,7 +80,7 @@
                   >
                     <v-text-field
                       v-model="city"
-                      label="City*"
+                      label="City"
                       prepend-icon="mdi-city"
                       :disabled="true"
                     ></v-text-field>
@@ -117,7 +92,7 @@
                   >
                     <v-text-field
                       v-model="country"
-                      label="Country*"
+                      label="Country"
                       prepend-icon="mdi-flag-checkered"
                       :disabled="true"
                     ></v-text-field>
@@ -130,7 +105,7 @@
                   >
                     <v-text-field
                       v-model="state"
-                      label="State/Province/Region*"
+                      label="State/Province/Region"
                       prepend-icon="mdi-home-map-marker"
                       :disabled="true"
                     ></v-text-field>

@@ -8,11 +8,23 @@ export default {
   name: 'history',
   data () {
     return {
-      posts: []
+      posts: [],
+      peopleViewedYou: [],
+      peopleLikedYou: [],
+      profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`
     }
   },
   mounted: function () {
     this.retrieveHistory()
+    this.retrievePeopleViewedYou()
+    this.retrievePeopleLikedYou()
+    EventBus.$on('updateHistory', () => {
+      this.posts = ''
+      this.posts = []
+      this.retrieveHistory()
+      this.retrievePeopleViewedYou()
+    })
+
     EventBus.$on('updateHistory', () => {
       this.posts = ''
       this.posts = []
@@ -20,9 +32,10 @@ export default {
     })
   },
   methods: {
-    openProfile (userId, name, surname) {
-      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'parent': 'History' })
+    openProfile (userId, name, surname, username) {
+      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'username': username, 'parent': 'History' })
       this.$root.$emit('OtherProfile')
+      this.putIntoHistory(userId, this.$session.get('userid'))
     },
     async like (liking) {
       let rating = this.$refs['rating' + liking][0]._data.internalValue
@@ -35,6 +48,13 @@ export default {
         }
       } else {
         EventBus.$emit('sendText', 'Rate first.')
+      }
+    },
+    async putIntoHistory (checkedUser, checkerUser) {
+      try {
+        await History.putIntoHistory(checkedUser, checkerUser)
+      } catch (error) {
+        console.log(error)
       }
     },
     async retrieveInfo (userId) {
@@ -53,6 +73,51 @@ export default {
         if (Object.keys(res).length !== 0) {
           res.forEach(user => {
             this.retrieveInfo(user.user_checked_id)
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async retrieveViewers (userId) {
+      try {
+        let results = await History.retrieveHistoryInfo(userId)
+        if (Object.keys(results).length !== 0) {
+          this.peopleViewedYou.push(results[0])
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async retrieveLikers (userId) {
+      try {
+        let results = await History.retrieveHistoryInfo(userId)
+        if (Object.keys(results).length !== 0) {
+          this.peopleLikedYou.push(results[0])
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async retrievePeopleLikedYou () {
+      try {
+        let res = await History.peopleLikedYou(this.$session.get('userid'))
+        if (Object.keys(res).length !== 0) {
+          res.forEach(user => {
+            this.retrieveLikers(user.user_liker_id)
+          })
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async retrievePeopleViewedYou () {
+      try {
+        let res = await History.retrieveViewedYou(this.$session.get('userid'))
+        alert(JSON.stringify(res))
+        if (Object.keys(res).length !== 0) {
+          res.forEach(user => {
+            this.retrieveViewers(user.user_checker_id)
           })
         }
       } catch (error) {

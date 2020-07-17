@@ -1,14 +1,10 @@
 8. Fix menu when scrolling down in mobile mode - Sorrrrryyyyy
 10. Fix registration page responsiveness - sorrrryyyyy 
-13. Change and rename sexual preference(make a bisexual option) - This is a must be able to manage
-14. We must also match users based on rating
 15. "The user must be able to check who looked at his/her profile as well as who “liked”him/her."
 16. Check website for mobile (afternoon goal)
 17. Check "inject html into user javascript in unprotected variables"
 18. Error check unwanted content - Images or videos
 19.Cannot alter SQL request
-20. !!!!!!!!!!!!!!Intergratge new user email verification!!!!!!!!!!!!!!
-21. Double check change password
 22. Integrate chat option
 23. Notifications
 - When user gets a like
@@ -18,6 +14,3 @@
 - A CONNECTED USER HAS UNLIKED YOU(10 second delay are allowed)
 
 24. !!!!!!!!!Script to create database and verify it has 500 different profiles - Dummy data!!!!!
-25. Check Users profile pictures (if no pictures, display a placeholder)
-
-https://github.com/wethinkcode-students/corrections_42_curriculum/blob/master/matcha.markingsheet.pdf

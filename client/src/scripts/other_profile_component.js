@@ -21,7 +21,7 @@ export default {
         { name: Constant.race, value: '' },
         { name: Constant.hair, value: '' }
       ],
-      username: 'kmbukuts',
+      username: '',
       street: '',
       postcode: '',
       city: '',
@@ -36,6 +36,7 @@ export default {
     let data = this.$session.get('matchId')
     this.userid = data.userId
     this.parent = data.parent
+    this.username = data.username
     this.getDetails()
     this.getImages()
   },
@@ -80,7 +81,7 @@ export default {
     },
     async getImages () {
       let images = []
-      const pics = await GalleryService.readImages('kmbukuts', 70)
+      const pics = await GalleryService.readImages(this.username, this.userid)
       images = pics.data
       images.forEach(row => {
         this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })

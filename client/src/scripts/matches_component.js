@@ -26,7 +26,8 @@ export default {
       userInteres: [],
       number: 0,
       progress: false,
-      userData: []
+      userData: [],
+      profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`
     }
   },
 
@@ -128,8 +129,8 @@ export default {
       this.interests.splice(0)
       this.init()
     },
-    openProfile (userId, name, surname) {
-      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'parent': 'Matches' })
+    openProfile (userId, name, surname, username) {
+      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'username': username, 'parent': 'Matches' })
       this.$root.$emit('OtherProfile')
       this.putIntoHistory(userId, this.$session.get('userid'))
       EventBus.$emit('updateHistory')
@@ -176,6 +177,7 @@ export default {
             matchGender = 'Bi-sexual'
           }
           user.interests = 0
+          user.pic = ''
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {

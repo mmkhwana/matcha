@@ -144,33 +144,6 @@
               </v-expansion-panels>
             </v-col>
             <v-col cols="6">
-          <v-expansion-panels
-            class="mb-6"
-          >
-            <v-expansion-panel>
-              <v-expansion-panel-header disable-icon-rotate>
-                Sort
-                <template v-slot:actions>
-                  <v-icon color="success">mdi-filter-variant</v-icon>
-                </template>
-              </v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    md="6"
-                  >
-                  </v-col>
-
-                  <v-col
-                    cols="12"
-                    md="6"
-                  >
-                  </v-col>
-                </v-row>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-              </v-expansion-panels>
             </v-col>
           </v-row>
           <v-row>
@@ -192,10 +165,10 @@
                 class="show-btns"
                 >
                   <img
-                    :src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
+                    :src="profile_pic"
                     min-width="200px"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                    @click="openProfile(user.user_id, user.user_first_name, user.user_last_name)"
+                    @click="openProfile(user.user_id, user.user_first_name, user.user_last_name, user.user_name)"
                   >
                 </v-avatar>
                 <v-row>
@@ -264,10 +237,10 @@
                 class="show-btns"
                 >
                   <img
-                    :src="`http://localhost:5000/api/posts/uploads/kmbukuts/landing.jpg`"
+                    :src="profile_pic"
                     min-width="200px"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                    @click="openProfile(user.user_id, user.user_first_name, user.user_last_name)"
+                    @click="openProfile(user.user_id, user.user_first_name, user.user_last_name, user.user_name)"
                   >
                 </v-avatar>
                 <v-row>
