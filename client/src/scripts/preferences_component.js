@@ -17,7 +17,7 @@ export default {
       location: null,
       locations: [],
       dropdown_icon: [{ text: '25 & under' }, { text: '35 & under' }, { text: '45 & under' }, { text: 'Above 45' }],
-      gender_type: [{ text: 'Women' }, { text: 'Men' }],
+      gender_type: [{ text: 'Women' }, { text: 'Men' }, { text: 'Bi-sexual' }],
       results: [],
       city: '',
       prefId: -404

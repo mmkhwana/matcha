@@ -50,7 +50,9 @@ export default {
         this.progress = true
         try {
           const users = (await LoginService.userLogin(this.username, this.pass))[0]
-          if (users === 'notfound') {
+          if (users === 'notverified') {
+            this.error = 'Account was not verified.'
+          } else if (users === 'notfound') {
             this.error = 'user doesn\'t exists.'
           } else if (users[Table.User.userName]) {
             this.$session.start()

@@ -2,7 +2,7 @@ module.exports = {
     select: {
         user: {
             details: `SELECT * FROM Matcha_Users WHERE user_id = ?`,
-            login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
+            login: `SELECT user_id, user_first_name, user_last_name,user_name, user_password, verify FROM Matcha_Users WHERE user_name = ? OR user_email = ?`,
             likes: `SELECT user_raters, user_ratings_sum, user_rating_avg FROM Matcha_Users WHERE user_id = ?`,
             searchWithAgeRating: `SELECT user_id, user_name, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_age <= ? AND user_rating_avg <= ? `,
             searchWithAgeDist: `SELECT user_id, user_name, user_first_name, user_last_name, user_age, user_latitude, user_longitude FROM Matcha_Users WHERE user_age <= ? `,

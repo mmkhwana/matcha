@@ -73,7 +73,6 @@ router.post('/register_user', async(req, res) => {
                 return;
             connect.query(sql.insert.user.fields, values, (error, results, fields) => 
             {
-                console.log(error);
                 connect.release();
                 if (error) {
                     res.status(200).send({'code': error.code, 'msg': error.sqlMessage});
@@ -86,7 +85,6 @@ router.post('/register_user', async(req, res) => {
                         pass: '0786324448'
                     }
                 });
-f
                 var mailOptions = {
                     from: 'unathinkomo16@gmail.com',
                     to: req.body.email,
@@ -125,22 +123,26 @@ router.post('/login_user', async(req, res) => {
         connect.query(sql.select.user.login, values, (error, results) => {
             connect.release();
             if (error) {
-                res.status(200).send(results);
+                res.status(200).send(error);
                 return;
             }
             if (results[0]) {
-
-                bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
-                    if (error) {
-                        res.status(200).send(error);
-                        return;
-                    }
-                    if (response)
-                        res.status(200).send(results);
-                    else {
-                        res.status(200).send(response);
-                    }
-                });
+                if (results[0].verify == 0)
+                {
+                    res.status(200).send(['notverified']);
+                } else {
+                    bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
+                        if (error) {
+                            res.status(200).send(error);
+                            return;
+                        }
+                        if (response)
+                            res.status(200).send(results);
+                        else {
+                            res.status(200).send(response);
+                        }
+                    });
+                }
             } else {
                 res.status(200).send(["notfound"]);
             }
