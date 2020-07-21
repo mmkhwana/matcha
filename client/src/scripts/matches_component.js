@@ -26,7 +26,8 @@ export default {
       userInteres: [],
       number: 0,
       progress: false,
-      userData: []
+      userData: [],
+      profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`
     }
   },
 
@@ -128,8 +129,8 @@ export default {
       this.interests.splice(0)
       this.init()
     },
-    openProfile (userId, name, surname) {
-      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'parent': 'Matches' })
+    openProfile (userId, name, surname, username) {
+      this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'username': username, 'parent': 'Matches' })
       this.$root.$emit('OtherProfile')
       this.putIntoHistory(userId, this.$session.get('userid'))
       EventBus.$emit('updateHistory')
@@ -175,11 +176,13 @@ export default {
           if (userPrefGender === 'Bi-sexual') {
             matchGender = 'Bi-sexual'
           }
+          user.interests = 0
+          user.profile = 'none'
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
-            user.interests = 0
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {
-            user.interests = 0
+            this.posts.push(user)
+          } else {
             this.postsSuggestions.push(user)
           }
         }
@@ -248,6 +251,19 @@ export default {
         this.interest = ''
       }
     },
+    async getProfilePics () {
+      let images = await Matches.getProfilePics(999)
+      if (Object.keys(images).length !== 0) {
+        images.forEach(image => {
+          let user = this.posts.filter(user => user.user_id === image.user_id)
+          if (user[0]) {
+            let index = this.posts.indexOf(user[0])
+            this.posts[index].profile = image.image_link
+          }
+        })
+        console.log(this.posts)
+      }
+    },
     async init () {
       this.posts = []
       this.defaultInterests = Interests
@@ -257,6 +273,7 @@ export default {
       this.posts.forEach(user => {
         this.matchInterests(user.user_id)
       })
+      this.getProfilePics()
     }
   },
   mounted () {

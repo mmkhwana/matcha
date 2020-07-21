@@ -59,32 +59,6 @@
                       ></v-text-field>
                     </v-col>
                   </v-row>
-                  <v-row>
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="street"
-                      label="Street Address"
-                      prepend-icon="mdi-map-marker"
-                      required
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col
-                    cols="12"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="postcode"
-                      label="Postal Code"
-                      type="number"
-                      prepend-icon="mdi-numeric-4-box-multiple-outline"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
                 <v-row>
                   <v-col
                     cols="12"

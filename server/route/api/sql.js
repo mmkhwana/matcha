@@ -22,7 +22,8 @@ module.exports = {
         },
         image: {
             all: `SELECT * FROM Matcha_Images WHERE user_id = ? ORDER BY image_role DESC`,
-            profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`
+            profile: `SELECT * FROM Matcha_Images WHERE image_role = ? AND user_id = ?`,
+            all_profile: `SELECT * FROM Matcha_Images WHERE image_role = ?`
         },
         preferences: {
             all: `SELECT * FROM Matcha_User_preferences WHERE user_id = ?`
@@ -74,7 +75,6 @@ module.exports = {
             SET pref_age = ?,
             preferred_gender = ?,
             preferred_user_rating = ?,
-            pref_lang = ?,
             preferred_location = ?
             WHERE user_id = ?`
         }

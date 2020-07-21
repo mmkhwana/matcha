@@ -44,5 +44,6 @@ export default {
   SearchWithDistance: 'search_with_distance',
   SearchWithAgeRating: 'search_with_age_rating',
   SearchWithAgeDistance: 'search_with_age_distance',
-  SearchWithRatingDistance: 'search_with_rating_distance'
+  SearchWithRatingDistance: 'search_with_rating_distance',
+  GetProfilePics: 'get_profile_picture'
 }

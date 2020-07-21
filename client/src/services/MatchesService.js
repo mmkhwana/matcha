@@ -44,6 +44,10 @@ class MatchesService {
   static searchWithRatingDistance (rating, distance) {
     return GeneralService.PostExecution(Constants.SearchWithRatingDistance, { rating, distance })
   }
+
+  static getProfilePics (id) {
+    return GeneralService.PostExecution(Constants.GetProfilePics, { id })
+  }
 }
 
 export default MatchesService

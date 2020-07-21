@@ -51,7 +51,7 @@ export default {
         try {
           const users = (await LoginService.userLogin(this.username, this.pass))[0]
           if (users === 'notverified') {
-            this.error = 'Account was not verified.'
+            this.error = 'Account was not verified. Please check email or re-register'
           } else if (users === 'notfound') {
             this.error = 'user doesn\'t exists.'
           } else if (users[Table.User.userName]) {

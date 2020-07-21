@@ -81,7 +81,7 @@ export default {
     },
     async getImages () {
       let images = []
-      const pics = await GalleryService.readImages('kmbukuts', 70)
+      const pics = await GalleryService.readImages(this.username, this.userid)
       images = pics.data
       images.forEach(row => {
         this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })

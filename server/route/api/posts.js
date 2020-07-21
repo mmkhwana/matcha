@@ -130,7 +130,8 @@ router.post('/login_user', async(req, res) => {
                 if (results[0].verify == 0)
                 {
                     res.status(200).send(['notverified']);
-                } else {
+                } else
+                {
                     bcrypt.compare(req.body.pass, results[0].user_password, (error, response) => {
                         if (error) {
                             res.status(200).send(error);
@@ -141,7 +142,7 @@ router.post('/login_user', async(req, res) => {
                         else {
                             res.status(200).send(response);
                         }
-                    });
+                    }); 
                 }
             } else {
                 res.status(200).send(["notfound"]);
@@ -664,14 +665,13 @@ router.post('/update_preferences', async(req, res) => {
                 req.body.age,
                 req.body.gender,
                 req.body.rating,
-                req.body.language,
                 req.body.location,
                 req.body.userId,
             ];
             connect.query(sql.update.preferences.fields, params, (error, results) => {
                 if (error) {
                     connect.rollback(() => {
-                        res.send(err)
+                        console.log(error);
                     });
                     return;
                 }
@@ -857,7 +857,7 @@ router.post('/matching', async (req, res) =>
                     return;
                 let lat = results[0].user_latitude;
                 let longi = results[0].user_longitude;
-                let sqlAll = 'SELECT user_id, user_age, user_first_name, user_last_name, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+                let sqlAll = 'SELECT user_id, user_name, user_age, user_first_name, user_last_name, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
                 let sqldist = 'SELECT pref_age, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
                 let userDist = 0;
                 let age = 0;
@@ -934,6 +934,46 @@ router.post('/retrieve_history_ids', async(req, res) => {
             req.body.userId
         ];
         connect.query(sql.select.history.all, param, (error, results) => {
+            connect.release();
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/people_who_liked_you', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query('SELECT * FROM Matcha_Likes WHERE user_liked_id = ?', param, (error, results) => {
+            connect.release();
+            if (error)
+                return;
+            if (results[0])
+            {
+                res.status(200).send(results);
+                return;
+            }
+        });
+    });
+});
+
+router.post('/people_who_viewed_you', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.userId
+        ];
+        connect.query('SELECT * FROM Matcha_User_History WHERE user_checked_id = ?', param, (error, results) => {
             connect.release();
             if (error)
                 return;
@@ -1213,6 +1253,20 @@ router.post('/search_with_all', async(req, res) => {
                     res.status(200).send({ 'matchData': results, 'userData': user });
                 });
             }
+        });
+    });
+});
+
+router.post('/get_profile_picture', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let params = ['profile'];
+        connect.query(sql.select.image.all_profile, params, (error, results) => {
+            if (error)
+                return;
+            if (results[0])
+                res.status(200).send(results);
         });
     });
 });

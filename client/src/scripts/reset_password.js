@@ -1,5 +1,6 @@
 import axios from 'axios'
 import General from '../services/GeneralService'
+import router from '../router'
 
 export default {
   name: 'reset',
@@ -11,6 +12,12 @@ export default {
   },
 
   methods: {
+    Loginbtn () {
+      router.push({ name: 'Login' })
+    },
+    Registerbtn () {
+      router.push({ name: 'home' })
+    },
     async reset_password () {
       await General.getReturnArrayExecution('account/send_verification', { email: this.email })
     },
