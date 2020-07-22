@@ -156,10 +156,10 @@
               class="images-flex"
               cols="4"
             >
-              <v-card elevation="8"
+              <v-card elevation="6"
                 min-width="300px"
-                padding="10px"
                 >
+                <v-row fullwidth><v-col cols="12"></v-col></v-row>
                 <v-avatar
                 size="200px"
                 min-width="300px"
@@ -176,8 +176,9 @@
                 </v-avatar>
                 <v-row>
                     <v-col cols="8">
-                        <v-card-title class="title text-left">{{ user.user_first_name + ' ' + user.user_last_name }} <span class="text-left online"></span></v-card-title>
+                        <v-card-title class="title text-left">{{ user.user_first_name + ' ' + user.user_last_name }}<span v-if="user.user_online === 1" class="online"></span></v-card-title>
                     </v-col>
+                    <v-spacer></v-spacer>
                     <v-col cols="3">
                     <v-card-subtitle class="text-right">{{ user.user_age }}</v-card-subtitle>
                     </v-col>
@@ -192,8 +193,12 @@
                     background-color="grey darken-1"
                     color="lime accent-3"
                     empty-icon="$ratingFull"
+                    class="text-left"
                   ></v-rating>
+                   <v-spacer></v-spacer>
+                   <span v-if="user.user_online === 0" class="text-right lastseen">{{lastseen + user.user_last_seen}}</span>
                  </v-card-actions>
+                 <v-divider></v-divider>
                  <v-card-actions>
                   <v-btn icon v-on:click="like(user.user_id)">
                   <v-icon>mdi-thumb-up-outline</v-icon>
@@ -237,6 +242,7 @@
               <v-card elevation="8"
                 min-width="300px"
                 >
+                <v-row fullwidth><v-col cols="12"></v-col></v-row>
                 <v-avatar
                 size="200px"
                 min-width="300px"

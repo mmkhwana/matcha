@@ -105,6 +105,7 @@ export default {
     })
     EventBus.$on('profile', (picname) => {
       this.profile = `http://localhost:5000/api/posts/uploads/${this.username}/${picname}`
+      this.$session.set('profile', 'set')
     })
     this.count = this.notifications.length
     this.updateCoordinates()
@@ -129,22 +130,25 @@ export default {
     },
     async changeTitles (titleName) {
       if (titleName === 'Log Out') {
-        if (this.$session.exists()) {
-          this.$session.clear()
-          this.$session.destroy()
-          router.push({ name: 'home' })
-        }
+        this.logout()
       } else {
         this.titles = titleName
       }
     },
     async logout () {
       if (this.$session.exists()) {
-        this.$session.clear()
-        this.$session.destroy()
-        alert(new Date())
-        await Service.logOut(this.$session.get('userid'), new Date(), 0)
-        router.push({ name: 'home' })
+        try {
+          console.log(this.$session.get('userid'))
+          let res = await Service.logOut(this.$session.get('userid'), Service.getDateTime(), 0)
+          console.log(res)
+          if (res) {
+            this.$session.clear()
+            this.$session.destroy()
+            router.push({ name: 'home' })
+          }
+        } catch (error) {
+          console.log(error)
+        }
       }
     },
     getRef () {

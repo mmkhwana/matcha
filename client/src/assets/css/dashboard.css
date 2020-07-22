@@ -23,10 +23,3 @@
     color: black;
     color: inherit
 }
-.online {
-    width: 10px;
-    height: 10px;
-    margin: 2px;
-    background: green;
-    border-radius: 100%;
-}

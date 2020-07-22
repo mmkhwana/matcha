@@ -19,6 +19,7 @@ export default {
       dist: ['50 ', '200', '500', '1000'],
       age_gap: ['25 & under', '35 & under', '45 & under', 'Above 45'],
       rating: 0,
+      lastseen: 'last seen: ',
       age: '',
       distance: '',
       interes: ' common interest(s)',
@@ -27,7 +28,8 @@ export default {
       number: 0,
       progress: false,
       userData: [],
-      profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`
+      profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`,
+      profile: ''
     }
   },
 
@@ -144,7 +146,8 @@ export default {
     },
     async like (liking) {
       let rating = this.$refs['rating' + liking][0]._data.internalValue
-      if (rating !== 0) {
+      console.log(this.$session.get('profile'))
+      if (rating !== 0 && this.$session.get('profile') === 'set') {
         let userId = this.$session.get('userid')
         try {
           await Matches.like(liking, rating, userId)
@@ -187,6 +190,7 @@ export default {
           }
           user.interests = 0
           user.profile = 'none'
+          user.user_last_seen = user.user_last_seen.substring(user.user_last_seen.indexOf('T') + 1, user.user_last_seen.lastIndexOf(':'))
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
           } else if (matchGender === userPrefGender) {
@@ -284,7 +288,7 @@ export default {
       this.getProfilePics()
     }
   },
-  mounted () {
+  mounted: function () {
     this.init()
   }
 }

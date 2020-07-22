@@ -46,6 +46,15 @@ class UserProfileService {
   static logOut (userId, lastseen, online) {
     return General.PostExecution('logout', { online, lastseen, userId })
   }
+  static getDateTime () {
+    let date = new Date()
+    let day = date.getDate()
+    let month = date.getMonth()
+    let year = date.getFullYear()
+    var time = date.toTimeString()
+    time = time.substring(0, time.indexOf(' '))
+    return (year + '-' + month + '-' + day + ' ' + time)
+  }
 }
 
 export default UserProfileService

@@ -30,10 +30,16 @@ export default {
       })
       this.$emit(Constant.ImageList, this.pictures)
       EventBus.$emit(Constant.Profile, this.pictures[0].name)
+      this.$session.set('profile', 'set')
+    } else {
+      this.$session.set('profile', 'notset')
     }
   },
   methods: {
     removePicture (picname, index) {
+      if (this.pictures.length === 0) {
+        this.$session.set('profile', 'notset')
+      }
       try {
         this.pictures.splice(index, 1)
         GalleryService.removeImage(picname, this.username, this.userid)

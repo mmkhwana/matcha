@@ -138,7 +138,7 @@ router.post('/logout', async(req, res) => {
             req.body.userId
         ];
         connect.query('Update Matcha_Users SET user_online = ?, user_last_seen = ? WHERE user_id = ?', param, async(error, results) => {
-            console.log(error);
+            connect.release();
             if (error)
                 return;
             res.send('ok');
@@ -927,7 +927,7 @@ router.post('/matching', async (req, res) =>
                     return;
                 let lat = results[0].user_latitude;
                 let longi = results[0].user_longitude;
-                let sqlAll = 'SELECT user_id, user_name, user_age, user_first_name, user_last_name, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
+                let sqlAll = 'SELECT user_id, user_name, user_age, user_first_name, user_last_name, user_online, user_last_seen, user_gender, user_latitude, user_longitude FROM Matcha_Users WHERE NOT user_id = ?';
                 let sqldist = 'SELECT pref_age, preferred_gender, preferred_location FROM  Matcha_User_preferences WHERE user_id = ?';
                 let userDist = 0;
                 let age = 0;
@@ -1229,6 +1229,7 @@ router.post('/search_with_two', async(req, res) => {
                     ];
                 }
                 connect.query(query, params, (error, results) => {
+                    connect.release();
                     if (error)
                     {
                         res.send('error');
@@ -1260,6 +1261,7 @@ router.post('/search_with_two', async(req, res) => {
                     ];
                 }
                 connect.query(query, params, (error, results) => {
+                    connect.release();
                     if (error)
                     {
                         res.send('error');
@@ -1267,7 +1269,7 @@ router.post('/search_with_two', async(req, res) => {
                     }
                     if (req.body.type === 'age&rating')
                         res.status(200).send(results)
-                    else 
+                    else
                         res.status(200).send({'matchData': results, 'userData': user})
                 });
             }
