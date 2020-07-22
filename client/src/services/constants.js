@@ -30,6 +30,7 @@ export default {
   RemovePrefInterest: 'remove_pref_interest',
   GetMatches: 'matches',
   Like: 'like',
+  Unlike: 'unlike',
   Coordinates: 'update_coordinates',
   RetrieveHistoryId: 'retrieve_history_ids',
   RetrieveHistoryInfo: 'retrieve_history_info',

@@ -9,6 +9,9 @@ class MatchesService {
   static like (liking, rating, userId) {
     return GeneralService.PostExecution(Constants.Like, { liking, rating, userId })
   }
+  static unlike (liking, userId) {
+    return GeneralService.PostExecution(Constants.Unlike, { liking, userId })
+  }
 
   static matching (userId) {
     return GeneralService.PostExecution(Constants.Matching, { userId })

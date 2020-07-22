@@ -825,6 +825,51 @@ router.post('/like', async(req, res) => {
         connect.release();
     });
 });
+router.post('/unlike', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        connect.beginTransaction((error) => {
+            if (error)
+                return;
+            let params = [
+                req.body.liking,
+                req.body.userId
+            ];
+            let sqll = 'DELETE FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?'; 
+            connect.query(sqll, params, (error, results) => {
+                if (error){
+                    connect.rollback(() => {
+                        res.send(error);
+                    });
+                    return;
+                }
+                if (!results[0]) {
+                    let param = [
+                        req.body.liking
+                    ];
+                    connect.query(sqll, param, (error, results) => {
+                        if (error) {
+                            connect.rollback(() => {
+                                res.send(error);
+                            });
+                            return;
+                        }
+                    });
+                }
+            })
+
+        });
+        connect.commit((error) => {
+            if (error) {
+                connect.rollback(() => {
+                    return;
+                });
+            }
+        });
+        connect.release();
+    });
+});
 
 router.post('/matching', async (req, res) => 
 {
