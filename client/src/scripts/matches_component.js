@@ -155,6 +155,15 @@ export default {
         EventBus.$emit('sendText', 'Rate first.')
       }
     },
+    async unlike (liking) {
+      let userId = this.$session.get('userid')
+      try {
+        await Matches.unlike(liking, userId)
+        EventBus.$emit('sendText', 'Dislike.')
+      } catch (error) {
+        console.log(error)
+      }
+    },
     checkMatching (userData, matchData) {
       let userLati = userData.lat
       let userLongi = userData.longi
