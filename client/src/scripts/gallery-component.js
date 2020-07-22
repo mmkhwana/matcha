@@ -23,7 +23,7 @@ export default {
     this.userid = this.$session.get('userid')
     let images = []
     const pics = await GalleryService.readImages(this.username, this.userid)
-    if (pics !== 'nopics') {
+    if (pics.data !== 'nopics') {
       images = pics.data
       images.forEach(row => {
         this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })

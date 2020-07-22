@@ -1,5 +1,4 @@
 <template>
-    <layout cols="12" sm="12">
     <v-card
       persistent
       max-width="500px"
@@ -9,7 +8,7 @@
         <v-card-title class="headline">Choose Photo</v-card-title>
       <v-card-text>
                 <v-img
-                  v-bind:src="img"
+                  :src="getImage()"
                   width="450px"
                   height="350px"
                   ref="photo"
@@ -19,6 +18,7 @@
           <input
               accept="image/*"
               color="primary"
+              name="image"
               type="file"
               ref="upload"
               @change="changed"
@@ -47,7 +47,6 @@
         </v-card-actions>
       </v-card>
     </v-card>
-    </layout>
 </template>
 <script>
 import upload from '../scripts/upload_component'

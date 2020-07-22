@@ -45,7 +45,7 @@ class GeneralService {
         resolve(res.data)
         reject(res.data)
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     })
   }

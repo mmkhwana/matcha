@@ -261,7 +261,6 @@ export default {
             this.posts[index].profile = image.image_link
           }
         })
-        console.log(this.posts)
       }
     },
     async init () {

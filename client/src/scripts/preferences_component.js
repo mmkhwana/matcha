@@ -25,7 +25,6 @@ export default {
   },
   async mounted () {
     this.getPreferences()
-    this.getPrefInterests()
   },
   methods: {
     async getPreferences () {

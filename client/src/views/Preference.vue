@@ -36,18 +36,6 @@
     </v-container>
 
     <v-divider class="mx-4"></v-divider>
-    <v-card-text>
-      <v-row>
-        <v-col
-          v-for="(name, i) in interests"
-          :key="i"
-          class="shrink"
-        >
-          <v-chip close filter outlined v-on:click:close="remove(i, name)">{{ name }}</v-chip>
-        </v-col>
-      </v-row>
-    </v-card-text>
-
     <v-card-actions>
       <v-row>
         <v-col cols="12" class="text-right">

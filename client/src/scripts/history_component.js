@@ -22,17 +22,11 @@ export default {
       this.posts = ''
       this.posts = []
       this.retrieveHistory()
-      this.retrievePeopleViewedYou()
-    })
-
-    EventBus.$on('updateHistory', () => {
-      this.posts = ''
-      this.posts = []
-      this.retrieveHistory()
     })
   },
   methods: {
     openProfile (userId, name, surname, username) {
+      console.log('executing...username: ' + username + 'ID: ' + userId)
       this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'username': username, 'parent': 'History' })
       this.$root.$emit('OtherProfile')
       this.putIntoHistory(userId, this.$session.get('userid'))
@@ -113,8 +107,7 @@ export default {
     },
     async retrievePeopleViewedYou () {
       try {
-        let res = await History.retrieveViewedYou(this.$session.get('userid'))
-        alert(JSON.stringify(res))
+        let res = await History.peopleViewedYou(this.$session.get('userid'))
         if (Object.keys(res).length !== 0) {
           res.forEach(user => {
             this.retrieveViewers(user.user_checker_id)

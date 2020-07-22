@@ -5,19 +5,19 @@ import Vue from 'vue'
 Vue.use(VueSession)
 export default {
   name: 'Dialog',
-  default () {
+  data () {
     return {
       file: null,
-      img: '',
       progress: false
     }
   },
-  computed: {
-    getImage () {
-      return this.img
-    }
+  props: {
+    img: ''
   },
   methods: {
+    getImage () {
+      return this.img
+    },
     changed (e) {
       this.file = e.target.files[0]
       var reader = new FileReader()

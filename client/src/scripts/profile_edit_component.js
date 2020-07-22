@@ -53,12 +53,10 @@ export default {
       longitude: 0,
       that: this,
       race: ['Black', 'Mix Race', 'White', 'Indian', 'Chineese'],
-      relations: ['Single', 'In a Relationship', 'Engaged', 'Married', 'Seperated', 'Divorced', 'Widowed', 'Complicated']
+      relations: ['Single', 'In a Relationship', 'Engaged', 'Married', 'Seperated', 'Divorced', 'Widowed', 'Complicated'],
+      lang: '',
+      interest: ''
     }
-  },
-  props: {
-    lang: { type: String },
-    interest: { type: String }
   },
   async mounted () {
     this.that = this

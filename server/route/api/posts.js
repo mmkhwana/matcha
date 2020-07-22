@@ -308,8 +308,6 @@ router.get('/uploads/:username/:name', (req, res) => {
 });
 
 router.post('/uploads', async(req, res) => {
-    let images = [];
-    let username;
     let file = __dirname + '/uploads/' + req.body.username;
     Connection.con.getConnection((err, connect) => {
         if (err)
@@ -321,20 +319,11 @@ router.post('/uploads', async(req, res) => {
             if (results[0]) {
                 if (fs.existsSync(file))
                 {
-                    results.forEach(image => {
-                        file = __dirname + '/uploads/' + req.body.username + '/' + image.image_name;
-                        if (fs.existsSync(file)) {
-                            images.push(image);
-                        }
-                    });
-                    if (images)
-                    {
-                        res.status(201).send(images);
-                        return;
-                    }
+                    res.send(results);
                 }
+            } else {
+                res.send('nopics');
             }
-            res.status(201).send('nopics');
         });
     });
 });
@@ -1105,7 +1094,6 @@ router.post('/search_with_distance', async(req, res) => {
                         return;
                     }
                     res.status(200).send({'matchData': result, 'userData': results});
-                    console.log(result);
                 });
             });
         });
@@ -1191,8 +1179,6 @@ router.post('/search_with_two', async(req, res) => {
                     ];
                 }
                 connect.query(query, params, (error, results) => {
-                    console.log(error);
-                    console.log(results);
                     if (error)
                     {
                         res.send('error');
@@ -1263,6 +1249,7 @@ router.post('/get_profile_picture', async(req, res) => {
             return;
         let params = ['profile'];
         connect.query(sql.select.image.all_profile, params, (error, results) => {
+            connect.release();
             if (error)
                 return;
             if (results[0])

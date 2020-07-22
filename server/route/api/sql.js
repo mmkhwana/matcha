@@ -40,7 +40,7 @@ module.exports = {
         },
         history: {
             all: `SELECT user_checked_id FROM Matcha_User_History WHERE user_checker_id = ?`,
-            user: `SELECT user_id, user_first_name, user_last_name, user_age FROM Matcha_Users WHERE user_id = ?`,
+            user: `SELECT user_id, user_first_name, user_last_name, user_name, user_age FROM Matcha_Users WHERE user_id = ?`,
             check: `SELECT * FROM Matcha_User_History WHERE user_checked_id = ? AND user_checker_id = ?`
         }
     },

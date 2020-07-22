@@ -81,11 +81,15 @@ export default {
     },
     async getImages () {
       let images = []
+      console.log('executing...username: ' + this.username + 'ID: ' + this.userid)
       const pics = await GalleryService.readImages(this.username, this.userid)
       images = pics.data
-      images.forEach(row => {
-        this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })
-      })
+      console.log(pics.data)
+      if (images !== 'nopics') {
+        images.forEach(row => {
+          this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })
+        })
+      }
     }
   }
 }

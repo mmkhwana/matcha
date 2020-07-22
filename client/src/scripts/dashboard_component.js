@@ -36,7 +36,6 @@ export default {
         { title: 'Matches', icon: 'mdi-account-group' },
         { title: 'History', icon: 'mdi-account-search' },
         { title: 'Chat', icon: 'mdi-chat' },
-        { title: 'Settings', icon: 'mdi-settings' },
         { title: 'Log Out', icon: 'mdi-logout' }],
       titles: 'Profile',
       drawer: false,
@@ -75,8 +74,8 @@ export default {
         return 'Preference'
       } else if (this.titles === 'Matches') {
         return 'Matches'
-      } else if (this.titles === 'Settings') {
-        return 'Settings'
+      } else if (this.titles === 'Upload') {
+        return 'Upload'
       } else if (this.titles === 'Chat') {
         return 'Chat'
       } else if (this.titles === 'Edit') {
