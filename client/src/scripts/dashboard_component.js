@@ -108,8 +108,16 @@ export default {
     })
     this.count = this.notifications.length
     this.updateCoordinates()
+    this.setOnline()
   },
   methods: {
+    async setOnline () {
+      try {
+        await Service.online(this.$session.get('userid'), 1)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async updateCoordinates () {
       try {
         if (this.$session.get('latitude') && this.$session.get('longitude')) {
@@ -130,10 +138,12 @@ export default {
         this.titles = titleName
       }
     },
-    logout () {
+    async logout () {
       if (this.$session.exists()) {
         this.$session.clear()
         this.$session.destroy()
+        alert(new Date())
+        await Service.logOut(this.$session.get('userid'), new Date(), 0)
         router.push({ name: 'home' })
       }
     },

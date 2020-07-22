@@ -40,6 +40,12 @@ class UserProfileService {
   static coordinates (lati, longi, userid) {
     return General.PostExecution(Constant.Coordinates, { lati, longi, userid })
   }
+  static online (userId, online) {
+    return General.PostExecution('online', { online, userId })
+  }
+  static logOut (userId, lastseen, online) {
+    return General.PostExecution('logout', { online, lastseen, userId })
+  }
 }
 
 export default UserProfileService

@@ -112,6 +112,40 @@ router.post('/register_user', async(req, res) => {
     }
 });
 
+router.post('/online', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.online,
+            req.body.userId
+        ];
+        connect.query('Update Matcha_Users SET user_online = ? WHERE user_id = ?', param, async(error, results) => {
+            if (error)
+                return;
+            res.send('ok');
+        });
+    });
+});
+
+router.post('/logout', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        let param = [
+            req.body.online,
+            req.body.lastseen,
+            req.body.userId
+        ];
+        connect.query('Update Matcha_Users SET user_online = ?, user_last_seen = ? WHERE user_id = ?', param, async(error, results) => {
+            console.log(error);
+            if (error)
+                return;
+            res.send('ok');
+        });
+    });
+});
+
 router.post('/login_user', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
@@ -137,8 +171,10 @@ router.post('/login_user', async(req, res) => {
                             res.status(200).send(error);
                             return;
                         }
-                        if (response)
+                        if (response) {
+
                             res.status(200).send(results);
+                        }
                         else {
                             res.status(200).send(response);
                         }

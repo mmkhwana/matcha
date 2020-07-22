@@ -175,11 +175,11 @@
                   >
                 </v-avatar>
                 <v-row>
-                    <v-col>
-                        <v-card-title class="title">{{ user.user_first_name + ' ' + user.user_last_name }}</v-card-title>
+                    <v-col cols="8">
+                        <v-card-title class="title text-left">{{ user.user_first_name + ' ' + user.user_last_name }} <span class="text-left online"></span></v-card-title>
                     </v-col>
                     <v-col cols="3">
-                    <v-card-subtitle class="text-left">{{ user.user_age }}</v-card-subtitle>
+                    <v-card-subtitle class="text-right">{{ user.user_age }}</v-card-subtitle>
                     </v-col>
                 </v-row>
                  <v-card-actions>
