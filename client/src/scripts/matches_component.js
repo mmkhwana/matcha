@@ -29,7 +29,8 @@ export default {
       progress: false,
       userData: [],
       profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`,
-      profile: ''
+      profile: '',
+      dislike: 0
     }
   },
 
@@ -190,6 +191,7 @@ export default {
           }
           user.interests = 0
           user.profile = 'none'
+          user.dislike = 0
           user.user_last_seen = user.user_last_seen.substring(user.user_last_seen.indexOf('T') + 1, user.user_last_seen.lastIndexOf(':'))
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
@@ -200,6 +202,23 @@ export default {
           }
         }
       })
+    },
+    async checkDislike () {
+      try {
+        let res = await Matches.checkLike(999, 999)
+        console.log(res)
+        if (res[0].length !== 0) {
+          this.posts.forEach(user => {
+            let param = this.res[0].filter(item => item.user_liker_id === user.user_id && item.like_check === 0)
+            if (param[0]) {
+              let index = this.posts.indexOf(user)
+              this.posts.splice(index, 1)
+            }
+          })
+        }
+      } catch (error) {
+
+      }
     },
     async userIntere (otherUserId) {
       this.number = 0
@@ -276,6 +295,15 @@ export default {
         })
       }
     },
+    filter () {
+      this.posts.forEach(user => {
+        this.checkDislike(user.user_id, this.$session.get('userid'))
+        if (this.dislike === 1) {
+          let index = this.posts.indexOf(user)
+          this.posts.splice(index, 1)
+        }
+      })
+    },
     async init () {
       this.posts = []
       this.defaultInterests = Interests
@@ -286,6 +314,7 @@ export default {
         this.matchInterests(user.user_id)
       })
       this.getProfilePics()
+      this.checkDislike()
     }
   },
   mounted: function () {

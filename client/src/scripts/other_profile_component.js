@@ -19,7 +19,8 @@ export default {
         { name: Constant.height, value: '' },
         { name: Constant.age, value: '' },
         { name: Constant.race, value: '' },
-        { name: Constant.hair, value: '' }
+        { name: Constant.hair, value: '' },
+        { name: 'Gender', value: '' }
       ],
       username: '',
       street: '',
@@ -63,6 +64,7 @@ export default {
       this.state = res[Table.User.state]
       this.biography = res[Table.User.biography]
       this.personality[0].value = res[Table.User.status]
+      this.personality[5].value = res['user_gender']
       this.rating = res[Table.User.AvgRating]
       if (res[Table.User.height]) {
         this.personality[1].value = res[Table.User.height] + 'm'
@@ -81,10 +83,8 @@ export default {
     },
     async getImages () {
       let images = []
-      console.log('executing...username: ' + this.username + 'ID: ' + this.userid)
       const pics = await GalleryService.readImages(this.username, this.userid)
       images = pics.data
-      console.log(pics.data)
       if (images !== 'nopics') {
         images.forEach(row => {
           this.pictures.push({ id: row[Table.Images.id], name: row[Table.Images.name], role: row[Table.Images.role] })

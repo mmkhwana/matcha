@@ -22,7 +22,8 @@ export default {
         { name: Constant.height, value: '' },
         { name: Constant.age, value: '' },
         { name: Constant.race, value: '' },
-        { name: Constant.hair, value: '' }
+        { name: Constant.hair, value: '' },
+        { name: 'Gender', value: '' }
       ],
       username: '',
       street: '',
@@ -44,6 +45,7 @@ export default {
     this.state = res[Table.User.state]
     this.biography = res[Table.User.biography]
     this.personality[0].value = res[Table.User.status]
+    this.personality[5].value = res['user_gender']
     if (res[Table.User.height]) {
       this.personality[1].value = res[Table.User.height] + 'm'
     } else {

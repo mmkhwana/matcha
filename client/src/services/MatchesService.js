@@ -51,6 +51,9 @@ class MatchesService {
   static getProfilePics (id) {
     return GeneralService.PostExecution(Constants.GetProfilePics, { id })
   }
+  static checkLike (disliked, disliker) {
+    return GeneralService.PostExecution('check_dislike', { disliked, disliker })
+  }
 }
 
 export default MatchesService

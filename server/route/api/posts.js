@@ -868,11 +868,13 @@ router.post('/unlike', async(req, res) => {
         connect.beginTransaction((error) => {
             if (error)
                 return;
+            let sqll = 'UPDATE FROM Matcha_Likes SET like_check = 0 WHERE user_liked_id = ? AND user_liker_id = ?'; 
+            let like_check = 1;
             let params = [
+                like_check,
                 req.body.liking,
                 req.body.userId
             ];
-            let sqll = 'DELETE FROM Matcha_Likes WHERE user_liked_id = ? AND user_liker_id = ?'; 
             connect.query(sqll, params, (error, results) => {
                 if (error){
                     connect.rollback(() => {
@@ -904,6 +906,21 @@ router.post('/unlike', async(req, res) => {
             }
         });
         connect.release();
+    });
+});
+
+router.post('/check_dislike', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        connect.query('SELECT * FROM Matcha_Likes WHERE like_check = 0', (error, results) => {
+            console.log(error);
+            connect.release();
+            if (error) {
+                return;
+            }
+            res.send(results);
+        });
     });
 });
 
