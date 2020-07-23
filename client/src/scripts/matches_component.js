@@ -30,7 +30,8 @@ export default {
       userData: [],
       profile_pic: `http://localhost:5000/api/posts/uploads/generic_pp/generic_pp.png`,
       profile: '',
-      dislike: 0
+      dislike: 0,
+      dislikes: []
     }
   },
 
@@ -203,21 +204,24 @@ export default {
         }
       })
     },
+    async processDis () {
+      this.posts.forEach(user => {
+        console.log(user)
+        let param = this.dislikes.filter(item => (item.user_liked_id === user.user_id && item.user_liker_id === this.$session.get('userid') && item.like_check === 0))
+        if (param) {
+          let index = this.posts.indexOf(user)
+          this.posts.splice(index, 1)
+        }
+      })
+    },
     async checkDislike () {
       try {
         let res = await Matches.checkLike(999, 999)
-        console.log(res)
-        if (res[0].length !== 0) {
-          this.posts.forEach(user => {
-            let param = this.res[0].filter(item => item.user_liker_id === user.user_id && item.like_check === 0)
-            if (param[0]) {
-              let index = this.posts.indexOf(user)
-              this.posts.splice(index, 1)
-            }
-          })
+        if (res) {
+          this.dislikes = res
         }
       } catch (error) {
-
+        console.log(error)
       }
     },
     async userIntere (otherUserId) {
@@ -228,7 +232,9 @@ export default {
       if (this.number !== 0) {
         let res = this.posts.filter(user => user.user_id === otherUserId)
         let index = this.posts.indexOf(res[0])
-        this.posts[index].interests = this.number
+        if (index !== -1) {
+          this.posts[index].interests = this.number
+        }
         if (Object.keys(this.interests).length !== 0) {
           this.posts = this.posts.filter(user => user.interests >= 1)
         }
@@ -295,13 +301,10 @@ export default {
         })
       }
     },
-    filter () {
+    compareInterests (res) {
+      this.checkMatching(res.userData, res.matchData)
       this.posts.forEach(user => {
-        this.checkDislike(user.user_id, this.$session.get('userid'))
-        if (this.dislike === 1) {
-          let index = this.posts.indexOf(user)
-          this.posts.splice(index, 1)
-        }
+        this.matchInterests(user.user_id)
       })
     },
     async init () {
@@ -309,12 +312,15 @@ export default {
       this.defaultInterests = Interests
       let res = await Matches.matching(this.$session.get('userid'))
       this.userData = res.userData
-      this.checkMatching(res.userData, res.matchData)
-      this.posts.forEach(user => {
-        this.matchInterests(user.user_id)
-      })
       this.getProfilePics()
-      this.checkDislike()
+      setTimeout(this.callback(res), 2000)
+      if (this.posts.length !== 0) {
+        this.processDis()
+        this.checkDislike()
+      }
+    },
+    callback (res) {
+      this.compareInterests(res)
     }
   },
   mounted: function () {
