@@ -219,7 +219,6 @@ router.post('/account/send_verification', async(req, res) =>
                   console.log('Email sent: ' + info.response);
               }
               });
-            console.log(result)
         }
         )
     })
@@ -321,7 +320,6 @@ router.post('/verify', async(req, res) => {
             if (err) {
                 throw err;
             } else if (results) {
-                console.log(results);
                 let value = [req.body.email]
                 sql = "UPDATE  Matcha_Users set verify = 1 WHERE user_email = ?";
                 connect.query(sql, value, function(err, results) {
@@ -889,6 +887,7 @@ router.post('/unlike', async(req, res) => {
                         req.body.liking
                     ];
                     connect.query(sqll, param, (error, results) => {
+                        connect.release();
                         if (error) {
                             connect.rollback(() => {
                                 res.send(error);
@@ -896,6 +895,8 @@ router.post('/unlike', async(req, res) => {
                             return;
                         }
                     });
+                } else {
+                    connect.release();
                 }
             })
 
@@ -920,9 +921,7 @@ router.post('/blocking', async(req, res) => {
             if (error)
                 return;
             let sqll = 'INSERT INTO Matcha_block (blocker_id, blocked_id) VALUES (?, ?)'; 
-          //  let like_check = 1;
             let params = [
-                //like_check,
                 req.body.liking,
                 req.body.userId
             ];
@@ -938,14 +937,16 @@ router.post('/blocking', async(req, res) => {
                         req.body.liking
                     ];
                     connect.query(sqll, param, (error, results) => {
+                        connect.release();
                         if (error) {
                             connect.rollback(() => {
                                 res.send(error);
                             });
-                            console.log(results);
                             return;
                         }
                     });
+                } else {
+                    connect.release();
                 }
             })
 
@@ -961,13 +962,26 @@ router.post('/blocking', async(req, res) => {
     });
 });
 
+router.post('/get_blocked', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        connect.query('SELECT * FROM Matcha_block WHERE blocked_id = ?', req.body.userId, (error, results) => {
+            connect.release();
+            if (error) {
+                return;
+            }
+            res.send(results);
+        });
+    });
+});
+
 
 router.post('/check_dislike', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
             return;
         connect.query('SELECT * FROM Matcha_Likes WHERE like_check = 0', (error, results) => {
-            console.log(error);
             connect.release();
             if (error) {
                 return;

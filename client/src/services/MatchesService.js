@@ -15,6 +15,11 @@ class MatchesService {
   static blocking (liking, userId) {
     return GeneralService.PostExecution(Constants.blocking, { liking, userId })
   }
+
+  static getBlocked (userId) {
+    return GeneralService.PostExecution('get_blocked', { userId })
+  }
+
   static matching (userId) {
     return GeneralService.PostExecution(Constants.Matching, { userId })
   }

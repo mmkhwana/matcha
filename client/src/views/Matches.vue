@@ -205,10 +205,10 @@
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-chip filter outlined v-if="user.interests">{{user.interests + interes}}</v-chip>
-                  <v-btn icon v-on:click="blocking(user.user_id)">
+                  <v-btn icon v-on:click="blocking('matches', user, user.user_id)">
                   <v-icon>mdi-block-helper</v-icon>
                   </v-btn>
-                  <v-btn icon v-on:click="unlike(user.user_id)">
+                  <v-btn icon v-on:click="unlike('matches', user, user.user_id)">
                   <v-icon>mdi-thumb-down-outline</v-icon>
                   </v-btn>
                  </v-card-actions>
@@ -285,10 +285,10 @@
                   </v-btn>
                   <v-spacer></v-spacer>
                   <v-chip filter outlined v-if="user.interests">{{user.interests + interes}}</v-chip>
-                  <v-btn icon v-on:click="blocking(user.user_id)">
+                  <v-btn icon v-on:click="blocking('suggest', user, user.user_id)">
                   <v-icon>mdi-block-helper</v-icon>
                   </v-btn>
-                  <v-btn icon v-on:click="unlike(user.user_id)">
+                  <v-btn icon v-on:click="unlike('suggest', user, user.user_id)">
                   <v-icon>mdi-thumb-down-outline</v-icon>
                   </v-btn>
                  </v-card-actions>
