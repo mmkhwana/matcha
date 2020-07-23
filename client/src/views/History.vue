@@ -27,8 +27,9 @@
               <v-card elevation="8"
                 min-width="300px"
                 >
+                <v-row fullwidth><v-col cols="12"></v-col></v-row>
                 <v-avatar
-                size="300px"
+                size="200px"
                 min-width="300px"
                 class="show-btns"
                 >
@@ -100,13 +101,14 @@
               <v-card elevation="8"
                 min-width="300px"
                 >
+                <v-row fullwidth><v-col cols="12"></v-col></v-row>
                 <v-avatar
-                size="300px"
+                size="200px"
                 min-width="300px"
                 class="show-btns"
                 >
                   <img
-                    :src="profile_pic"
+                    :src="(user.profile !== 'none') ? user.profile : profile_pic"
                     class="radius-profile"
                     min-width="200px"
                     min-height="200px"
@@ -174,8 +176,9 @@
               <v-card elevation="8"
                 min-width="300px"
                 >
+                <v-row fullwidth><v-col cols="12"></v-col></v-row>
                 <v-avatar
-                size="300px"
+                size="200px"
                 min-width="300px"
                 class="show-btns"
                 >

@@ -18,6 +18,7 @@ export default {
     this.retrieveHistory()
     this.retrievePeopleViewedYou()
     this.retrievePeopleLikedYou()
+    this.getProfilePics()
     EventBus.$on('updateHistory', () => {
       this.posts = ''
       this.posts = []
@@ -26,7 +27,6 @@ export default {
   },
   methods: {
     openProfile (userId, name, surname, username) {
-      console.log('executing...username: ' + username + 'ID: ' + userId)
       this.$session.set('matchId', { 'userId': userId, 'name': name, 'surname': surname, 'username': username, 'parent': 'History' })
       this.$root.$emit('OtherProfile')
       this.putIntoHistory(userId, this.$session.get('userid'))
@@ -44,6 +44,18 @@ export default {
         EventBus.$emit('sendText', 'Rate first.')
       }
     },
+    async getProfilePics () {
+      let images = await Matches.getProfilePics(999)
+      if (Object.keys(images).length !== 0) {
+        images.forEach(image => {
+          let user = this.posts.filter(user => user.user_id === image.user_id)
+          if (user[0]) {
+            let index = this.posts.indexOf(user[0])
+            this.posts[index].profile = image.image_link
+          }
+        })
+      }
+    },
     async putIntoHistory (checkedUser, checkerUser) {
       try {
         await History.putIntoHistory(checkedUser, checkerUser)
@@ -55,6 +67,7 @@ export default {
       try {
         let results = await History.retrieveHistoryInfo(userId)
         if (Object.keys(results).length !== 0) {
+          results[0].profile = 'none'
           this.posts.push(results[0])
         }
       } catch (error) {

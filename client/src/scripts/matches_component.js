@@ -189,7 +189,7 @@ export default {
       }
       try {
         await Matches.blocking(liking, userId)
-        EventBus.$emit('sendText', 'User blocked.')
+        EventBus.$emit('sendText', user.user_first_name + ' is blocked.')
       } catch (error) {
         console.log(error)
       }
@@ -217,7 +217,6 @@ export default {
           }
           user.interests = 0
           user.profile = 'none'
-          user.dislike = 0
           user.user_last_seen = user.user_last_seen.substring(user.user_last_seen.indexOf('T') + 1, user.user_last_seen.lastIndexOf(':'))
           if (dist <= parseInt(userDist) && (parseInt(matchAge) <= parseInt(userAge)) && matchGender === userPrefGender) {
             this.posts.push(user)
@@ -231,7 +230,6 @@ export default {
     },
     async processDis () {
       this.posts.forEach(user => {
-        console.log(user)
         let param = this.dislikes.filter(item => (item.user_liked_id === user.user_id && item.user_liker_id === this.$session.get('userid') && item.like_check === 0))
         if (param) {
           let index = this.posts.indexOf(user)

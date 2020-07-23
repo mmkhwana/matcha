@@ -920,12 +920,13 @@ router.post('/blocking', async(req, res) => {
         connect.beginTransaction((error) => {
             if (error)
                 return;
-            let sqll = 'INSERT INTO Matcha_block (blocker_id, blocked_id) VALUES (?, ?)'; 
+            let sqll = 'SELECT * FROM Matcha_block WHERE blocker_id = ? AND blocked_id = ?'; 
             let params = [
                 req.body.liking,
                 req.body.userId
             ];
             connect.query(sqll, params, (error, results) => {
+                console.log(error);
                 if (error){
                     connect.rollback(() => {
                         res.send(error);
@@ -933,10 +934,8 @@ router.post('/blocking', async(req, res) => {
                     return;
                 }
                 if (!results[0]) {
-                    let param = [
-                        req.body.liking
-                    ];
-                    connect.query(sqll, param, (error, results) => {
+                    let sql = 'INSERT INTO Matcha_block (blocker_id, blocked_id) VALUES (?, ?)'; 
+                    connect.query(sql, params, (error, results) => {
                         connect.release();
                         if (error) {
                             connect.rollback(() => {
@@ -944,9 +943,11 @@ router.post('/blocking', async(req, res) => {
                             });
                             return;
                         }
+                        res.send('ok');
                     });
                 } else {
                     connect.release();
+                    res.send('ok');
                 }
             })
 
@@ -958,7 +959,6 @@ router.post('/blocking', async(req, res) => {
                 });
             }
         });
-        connect.release();
     });
 });
 
