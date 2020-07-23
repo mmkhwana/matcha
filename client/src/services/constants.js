@@ -31,6 +31,7 @@ export default {
   GetMatches: 'matches',
   Like: 'like',
   Unlike: 'unlike',
+  blocking: 'blocking',
   Coordinates: 'update_coordinates',
   RetrieveHistoryId: 'retrieve_history_ids',
   RetrieveHistoryInfo: 'retrieve_history_info',

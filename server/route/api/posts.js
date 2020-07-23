@@ -861,6 +861,8 @@ router.post('/like', async(req, res) => {
         connect.release();
     });
 });
+
+//unlike
 router.post('/unlike', async(req, res) => {
     Connection.con.getConnection((error, connect) => {
         if (error)
@@ -908,6 +910,57 @@ router.post('/unlike', async(req, res) => {
         connect.release();
     });
 });
+
+//block
+router.post('/blocking', async(req, res) => {
+    Connection.con.getConnection((error, connect) => {
+        if (error)
+            return;
+        connect.beginTransaction((error) => {
+            if (error)
+                return;
+            let sqll = 'INSERT INTO Matcha_block (blocker_id, blocked_id) VALUES (?, ?)'; 
+          //  let like_check = 1;
+            let params = [
+                //like_check,
+                req.body.liking,
+                req.body.userId
+            ];
+            connect.query(sqll, params, (error, results) => {
+                if (error){
+                    connect.rollback(() => {
+                        res.send(error);
+                    });
+                    return;
+                }
+                if (!results[0]) {
+                    let param = [
+                        req.body.liking
+                    ];
+                    connect.query(sqll, param, (error, results) => {
+                        if (error) {
+                            connect.rollback(() => {
+                                res.send(error);
+                            });
+                            console.log(results);
+                            return;
+                        }
+                    });
+                }
+            })
+
+        });
+        connect.commit((error) => {
+            if (error) {
+                connect.rollback(() => {
+                    return;
+                });
+            }
+        });
+        connect.release();
+    });
+});
+
 
 router.post('/check_dislike', async(req, res) => {
     Connection.con.getConnection((error, connect) => {

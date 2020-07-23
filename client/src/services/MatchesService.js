@@ -12,7 +12,9 @@ class MatchesService {
   static unlike (liking, userId) {
     return GeneralService.PostExecution(Constants.Unlike, { liking, userId })
   }
-
+  static blocking (liking, userId) {
+    return GeneralService.PostExecution(Constants.blocking, { liking, userId })
+  }
   static matching (userId) {
     return GeneralService.PostExecution(Constants.Matching, { userId })
   }

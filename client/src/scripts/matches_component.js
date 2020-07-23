@@ -168,6 +168,15 @@ export default {
         console.log(error)
       }
     },
+    async blocking (liking) {
+      let userId = this.$session.get('userid')
+      try {
+        await Matches.blocking(liking, userId)
+        EventBus.$emit('sendText', 'User blocked.')
+      } catch (error) {
+        console.log(error)
+      }
+    },
     checkMatching (userData, matchData) {
       let userLati = userData.lat
       let userLongi = userData.longi
