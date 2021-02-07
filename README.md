@@ -53,31 +53,31 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 [Marking sheet linked here](https://github.com/Mell-vin/Matcha2.0/blob/master/matcha.markingsheet.pdf)
 
 * Launch the webserver
-*  Create an account
-Login
-Edit profile
-View profile suggestions.
-Search / Filter
-Geolocation
-Populatity flexing
-Notifications
-View a Profile
-Like / Unlike
-Block
-Messaging
+* Create an account
+* Login
+* Edit profile
+* View profile suggestions.
+* Search / Filter
+* Geolocation
+* Populatity flexing
+* Notifications
+* View a Profile
+* Like
+* Block
+* Messaging - Not implemented
 
 ## Expected Outcomes
     
-The webserver launches
-a account has been created and a email has been sent
-a user can login after verifying his/ her password
-a user can edit their profile
-a user should see reccomended profiles
-a user should be able to filter / search for a profile
-Geolocation should be supported
-People should have popularity ratings
-You should be able to receive Notifications
-You should be able to view a profile
-You should be able to like / Unlike a profile
-You should be able to block a profile
-You should be able to send a message to a connected user and receive one back
+* The webserver launches
+* a account has been created and a email has been sent
+* a user can login after verifying his/ her password
+* a user can edit their profile
+* a user should see reccomended profiles
+* a user should be able to filter / search for a profile
+* Geolocation should be supported
+* People should have popularity ratings
+* You should be able to receive Notifications
+* You should be able to view a profile
+* You should be able to like / Unlike a profile
+* You should be able to block a profile
+* You should be able to send a message to a connected user and receive one back
