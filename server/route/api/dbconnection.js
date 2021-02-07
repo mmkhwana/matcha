@@ -2,9 +2,9 @@ const mysql = require('mysql');
 
 con = mysql.createPool({
     host: 'matcha.cloudaccess.host',
-    user: 'lpnwzqqm',
+    user: 'jolbbdyg',
     password: 'Khanyisa18',
-    database: 'lpnwzqqm',
+    database: 'jolbbdyg',
     multipleStatements: true
 });
 
