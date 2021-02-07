@@ -53,7 +53,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 [Marking sheet linked here](https://github.com/Mell-vin/Matcha2.0/blob/master/matcha.markingsheet.pdf)
 
 * Launch the webserver
-* Create an account
+*  Create an account
 Login
 Edit profile
 View profile suggestions.
