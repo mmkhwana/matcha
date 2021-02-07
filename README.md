@@ -60,7 +60,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 * Search / Filter
 * Geolocation
 * Populatity flexing
-* Notifications
+* Notifications - Not implemented
 * View a Profile
 * Like
 * Block
